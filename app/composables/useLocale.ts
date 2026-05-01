@@ -1,0 +1,439 @@
+const messages = {
+  ru: {
+    // Navbar
+    'nav.place': '+ Подать объявление',
+    'nav.login': 'Войти',
+    'nav.register': 'Регистрация',
+    'nav.profile': 'Мой профиль',
+    'nav.myAds': 'Мои объявления',
+    'nav.messages': 'Сообщения',
+    'nav.admin': 'Администратор',
+    'nav.logout': 'Выйти',
+    'nav.home': 'Главная',
+    'nav.create': 'Создать',
+    'nav.chat': 'Чат',
+    'nav.profile': 'Профиль',
+
+    // Home
+    'home.hero.title': 'Найдите специалиста по',
+    'home.hero.accent': 'красоте и здоровью',
+    'home.hero.placeholder': 'Массаж, стоматология, маникюр...',
+    'home.hero.city': 'Город',
+    'home.hero.search': 'Найти',
+    'home.categories.title': 'Популярные категории',
+    'home.categories.subtitle': 'Выберите направление которое вас интересует',
+    'home.ads.title': 'Новые объявления',
+    'home.ads.subtitle': 'Свежие предложения специалистов',
+    'home.ads.all': 'Смотреть все →',
+    'home.cta.title': 'Готовы разместить объявление?',
+    'home.cta.subtitle': 'Присоединяйтесь к тысячам специалистов на нашей платформе',
+    'home.cta.register': 'Зарегистрироваться',
+    'home.cta.find': 'Найти специалиста',
+
+    // Catalog
+    'mobile.searchPlaceholder': 'Поиск специалистов...',
+    'catalog.title': 'Каталог услуг',
+    'catalog.subtitle': 'Найдите специалиста под ваши задачи',
+    'catalog.search': 'Услуга или специалист...',
+    'catalog.city': 'Город',
+    'catalog.allCats': 'Все категории',
+    'catalog.allSubs': 'Все подкатегории',
+    'catalog.find': 'Найти',
+    'catalog.reset': 'Сбросить всё',
+    'catalog.found': 'Найдено:',
+    'catalog.ads': 'объявлений',
+    'catalog.empty': 'Объявлений не найдено',
+    'catalog.emptyHint': 'Попробуйте изменить параметры поиска',
+    'catalog.activeFilters': 'Активные фильтры:',
+
+    // Ad page
+    'ad.description': 'Описание',
+    'ad.details': 'Детали',
+    'ad.category': 'Категория',
+    'ad.subcategory': 'Направление',
+    'ad.city': 'Город',
+    'ad.address': 'Адрес',
+    'ad.date': 'Дата публикации',
+    'ad.contacts': 'Контакты',
+    'ad.writeMsg': 'Написать сообщение',
+    'ad.loginToWrite': 'Войдите чтобы написать',
+    'ad.edit': 'Редактировать',
+    'ad.delete': 'Удалить',
+    'ad.price.negotiable': 'Цена договорная',
+    'ad.back': '← Каталог',
+
+    // Account
+    'account.profile': 'Мой профиль',
+    'account.name': 'Имя',
+    'account.org': 'Организация',
+    'account.orgHint': 'Необязательно',
+    'account.website': 'Сайт организации',
+    'account.websiteHint': 'https://example.com',
+    'account.avatar': 'Фото профиля',
+    'account.avatarChange': 'Изменить фото',
+    'account.avatarUploading': 'Загружаем...',
+    'account.save': 'Сохранить',
+    'account.saving': 'Сохраняем...',
+    'account.saved': 'Профиль сохранён ✓',
+    'account.language': 'Язык',
+    'account.myAds': 'Мои объявления',
+    'account.createAd': 'Создать объявление',
+    'account.messages': 'Сообщения',
+    'account.place': '+ Подать объявление',
+    'account.noAds': 'У вас нет объявлений',
+    'account.noAdsHint': 'Разместите своё первое объявление',
+    'account.view': 'Просмотр',
+    'account.editAd': 'Изменить',
+    'account.deleteAd': 'Удалить',
+    'account.active': 'Активно',
+    'account.inactive': 'Неактивно',
+    'account.dialogs': 'Диалоги',
+    'account.noDialogs': 'Нет диалогов',
+    'account.selectDialog': 'Выберите диалог для просмотра',
+    'account.msgPlaceholder': 'Написать сообщение...',
+    'account.send': 'Отправить',
+    'account.createTitle': 'Разместить объявление',
+    'account.editTitle': 'Редактировать объявление',
+
+    // Footer
+    'footer.description': 'Современная платформа для поиска специалистов в сфере красоты и здоровья.',
+    'footer.nav': 'Навигация',
+    'footer.catalog': 'Каталог',
+    'footer.about': 'О проекте',
+    'footer.contacts': 'Контакты',
+    'footer.categories': 'Категории',
+    'footer.medicine': 'Медицина',
+    'footer.beauty': 'Beauty-услуги',
+    'footer.cosmetology': 'Косметология',
+    'footer.rights': '© 2026 MedBeauty Board. Все права защищены.',
+
+    // Login
+    'login.title': 'Вход в аккаунт',
+    'login.subtitle': 'Войдите по email или номеру телефона',
+    'login.label': 'Email или телефон',
+    'login.placeholder': '+7 999 123-45-67 или email@mail.com',
+    'login.password': 'Пароль',
+    'login.loading': 'Входим...',
+    'login.submit': 'Войти',
+    'login.noAccount': 'Нет аккаунта?',
+    'login.register': 'Зарегистрируйтесь',
+    'login.error': 'Ошибка входа',
+
+    // Register
+    'register.title': 'Создать аккаунт',
+    'register.subtitle': 'Присоединяйтесь к платформе специалистов',
+    'register.name': 'Имя',
+    'register.namePlaceholder': 'Иван Иванов',
+    'register.phone': 'Телефон',
+    'register.phonePlaceholder': '+7 999 123-45-67',
+    'register.email': 'Email',
+    'register.password': 'Пароль',
+    'register.passwordPlaceholder': 'Минимум 8 символов',
+    'register.org': 'Организация (необязательно)',
+    'register.orgPlaceholder': 'Название клиники, салона...',
+    'register.loading': 'Регистрируем...',
+    'register.submit': 'Зарегистрироваться',
+    'register.hasAccount': 'Уже есть аккаунт?',
+    'register.login': 'Войдите',
+    'register.error': 'Ошибка регистрации',
+
+    // About
+    'about.title': 'О проекте',
+    'about.subtitle': 'MedBeauty Board — современная платформа для поиска и размещения объявлений в сфере медицины и beauty-услуг.',
+    'about.medicine.title': 'Медицинские услуги',
+    'about.medicine.desc': 'Стоматологи, терапевты, психологи, массажисты и другие медицинские специалисты.',
+    'about.beauty.title': 'Beauty-услуги',
+    'about.beauty.desc': 'Косметологи, мастера маникюра, парикмахеры, барберы, визажисты и SPA-мастера.',
+
+    // Contacts
+    'contacts.title': 'Контакты',
+    'contacts.subtitle': 'Мы всегда рады помочь!',
+    'contacts.phone': 'Телефон',
+
+    // Profile additions
+    'account.phone': 'Телефон',
+    'account.loginHint': 'Для просмотра профиля необходимо войти',
+
+    // Breadcrumb
+    'nav.home': 'Главная',
+    'nav.catalog': 'Каталог',
+
+    // Form
+    'form.mainInfo': 'Основная информация',
+    'form.title': 'Заголовок',
+    'form.titlePlaceholder': 'Напр: Массаж спины, 60 мин',
+    'form.category': 'Категория',
+    'form.subcategory': 'Подкатегория',
+    'form.description': 'Описание',
+    'form.descPlaceholder': 'Подробно опишите услугу, ваш опыт, условия...',
+    'form.price': 'Цена (€)',
+    'form.pricePlaceholder': 'Оставьте пустым если договорная',
+    'form.city': 'Город',
+    'form.cityPlaceholder': 'Москва',
+    'form.address': 'Адрес',
+    'form.addressPlaceholder': 'Необязательно',
+    'form.select': 'Выберите...',
+    'form.photos': 'Фотографии',
+    'form.photosHint': 'до 10 штук',
+    'form.addPhoto': 'Добавить',
+    'form.uploading': 'Загружаем фото...',
+    'form.uploadError': 'Ошибка загрузки фото',
+    'form.saveError': 'Ошибка сохранения',
+
+    // Common
+    'common.cancel': 'Отмена',
+    'common.publish': 'Опубликовать объявление',
+    'common.saveChanges': 'Сохранить изменения',
+    'common.saving': 'Сохраняем...',
+    'common.loginRequired': 'Войти',
+    'common.send': 'Отправить',
+    'common.sending': 'Отправляем...',
+    'common.msgPlaceholder': 'Введите ваше сообщение...',
+    'common.deleteConfirm': 'Удалить объявление?',
+  },
+
+  en: {
+    // Navbar
+    'nav.place': '+ Post a listing',
+    'nav.login': 'Sign in',
+    'nav.register': 'Sign Up',
+    'nav.profile': 'My profile',
+    'nav.myAds': 'My ads',
+    'nav.messages': 'Messages',
+    'nav.admin': 'Admin panel',
+    'nav.logout': 'Sign out',
+    'nav.home': 'Home',
+    'nav.create': 'Create',
+    'nav.chat': 'Chat',
+    'nav.profile': 'Profile',
+
+    // Home
+    'home.hero.title': 'Find a specialist in',
+    'home.hero.accent': 'beauty and wellness',
+    'home.hero.placeholder': 'Massage, dentistry, manicure...',
+    'home.hero.city': 'City',
+    'home.hero.search': 'Search',
+    'home.categories.title': 'Popular categories',
+    'home.categories.subtitle': 'Choose the direction you are interested in',
+    'home.ads.title': 'New listings',
+    'home.ads.subtitle': 'Fresh offers from specialists',
+    'home.ads.all': 'View all →',
+    'home.cta.title': 'Ready to post an ad?',
+    'home.cta.subtitle': 'Join thousands of specialists on our platform',
+    'home.cta.register': 'Sign up',
+    'home.cta.find': 'Find a specialist',
+
+    // Catalog
+    'mobile.searchPlaceholder': 'Search specialists...',
+    'catalog.title': 'Service catalog',
+    'catalog.subtitle': 'Find a specialist for your needs',
+    'catalog.search': 'Service or specialist...',
+    'catalog.city': 'City',
+    'catalog.allCats': 'All categories',
+    'catalog.allSubs': 'All subcategories',
+    'catalog.find': 'Search',
+    'catalog.reset': 'Reset all',
+    'catalog.found': 'Found:',
+    'catalog.ads': 'listings',
+    'catalog.empty': 'No listings found',
+    'catalog.emptyHint': 'Try changing the search parameters',
+    'catalog.activeFilters': 'Active filters:',
+
+    // Ad page
+    'ad.description': 'Description',
+    'ad.details': 'Details',
+    'ad.category': 'Category',
+    'ad.subcategory': 'Direction',
+    'ad.city': 'City',
+    'ad.address': 'Address',
+    'ad.date': 'Published',
+    'ad.contacts': 'Contacts',
+    'ad.writeMsg': 'Send a message',
+    'ad.loginToWrite': 'Sign in to write',
+    'ad.edit': 'Edit',
+    'ad.delete': 'Delete',
+    'ad.price.negotiable': 'Price negotiable',
+    'ad.back': '← Catalog',
+
+    // Account
+    'account.profile': 'My profile',
+    'account.name': 'Name',
+    'account.org': 'Organization',
+    'account.orgHint': 'Optional',
+    'account.website': 'Organization website',
+    'account.websiteHint': 'https://example.com',
+    'account.avatar': 'Profile photo',
+    'account.avatarChange': 'Change photo',
+    'account.avatarUploading': 'Uploading...',
+    'account.save': 'Save',
+    'account.saving': 'Saving...',
+    'account.saved': 'Profile saved ✓',
+    'account.language': 'Language',
+    'account.myAds': 'My ads',
+    'account.createAd': 'Create listing',
+    'account.messages': 'Messages',
+    'account.place': '+ Post a listing',
+    'account.noAds': 'You have no listings',
+    'account.noAdsHint': 'Post your first listing',
+    'account.view': 'View',
+    'account.editAd': 'Edit',
+    'account.deleteAd': 'Delete',
+    'account.active': 'Active',
+    'account.inactive': 'Inactive',
+    'account.dialogs': 'Chats',
+    'account.noDialogs': 'No chats yet',
+    'account.selectDialog': 'Select a chat to view',
+    'account.msgPlaceholder': 'Write a message...',
+    'account.send': 'Send',
+    'account.createTitle': 'Post an ad',
+    'account.editTitle': 'Edit ad',
+
+    // Footer
+    'footer.description': 'A modern platform to find beauty and wellness specialists.',
+    'footer.nav': 'Navigation',
+    'footer.catalog': 'Catalog',
+    'footer.about': 'About',
+    'footer.contacts': 'Contacts',
+    'footer.categories': 'Categories',
+    'footer.medicine': 'Medicine',
+    'footer.beauty': 'Beauty services',
+    'footer.cosmetology': 'Cosmetology',
+    'footer.rights': '© 2026 MedBeauty Board. All rights reserved.',
+
+    // Login
+    'login.title': 'Sign in',
+    'login.subtitle': 'Sign in with your email or phone number',
+    'login.label': 'Email or phone',
+    'login.placeholder': '+7 999 123-45-67 or email@mail.com',
+    'login.password': 'Password',
+    'login.loading': 'Signing in...',
+    'login.submit': 'Sign in',
+    'login.noAccount': 'No account?',
+    'login.register': 'Sign Up',
+    'login.error': 'Sign in error',
+
+    // Register
+    'register.title': 'Sign up',
+    'register.subtitle': 'Join the specialist platform',
+    'register.name': 'Name',
+    'register.namePlaceholder': 'John Smith',
+    'register.phone': 'Phone',
+    'register.phonePlaceholder': '+7 999 123-45-67',
+    'register.email': 'Email',
+    'register.password': 'Password',
+    'register.passwordPlaceholder': 'Minimum 8 characters',
+    'register.org': 'Organization (optional)',
+    'register.orgPlaceholder': 'Clinic or salon name...',
+    'register.loading': 'Signing up...',
+    'register.submit': 'Sign up',
+    'register.hasAccount': 'Already have an account?',
+    'register.login': 'Sign in',
+    'register.error': 'Registration error',
+
+    // About
+    'about.title': 'About',
+    'about.subtitle': 'MedBeauty Board — a modern platform for finding and posting listings in medicine and beauty services.',
+    'about.medicine.title': 'Medical services',
+    'about.medicine.desc': 'Dentists, therapists, psychologists, massage therapists and other medical specialists.',
+    'about.beauty.title': 'Beauty services',
+    'about.beauty.desc': 'Cosmetologists, manicure masters, hairdressers, barbers, makeup artists and SPA masters.',
+
+    // Contacts
+    'contacts.title': 'Contacts',
+    'contacts.subtitle': 'We are always happy to help!',
+    'contacts.phone': 'Phone',
+
+    // Profile additions
+    'account.phone': 'Phone',
+    'account.loginHint': 'Please sign in to view your profile',
+
+    // Breadcrumb
+    'nav.home': 'Home',
+    'nav.catalog': 'Catalog',
+
+    // Form
+    'form.mainInfo': 'Main information',
+    'form.title': 'Title',
+    'form.titlePlaceholder': 'E.g. Back massage, 60 min',
+    'form.category': 'Category',
+    'form.subcategory': 'Subcategory',
+    'form.description': 'Description',
+    'form.descPlaceholder': 'Describe the service, your experience, terms...',
+    'form.price': 'Price (€)',
+    'form.pricePlaceholder': 'Leave empty if negotiable',
+    'form.city': 'City',
+    'form.cityPlaceholder': 'Moscow',
+    'form.address': 'Address',
+    'form.addressPlaceholder': 'Optional',
+    'form.select': 'Select...',
+    'form.photos': 'Photos',
+    'form.photosHint': 'up to 10',
+    'form.addPhoto': 'Add',
+    'form.uploading': 'Uploading photo...',
+    'form.uploadError': 'Photo upload error',
+    'form.saveError': 'Save error',
+
+    // Common
+    'common.cancel': 'Cancel',
+    'common.publish': 'Publish listing',
+    'common.saveChanges': 'Save changes',
+    'common.saving': 'Saving...',
+    'common.loginRequired': 'Sign in',
+    'common.send': 'Send',
+    'common.sending': 'Sending...',
+    'common.msgPlaceholder': 'Enter your message...',
+    'common.deleteConfirm': 'Delete listing?',
+  }
+}
+
+const categoryNames: Record<string, Record<string, string>> = {
+  ru: { medicine: 'Медицина', beauty: 'Beauty' },
+  en: { medicine: 'Medicine', beauty: 'Beauty' },
+}
+
+const subcategoryNames: Record<string, Record<string, string>> = {
+  ru: {
+    'Стоматология': 'Стоматология', 'Психология': 'Психология', 'Терапия': 'Терапия',
+    'Гинекология': 'Гинекология', 'Реабилитация': 'Реабилитация', 'Массаж': 'Массаж',
+    'Диетология': 'Диетология', 'ЛФК': 'ЛФК', 'Косметология': 'Косметология',
+    'Маникюр / Педикюр': 'Маникюр / Педикюр', 'Парикмахер': 'Парикмахер',
+    'Барбер': 'Барбер', 'Визажист': 'Визажист', 'Лазерная эпиляция': 'Лазерная эпиляция',
+    'Бровист / Лешмейкер': 'Бровист / Лешмейкер', 'SPA': 'SPA',
+  },
+  en: {
+    'Стоматология': 'Dentistry', 'Психология': 'Psychology', 'Терапия': 'Therapy',
+    'Гинекология': 'Gynecology', 'Реабилитация': 'Rehabilitation', 'Массаж': 'Massage',
+    'Диетология': 'Dietology', 'ЛФК': 'Exercise Therapy', 'Косметология': 'Cosmetology',
+    'Маникюр / Педикюр': 'Manicure / Pedicure', 'Парикмахер': 'Hairdresser',
+    'Барбер': 'Barber', 'Визажист': 'Makeup Artist', 'Лазерная эпиляция': 'Laser Hair Removal',
+    'Бровист / Лешмейкер': 'Brow / Lash Artist', 'SPA': 'SPA',
+  },
+}
+
+export function useLocale() {
+  const locale = useState<'ru' | 'en'>('locale', () => 'ru')
+
+  function setLocale(l: 'ru' | 'en') {
+    locale.value = l
+    if (process.client) localStorage.setItem('locale', l)
+  }
+
+  function t(key: string): string {
+    return (messages[locale.value] as any)[key] ?? (messages.ru as any)[key] ?? key
+  }
+
+  function tCat(slug: string): string {
+    return categoryNames[locale.value]?.[slug] ?? categoryNames['ru']?.[slug] ?? slug
+  }
+
+  function tSub(name: string): string {
+    return subcategoryNames[locale.value]?.[name] ?? name
+  }
+
+  if (process.client) {
+    const saved = localStorage.getItem('locale') as 'ru' | 'en' | null
+    if (saved) locale.value = saved
+  }
+
+  return { locale, setLocale, t, tCat, tSub }
+}

@@ -1,0 +1,81 @@
+<template>
+  <NuxtLink :to="`/ad/${ad.slug}`"
+    class="group flex gap-5 bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] hover:shadow-[0_6px_24px_rgba(45,77,58,0.13)] transition-all duration-200 overflow-hidden p-4">
+    <!-- Image -->
+    <div class="relative w-40 h-32 shrink-0 rounded overflow-hidden bg-gray-100">
+      <img v-if="ad.images?.[0]"
+        :src="ad.images[0].imageUrl"
+        :alt="ad.title"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+      <img v-else
+        :src="fallbackImage"
+        :alt="ad.subcategory"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+    </div>
+
+    <!-- Content -->
+    <div class="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-xs font-semibold bg-[#8FD9A8] text-[#2D4D3A] px-2 py-0.5 rounded-full shrink-0">
+            {{ tSub(ad.subcategory) }}
+          </span>
+        </div>
+        <h3 class="font-semibold text-[#2D4D3A] text-base leading-snug line-clamp-1 group-hover:text-[#3d6650] transition-colors">
+          {{ ad.title }}
+        </h3>
+        <p class="text-[#5B5B5B] text-sm mt-1 line-clamp-2">{{ ad.description }}</p>
+      </div>
+
+      <div class="flex items-center justify-between mt-2">
+        <div class="text-[#2D4D3A] font-bold text-base">
+          {{ ad.price ? formatPrice(ad.price) : t('ad.price.negotiable') }}
+        </div>
+        <div class="flex items-center gap-3 text-xs text-gray-400">
+          <span class="flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            {{ ad.city }}
+          </span>
+          <span>{{ ad.user?.name || 'Специалист' }}</span>
+        </div>
+      </div>
+    </div>
+  </NuxtLink>
+</template>
+
+<script setup lang="ts">
+const props = defineProps<{ ad: any }>()
+const { t, tSub } = useLocale()
+
+const keywordMap: Record<string, string> = {
+  'Стоматология': 'dentist,dental',
+  'Психология': 'psychology,therapy',
+  'Терапия': 'doctor,clinic',
+  'Гинекология': 'medical,healthcare',
+  'Реабилитация': 'rehabilitation,physiotherapy',
+  'Массаж': 'massage,spa',
+  'Диетология': 'nutrition,healthy-food',
+  'ЛФК': 'fitness,exercise',
+  'Косметология': 'cosmetology,skincare',
+  'Маникюр / Педикюр': 'manicure,nails',
+  'Парикмахер': 'hairdresser,haircut',
+  'Барбер': 'barbershop,barber',
+  'Визажист': 'makeup,beauty',
+  'Лазерная эпиляция': 'laser,beauty-salon',
+  'Бровист / Лешмейкер': 'eyebrows,lashes',
+  'SPA': 'spa,relaxation',
+}
+
+const fallbackImage = computed(() => {
+  const kw = keywordMap[props.ad.subcategory] || 'beauty,health'
+  const lock = props.ad.id % 50
+  return `https://loremflickr.com/400/300/${kw}?lock=${lock}`
+})
+
+function formatPrice(price: number) {
+  return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price)
+}
+</script>
