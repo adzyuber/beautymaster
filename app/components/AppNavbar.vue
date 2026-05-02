@@ -4,7 +4,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-[72px]">
         <!-- Logo -->
-        <NuxtLink to="/" class="flex items-center gap-2 -ml-3">
+        <NuxtLink to="/" class="flex items-center gap-2">
           <img src="/logo.png" alt="BeautyMaster" class="h-12 w-auto brightness-0 invert">
           <span class="text-2xl font-bold text-[#1EC3BD]">Beauty<span class="text-white">Master</span></span>
         </NuxtLink>
