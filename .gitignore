@@ -17,6 +17,7 @@ logs
 .DS_Store
 .fleet
 .idea
+Screenshot*
 
 # Local env files
 .env
