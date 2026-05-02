@@ -5,8 +5,8 @@
       <div class="flex items-center justify-between h-20">
         <!-- Logo -->
         <NuxtLink to="/" class="flex items-center gap-2">
-          <img src="/logo.png" alt="MedBeauty Board" class="h-14 w-auto brightness-0 invert">
-          <span class="text-3xl font-bold text-[#1EC3BD]">Med<span class="text-white">&Beauty</span></span>
+          <img src="/logo.png" alt="BeautyMaster" class="h-14 w-auto brightness-0 invert">
+          <span class="text-3xl font-bold text-[#1EC3BD]">Beauty<span class="text-white">Master</span></span>
         </NuxtLink>
 
         <!-- Auth + locale -->

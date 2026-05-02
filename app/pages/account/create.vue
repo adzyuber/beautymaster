@@ -211,5 +211,5 @@ async function submit() {
   }
 }
 
-useSeoMeta({ title: `${isEdit.value ? 'Редактировать' : 'Создать объявление'} — MedBeauty Board` })
+useSeoMeta({ title: `${isEdit.value ? 'Редактировать' : 'Создать объявление'} — BeautyMaster` })
 </script>

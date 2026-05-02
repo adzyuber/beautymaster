@@ -187,5 +187,5 @@ function goPage(p: number) {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-useSeoMeta({ title: 'Каталог услуг — MedBeauty Board' })
+useSeoMeta({ title: 'Каталог услуг — BeautyMaster' })
 </script>

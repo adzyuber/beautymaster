@@ -80,5 +80,5 @@ function formatDate(d: string) {
   return new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
 }
 
-useSeoMeta({ title: 'Мои объявления — MedBeauty Board' })
+useSeoMeta({ title: 'Мои объявления — BeautyMaster' })
 </script>

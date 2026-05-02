@@ -88,7 +88,7 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
 definePageMeta({ layout: 'admin' })
-useSeoMeta({ title: 'Admin — MedBeauty Board' })
+useSeoMeta({ title: 'Admin — BeautyMaster' })
 
 const authStore = useAuthStore()
 const form = reactive({ login: '', password: '' })

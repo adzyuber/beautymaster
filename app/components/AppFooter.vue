@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-28 sm:pb-12">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <div class="text-2xl font-bold mb-3">Med<span class="text-[#1EC3BD]">&Beauty</span></div>
+          <div class="text-2xl font-bold mb-3">Beauty<span class="text-[#1EC3BD]">Master</span></div>
           <p class="text-white/60 text-sm">{{ tr.description }}</p>
         </div>
         <div>

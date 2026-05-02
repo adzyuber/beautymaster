@@ -105,7 +105,7 @@ const messages = {
     'footer.medicine': 'Медицина',
     'footer.beauty': 'Beauty-услуги',
     'footer.cosmetology': 'Косметология',
-    'footer.rights': '© 2026 MedBeauty Board. Все права защищены.',
+    'footer.rights': '© 2026 BeautyMaster. Все права защищены.',
 
     // Login
     'login.title': 'Вход в аккаунт',
@@ -139,7 +139,7 @@ const messages = {
 
     // About
     'about.title': 'О проекте',
-    'about.subtitle': 'MedBeauty Board — современная платформа для поиска и размещения объявлений в сфере медицины и beauty-услуг.',
+    'about.subtitle': 'BeautyMaster — современная платформа для поиска и размещения объявлений в сфере медицины и beauty-услуг.',
     'about.medicine.title': 'Медицинские услуги',
     'about.medicine.desc': 'Стоматологи, терапевты, психологи, массажисты и другие медицинские специалисты.',
     'about.beauty.title': 'Beauty-услуги',
@@ -298,7 +298,7 @@ const messages = {
     'footer.medicine': 'Medicine',
     'footer.beauty': 'Beauty services',
     'footer.cosmetology': 'Cosmetology',
-    'footer.rights': '© 2026 MedBeauty Board. All rights reserved.',
+    'footer.rights': '© 2026 BeautyMaster. All rights reserved.',
 
     // Login
     'login.title': 'Sign in',
@@ -332,7 +332,7 @@ const messages = {
 
     // About
     'about.title': 'About',
-    'about.subtitle': 'MedBeauty Board — a modern platform for finding and posting listings in medicine and beauty services.',
+    'about.subtitle': 'BeautyMaster — a modern platform for finding and posting listings in medicine and beauty services.',
     'about.medicine.title': 'Medical services',
     'about.medicine.desc': 'Dentists, therapists, psychologists, massage therapists and other medical specialists.',
     'about.beauty.title': 'Beauty services',

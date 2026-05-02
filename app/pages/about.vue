@@ -20,5 +20,5 @@
 
 <script setup lang="ts">
 const { t } = useLocale()
-useSeoMeta({ title: 'О проекте — MedBeauty Board' })
+useSeoMeta({ title: 'О проекте — BeautyMaster' })
 </script>

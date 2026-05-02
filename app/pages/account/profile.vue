@@ -172,5 +172,5 @@ watch(() => authStore.user, (u) => {
   if (u) { form.name = u.name; form.organization = u.organization || ''; form.website = u.website || '' }
 }, { immediate: true })
 
-useSeoMeta({ title: 'Мой профиль — MedBeauty Board' })
+useSeoMeta({ title: 'Мой профиль — BeautyMaster' })
 </script>

@@ -12,8 +12,8 @@
       </div>
       <div class="text-center mb-8">
         <NuxtLink to="/" class="inline-flex items-center gap-2 justify-center">
-          <img src="/logo.png" alt="Med&Beauty" class="h-10 w-auto">
-          <span class="text-2xl font-bold text-[#1EC3BD]">Med<span class="text-[#2D2D2D]">&Beauty</span></span>
+          <img src="/logo.png" alt="BeautyMaster" class="h-10 w-auto">
+          <span class="text-2xl font-bold text-[#1EC3BD]">Beauty<span class="text-[#2D2D2D]">Master</span></span>
         </NuxtLink>
         <h1 class="text-xl font-bold text-[#2D4D3A] mt-4">{{ t('login.title') }}</h1>
         <p class="text-[#5B5B5B] text-sm mt-1">{{ t('login.subtitle') }}</p>
@@ -75,5 +75,5 @@ async function submit() {
   }
 }
 
-useSeoMeta({ title: 'Вход — MedBeauty Board' })
+useSeoMeta({ title: 'Вход — BeautyMaster' })
 </script>

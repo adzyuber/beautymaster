@@ -246,7 +246,7 @@ function formatDate(d: string) {
 }
 
 useSeoMeta({
-  title: () => ad.value ? `${ad.value.title} — MedBeauty Board` : 'MedBeauty Board',
+  title: () => ad.value ? `${ad.value.title} — BeautyMaster` : 'BeautyMaster',
   description: () => ad.value?.description?.slice(0, 160) || ''
 })
 </script>

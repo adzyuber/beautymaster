@@ -163,5 +163,5 @@ async function sendMsg() {
   if (el) el.scrollTop = el.scrollHeight
 }
 
-useSeoMeta({ title: 'Сообщения — MedBeauty Board' })
+useSeoMeta({ title: 'Сообщения — BeautyMaster' })
 </script>

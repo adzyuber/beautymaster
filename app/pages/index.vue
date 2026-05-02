@@ -41,7 +41,7 @@
     <!-- Categories (mobile padding top) -->
     <section class="bg-white border-b border-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
-      <h2 class="text-2xl font-bold text-[#2D4D3A] mb-2">{{ t('home.categories.title') }} <span class="sm:hidden"><span class="text-[#1EC3BD]">Med</span><span class="text-[#02282C]">&Beauty</span></span></h2>
+      <h2 class="text-2xl font-bold text-[#2D4D3A] mb-2">{{ t('home.categories.title') }} <span class="sm:hidden">Beauty<span class="text-[#1EC3BD]">Master</span></span></h2>
       <p class="text-[#5B5B5B] mb-8">{{ t('home.categories.subtitle') }}</p>
       <!-- Mobile: 3 rows, horizontal scroll -->
       <div v-if="categories" class="sm:hidden overflow-x-auto -mx-4 px-4 pb-2">
@@ -142,7 +142,7 @@ function goSearch() {
 }
 
 useSeoMeta({
-  title: 'MedBeauty Board — лучшие специалисты красоты и здоровья',
+  title: 'BeautyMaster — лучшие специалисты красоты и здоровья',
   description: 'Найдите лучших врачей, косметологов, массажистов и beauty-мастеров в вашем городе.'
 })
 </script>
