@@ -2,11 +2,11 @@
   <header class="bg-[#02282C] shadow-sm fixed top-0 left-0 right-0 z-50 transition-transform duration-300"
     :class="hidden ? '-translate-y-full' : 'translate-y-0'">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
+      <div class="flex items-center justify-between h-[72px]">
         <!-- Logo -->
-        <NuxtLink to="/" class="flex items-center gap-2">
-          <img src="/logo.png" alt="BeautyMaster" class="h-14 w-auto brightness-0 invert">
-          <span class="text-3xl font-bold text-[#1EC3BD]">Beauty<span class="text-white">Master</span></span>
+        <NuxtLink to="/" class="flex items-center gap-2 -ml-3">
+          <img src="/logo.png" alt="BeautyMaster" class="h-12 w-auto brightness-0 invert">
+          <span class="text-2xl font-bold text-[#1EC3BD]">Beauty<span class="text-white">Master</span></span>
         </NuxtLink>
 
         <!-- Auth + locale -->

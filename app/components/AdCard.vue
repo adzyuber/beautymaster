@@ -10,7 +10,10 @@
         :src="fallbackImage"
         :alt="ad.subcategory"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-      <span class="absolute top-3 left-3 bg-[#8FD9A8] text-[#2D4D3A] text-xs font-semibold px-3 py-1 rounded-full">
+      <span class="absolute top-3 left-3 flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
+        :style="{ backgroundColor: categoryIcons[ad.subcategory]?.bg ?? '#E0F7F6', color: categoryIcons[ad.subcategory]?.color ?? '#02282C' }">
+        <svg v-if="categoryIcons[ad.subcategory]" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          v-html="categoryIcons[ad.subcategory].paths" />
         {{ tSub(ad.subcategory) }}
       </span>
     </div>
@@ -37,6 +40,8 @@
 </template>
 
 <script setup lang="ts">
+import { categoryIcons } from '~/utils/categoryIcons'
+
 const props = defineProps<{ ad: any }>()
 const { t, tSub } = useLocale()
 

@@ -17,7 +17,10 @@
     <div class="flex-1 min-w-0 flex flex-col justify-between py-0.5">
       <div>
         <div class="flex items-center gap-2 mb-1">
-          <span class="text-xs font-semibold bg-[#8FD9A8] text-[#2D4D3A] px-2 py-0.5 rounded-full shrink-0">
+          <span class="flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-full shrink-0"
+            :style="{ backgroundColor: categoryIcons[ad.subcategory]?.bg ?? '#E0F7F6', color: categoryIcons[ad.subcategory]?.color ?? '#02282C' }">
+            <svg v-if="categoryIcons[ad.subcategory]" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              v-html="categoryIcons[ad.subcategory].paths" />
             {{ tSub(ad.subcategory) }}
           </span>
         </div>
@@ -47,6 +50,8 @@
 </template>
 
 <script setup lang="ts">
+import { categoryIcons } from '~/utils/categoryIcons'
+
 const props = defineProps<{ ad: any }>()
 const { t, tSub } = useLocale()
 
