@@ -58,7 +58,7 @@
       </div>
 
       <!-- Mobile layout -->
-      <div class="sm:hidden flex flex-col bg-white" style="height: calc(100dvh - 64px);">
+      <div class="sm:hidden flex flex-col bg-white" style="height: 100dvh; padding-bottom: 64px;">
 
         <!-- Chat list -->
         <template v-if="!activeChat">
