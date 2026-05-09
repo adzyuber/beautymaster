@@ -96,14 +96,17 @@
           </div>
 
           <div ref="msgContainerMobile" class="flex-1 min-h-0 overflow-y-auto bg-white" style="overscroll-behavior: contain; padding-top: 60px;">
-            <div class="min-h-full flex flex-col justify-end p-4 space-y-3" style="padding-bottom: 140px;">
-              <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
-                <div :class="['max-w-[80%] px-4 py-3 rounded text-sm leading-relaxed',
-                  msg.fromUserId === authStore.user?.id ? 'bg-[#02282C] text-white' : 'bg-gray-100 text-[#2D4D3A]']">
-                  {{ msg.text }}
+            <div class="min-h-full flex flex-col">
+              <div class="flex-1"></div>
+              <div class="p-4 space-y-3" style="padding-bottom: 140px;">
+                <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
+                  <div :class="['max-w-[80%] px-4 py-3 rounded text-sm leading-relaxed',
+                    msg.fromUserId === authStore.user?.id ? 'bg-[#02282C] text-white' : 'bg-gray-100 text-[#2D4D3A]']">
+                    {{ msg.text }}
+                  </div>
                 </div>
+                <div ref="msgEndMobile"></div>
               </div>
-              <div ref="msgEndMobile"></div>
             </div>
           </div>
 
