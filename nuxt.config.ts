@@ -17,6 +17,9 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     jwtSecret: process.env.JWT_SECRET || 'medbeauty-secret',
+    resendApiKey: process.env.RESEND_API_KEY || '',
+    mailFrom: process.env.MAIL_FROM || 'BeautyMaster <noreply@beautymaster.guru>',
+    appUrl: process.env.APP_URL || 'http://localhost:3030',
     public: {}
   },
   nitro: {

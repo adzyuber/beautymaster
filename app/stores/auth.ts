@@ -51,6 +51,14 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       await ofetch('/api/auth/logout', { method: 'POST' })
       this.user = null
+    },
+    async resetPassword(token: string, password: string) {
+      const res = await ofetch<{ user: User }>('/api/auth/reset-password', {
+        method: 'POST',
+        body: { token, password }
+      })
+      this.user = res.user
+      return res
     }
   }
 })

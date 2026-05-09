@@ -2,7 +2,7 @@ import prisma from '../../utils/prisma'
 import { requireAuth } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
-  const auth = requireAuth(event)
+  const auth = await requireAuth(event)
   const query = getQuery(event)
   const withUserId = query.with ? Number(query.with) : null
 

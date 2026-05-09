@@ -8,20 +8,36 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  name         String
-  organization String?
-  website      String?
-  avatarUrl    String?
-  phone        String    @unique
-  email        String    @unique
-  passwordHash String
-  role         String    @default("user")
-  createdAt    DateTime  @default(now())
+  id                Int       @id @default(autoincrement())
+  name              String
+  organization      String?
+  website           String?
+  avatarUrl         String?
+  phone             String    @unique
+  email             String    @unique
+  passwordHash      String
+  role              String    @default("user")
+  createdAt         DateTime  @default(now())
+  passwordChangedAt DateTime  @default(now())
 
   ads              Ad[]
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+  resetTokens      PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model Ad {

@@ -118,6 +118,29 @@ const messages = {
     'login.noAccount': 'Нет аккаунта?',
     'login.register': 'Зарегистрируйтесь',
     'login.error': 'Ошибка входа',
+    'login.forgot': 'Забыли пароль?',
+
+    // Forgot password
+    'forgot.title': 'Восстановление пароля',
+    'forgot.subtitle': 'Введите email — пришлём ссылку для сброса',
+    'forgot.email': 'Email',
+    'forgot.submit': 'Отправить ссылку',
+    'forgot.loading': 'Отправляем...',
+    'forgot.sent': 'Если такой email зарегистрирован, мы отправили на него письмо со ссылкой для сброса пароля. Проверьте папку «Спам», если письма нет.',
+    'forgot.error': 'Не удалось отправить письмо',
+    'forgot.backToLogin': '← Вернуться ко входу',
+
+    // Reset password
+    'reset.title': 'Новый пароль',
+    'reset.subtitle': 'Придумайте новый пароль для аккаунта',
+    'reset.password': 'Новый пароль',
+    'reset.confirm': 'Повторите пароль',
+    'reset.submit': 'Сохранить и войти',
+    'reset.loading': 'Сохраняем...',
+    'reset.mismatch': 'Пароли не совпадают',
+    'reset.invalidLink': 'Ссылка недействительна. Запросите новую через «Забыли пароль?».',
+    'reset.error': 'Не удалось обновить пароль',
+    'reset.backToLogin': '← Вернуться ко входу',
 
     // Register
     'register.title': 'Создать аккаунт',
@@ -311,6 +334,29 @@ const messages = {
     'login.noAccount': 'No account?',
     'login.register': 'Sign Up',
     'login.error': 'Sign in error',
+    'login.forgot': 'Forgot password?',
+
+    // Forgot password
+    'forgot.title': 'Reset your password',
+    'forgot.subtitle': 'Enter your email and we will send a reset link',
+    'forgot.email': 'Email',
+    'forgot.submit': 'Send reset link',
+    'forgot.loading': 'Sending...',
+    'forgot.sent': 'If this email is registered, we have sent a password reset link. Please check your spam folder if you do not see it.',
+    'forgot.error': 'Failed to send email',
+    'forgot.backToLogin': '← Back to sign in',
+
+    // Reset password
+    'reset.title': 'New password',
+    'reset.subtitle': 'Choose a new password for your account',
+    'reset.password': 'New password',
+    'reset.confirm': 'Confirm password',
+    'reset.submit': 'Save and sign in',
+    'reset.loading': 'Saving...',
+    'reset.mismatch': 'Passwords do not match',
+    'reset.invalidLink': 'This link is invalid. Request a new one via "Forgot password?".',
+    'reset.error': 'Failed to update password',
+    'reset.backToLogin': '← Back to sign in',
 
     // Register
     'register.title': 'Sign up',

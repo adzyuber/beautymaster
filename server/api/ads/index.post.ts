@@ -3,7 +3,7 @@ import { requireAuth } from '../../utils/auth'
 import { slugify } from '../../utils/slugify'
 
 export default defineEventHandler(async (event) => {
-  const auth = requireAuth(event)
+  const auth = await requireAuth(event)
   const body = await readBody(event)
   const { title, category, subcategory, description, price, city, address, images } = body
 

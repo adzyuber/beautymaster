@@ -2,7 +2,7 @@ import prisma from '../../utils/prisma'
 import { getAuthUser } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
-  const auth = getAuthUser(event)
+  const auth = await getAuthUser(event)
   if (!auth) return null
 
   const user = await prisma.user.findUnique({

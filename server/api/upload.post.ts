@@ -3,7 +3,7 @@ import { writeFile } from 'fs/promises'
 import { join } from 'path'
 
 export default defineEventHandler(async (event) => {
-  requireAuth(event)
+  await requireAuth(event)
   const form = await readMultipartFormData(event)
   if (!form) throw createError({ statusCode: 400, message: 'No file' })
 

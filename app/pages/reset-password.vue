@@ -15,22 +15,23 @@
           <img src="/logo.png" alt="BeautyMaster" class="h-10 w-auto">
           <span class="text-2xl font-bold text-[#1EC3BD]">Beauty<span class="text-[#2D2D2D]">Master</span></span>
         </NuxtLink>
-        <h1 class="text-xl font-bold text-[#2D4D3A] mt-4">{{ t('login.title') }}</h1>
-        <p class="text-[#5B5B5B] text-sm mt-1">{{ t('login.subtitle') }}</p>
+        <h1 class="text-xl font-bold text-[#2D4D3A] mt-4">{{ t('reset.title') }}</h1>
+        <p class="text-[#5B5B5B] text-sm mt-1">{{ t('reset.subtitle') }}</p>
       </div>
 
-      <form @submit.prevent="submit" class="space-y-4">
+      <div v-if="!token" class="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-4 rounded">
+        {{ t('reset.invalidLink') }}
+      </div>
+
+      <form v-else @submit.prevent="submit" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('login.label') }}</label>
-          <input v-model="form.login" type="text" required
+          <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('reset.password') }}</label>
+          <input v-model="form.password" type="password" required minlength="6" autocomplete="new-password"
             class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
         </div>
         <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="block text-xs font-semibold text-[#5B5B5B] uppercase tracking-wide">{{ t('login.password') }}</label>
-            <NuxtLink to="/forgot-password" class="text-xs font-semibold text-[#1EC3BD] hover:text-[#02282C] transition-colors">{{ t('login.forgot') }}</NuxtLink>
-          </div>
-          <input v-model="form.password" type="password" required
+          <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('reset.confirm') }}</label>
+          <input v-model="form.confirm" type="password" required minlength="6" autocomplete="new-password"
             class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
         </div>
 
@@ -40,13 +41,12 @@
 
         <button type="submit" :disabled="loading"
           class="w-full bg-[#2D2D2D] text-white border-2 border-[#2D2D2D] py-3 rounded font-bold hover:bg-[#1a1a1a] hover:border-[#1a1a1a] transition-all disabled:opacity-50">
-          {{ loading ? t('login.loading') : t('login.submit') }}
+          {{ loading ? t('reset.loading') : t('reset.submit') }}
         </button>
       </form>
 
       <p class="text-center text-sm text-[#5B5B5B] mt-6">
-        {{ t('login.noAccount') }}
-        <NuxtLink to="/register" class="text-[#2D4D3A] font-semibold hover:underline">{{ t('login.register') }}</NuxtLink>
+        <NuxtLink to="/login" class="text-[#2D4D3A] font-semibold hover:underline">{{ t('reset.backToLogin') }}</NuxtLink>
       </p>
     </div>
   </div>
@@ -57,26 +57,35 @@ import { useAuthStore } from '~/stores/auth'
 definePageMeta({ layout: false })
 
 const { t, locale, setLocale } = useLocale()
-const authStore = useAuthStore()
-const router = useRouter()
 const route = useRoute()
-const form = reactive({ login: '', password: '' })
+const router = useRouter()
+const authStore = useAuthStore()
+
+const token = computed(() => {
+  const t = route.query.token
+  return typeof t === 'string' && /^[a-f0-9]{64}$/i.test(t) ? t : ''
+})
+
+const form = reactive({ password: '', confirm: '' })
 const loading = ref(false)
 const error = ref('')
 
 async function submit() {
-  loading.value = true
   error.value = ''
+  if (form.password !== form.confirm) {
+    error.value = t('reset.mismatch')
+    return
+  }
+  loading.value = true
   try {
-    await authStore.login(form.login, form.password)
-    const redirect = route.query.redirect as string | undefined
-    router.push(redirect || '/account/profile')
+    await authStore.resetPassword(token.value, form.password)
+    router.push('/account/profile')
   } catch (e: any) {
-    error.value = e.data?.message || t('login.error')
+    error.value = e.data?.message || t('reset.error')
   } finally {
     loading.value = false
   }
 }
 
-useSeoMeta({ title: 'Вход — BeautyMaster' })
+useSeoMeta({ title: 'Новый пароль — BeautyMaster' })
 </script>
