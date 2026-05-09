@@ -95,7 +95,7 @@
             <span class="font-bold text-[#2D4D3A] text-base truncate">{{ activeChat.userName }}</span>
           </div>
 
-          <div ref="msgContainerMobile" class="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-white">
+          <div ref="msgContainerMobile" class="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-white" style="overscroll-behavior: contain;">
             <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
               <div :class="['max-w-[80%] px-4 py-3 rounded text-sm leading-relaxed',
                 msg.fromUserId === authStore.user?.id ? 'bg-[#02282C] text-white' : 'bg-gray-100 text-[#2D4D3A]']">
