@@ -8,17 +8,17 @@ export default defineEventHandler(async (event) => {
   const { name, phone, email, password, organization } = body
 
   if (!name || !phone || !email || !password) {
-    throw createError({ statusCode: 400, message: 'Заполните все обязательные поля' })
+    throw createError({ statusCode: 400, message: 'Заполните все обязательные поля', data: { code: 'missing_fields' } })
   }
   if (password.length < 8) {
-    throw createError({ statusCode: 400, message: 'Пароль должен содержать минимум 8 символов' })
+    throw createError({ statusCode: 400, message: 'Пароль должен содержать минимум 8 символов', data: { code: 'password_too_short' } })
   }
 
   const existing = await prisma.user.findFirst({
     where: { OR: [{ email }, { phone }] }
   })
   if (existing) {
-    throw createError({ statusCode: 400, message: 'Email или телефон уже зарегистрирован' })
+    throw createError({ statusCode: 400, message: 'Email или телефон уже зарегистрирован', data: { code: 'duplicate_account' } })
   }
 
   const passwordHash = await bcrypt.hash(password, 10)

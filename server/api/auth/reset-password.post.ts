@@ -10,11 +10,11 @@ export default defineEventHandler(async (event) => {
   const password = typeof body?.password === 'string' ? body.password : ''
 
   if (!token || !/^[a-f0-9]{64}$/i.test(token)) {
-    throw createError({ statusCode: 400, message: 'Некорректная ссылка' })
+    throw createError({ statusCode: 400, message: 'Некорректная ссылка', data: { code: 'invalid_token' } })
   }
 
   if (!password || password.length < 6) {
-    throw createError({ statusCode: 400, message: 'Пароль должен быть не короче 6 символов' })
+    throw createError({ statusCode: 400, message: 'Пароль должен быть не короче 6 символов', data: { code: 'password_too_short' } })
   }
 
   const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
   })
 
   if (!record || record.usedAt || record.expiresAt < new Date()) {
-    throw createError({ statusCode: 400, message: 'Ссылка недействительна или истекла' })
+    throw createError({ statusCode: 400, message: 'Ссылка недействительна или истекла', data: { code: 'token_expired' } })
   }
 
   const passwordHash = await bcrypt.hash(password, 10)

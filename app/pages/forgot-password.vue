@@ -50,7 +50,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: false })
 
-const { t, locale, setLocale } = useLocale()
+const { t, locale, setLocale, tError } = useLocale()
 const email = ref('')
 const loading = ref(false)
 const error = ref('')
@@ -66,11 +66,11 @@ async function submit() {
     })
     sent.value = true
   } catch (e: any) {
-    error.value = e.data?.message || t('forgot.error')
+    error.value = tError(e, 'forgot.error')
   } finally {
     loading.value = false
   }
 }
 
-useSeoMeta({ title: 'Восстановление пароля — BeautyMaster' })
+useSeoMeta({ title: () => `${t('forgot.title')} — BeautyMaster` })
 </script>

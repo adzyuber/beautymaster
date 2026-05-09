@@ -56,7 +56,7 @@
 import { useAuthStore } from '~/stores/auth'
 definePageMeta({ layout: false })
 
-const { t, locale, setLocale } = useLocale()
+const { t, locale, setLocale, tError } = useLocale()
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
@@ -72,11 +72,11 @@ async function submit() {
     const redirect = route.query.redirect as string | undefined
     router.push(redirect || '/account/profile')
   } catch (e: any) {
-    error.value = e.data?.message || t('login.error')
+    error.value = tError(e, 'login.error')
   } finally {
     loading.value = false
   }
 }
 
-useSeoMeta({ title: 'Вход — BeautyMaster' })
+useSeoMeta({ title: () => `${t('login.title')} — BeautyMaster` })
 </script>

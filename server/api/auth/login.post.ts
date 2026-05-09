@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const { login, password } = body
 
   if (!login || !password) {
-    throw createError({ statusCode: 400, message: 'Введите логин и пароль' })
+    throw createError({ statusCode: 400, message: 'Введите логин и пароль', data: { code: 'missing_fields' } })
   }
 
   const user = await prisma.user.findFirst({
@@ -21,12 +21,12 @@ export default defineEventHandler(async (event) => {
   })
 
   if (!user) {
-    throw createError({ statusCode: 401, message: 'Неверный логин или пароль' })
+    throw createError({ statusCode: 401, message: 'Неверный логин или пароль', data: { code: 'invalid_credentials' } })
   }
 
   const valid = await bcrypt.compare(password, user.passwordHash)
   if (!valid) {
-    throw createError({ statusCode: 401, message: 'Неверный логин или пароль' })
+    throw createError({ statusCode: 401, message: 'Неверный логин или пароль', data: { code: 'invalid_credentials' } })
   }
 
   const config = useRuntimeConfig()

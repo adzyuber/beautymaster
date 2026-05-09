@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   const locale: 'ru' | 'en' = body?.locale === 'en' ? 'en' : 'ru'
 
   if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-    throw createError({ statusCode: 400, message: 'Введите корректный email' })
+    throw createError({ statusCode: 400, message: 'Введите корректный email', data: { code: 'invalid_email' } })
   }
 
   const config = useRuntimeConfig()

@@ -68,7 +68,7 @@
 import { useAuthStore } from '~/stores/auth'
 definePageMeta({ layout: false })
 
-const { t, locale, setLocale } = useLocale()
+const { t, locale, setLocale, tError } = useLocale()
 const authStore = useAuthStore()
 const router = useRouter()
 const form = reactive({ name: '', phone: '', email: '', password: '', organization: '' })
@@ -82,11 +82,11 @@ async function submit() {
     await authStore.register(form)
     router.push('/account/profile')
   } catch (e: any) {
-    error.value = e.data?.message || t('register.error')
+    error.value = tError(e, 'register.error')
   } finally {
     loading.value = false
   }
 }
 
-useSeoMeta({ title: 'Регистрация — BeautyMaster' })
+useSeoMeta({ title: () => `${t('register.title')} — BeautyMaster` })
 </script>

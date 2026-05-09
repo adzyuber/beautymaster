@@ -56,7 +56,7 @@
 import { useAuthStore } from '~/stores/auth'
 definePageMeta({ layout: false })
 
-const { t, locale, setLocale } = useLocale()
+const { t, locale, setLocale, tError } = useLocale()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
@@ -81,11 +81,11 @@ async function submit() {
     await authStore.resetPassword(token.value, form.password)
     router.push('/account/profile')
   } catch (e: any) {
-    error.value = e.data?.message || t('reset.error')
+    error.value = tError(e, 'reset.error')
   } finally {
     loading.value = false
   }
 }
 
-useSeoMeta({ title: 'Новый пароль — BeautyMaster' })
+useSeoMeta({ title: () => `${t('reset.title')} — BeautyMaster` })
 </script>

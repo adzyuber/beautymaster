@@ -118,6 +118,13 @@ const messages = {
     'login.noAccount': 'Нет аккаунта?',
     'login.register': 'Зарегистрируйтесь',
     'login.error': 'Ошибка входа',
+    'err.missing_fields': 'Заполните все обязательные поля',
+    'err.invalid_credentials': 'Неверный логин или пароль',
+    'err.invalid_email': 'Введите корректный email',
+    'err.duplicate_account': 'Email или телефон уже зарегистрирован',
+    'err.password_too_short': 'Пароль слишком короткий',
+    'err.invalid_token': 'Некорректная ссылка',
+    'err.token_expired': 'Ссылка недействительна или истекла',
     'login.forgot': 'Забыли пароль?',
 
     // Forgot password
@@ -334,6 +341,13 @@ const messages = {
     'login.noAccount': 'No account?',
     'login.register': 'Sign Up',
     'login.error': 'Sign in error',
+    'err.missing_fields': 'Please fill in all required fields',
+    'err.invalid_credentials': 'Invalid login or password',
+    'err.invalid_email': 'Enter a valid email',
+    'err.duplicate_account': 'This email or phone is already registered',
+    'err.password_too_short': 'Password is too short',
+    'err.invalid_token': 'Invalid link',
+    'err.token_expired': 'Link is invalid or expired',
     'login.forgot': 'Forgot password?',
 
     // Forgot password
@@ -457,11 +471,18 @@ const subcategoryNames: Record<string, Record<string, string>> = {
 }
 
 export function useLocale() {
-  const locale = useState<'ru' | 'en'>('locale', () => 'ru')
+  const cookie = useCookie<'ru' | 'en'>('locale', {
+    default: () => 'en',
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: 'lax',
+    path: '/'
+  })
+
+  const locale = useState<'ru' | 'en'>('locale', () => cookie.value === 'ru' ? 'ru' : 'en')
 
   function setLocale(l: 'ru' | 'en') {
     locale.value = l
-    if (process.client) localStorage.setItem('locale', l)
+    cookie.value = l
   }
 
   function t(key: string): string {
@@ -476,10 +497,15 @@ export function useLocale() {
     return subcategoryNames[locale.value]?.[name] ?? name
   }
 
-  if (process.client) {
-    const saved = localStorage.getItem('locale') as 'ru' | 'en' | null
-    if (saved) locale.value = saved
+  function tError(e: any, fallbackKey: string): string {
+    const code = e?.data?.data?.code ?? e?.data?.code
+    if (code) {
+      const key = `err.${code}`
+      const msg = (messages[locale.value] as any)[key]
+      if (msg) return msg
+    }
+    return e?.data?.message || t(fallbackKey)
   }
 
-  return { locale, setLocale, t, tCat, tSub }
+  return { locale, setLocale, t, tCat, tSub, tError }
 }
