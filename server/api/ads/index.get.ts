@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
 
   const where: any = { status: 'active' }
   if (query.category) where.category = query.category
-  if (query.subcategory) where.subcategory = query.subcategory
   if (query.city) where.city = { contains: query.city as string }
   if (query.search) {
     const s = query.search as string

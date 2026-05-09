@@ -12,11 +12,11 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, message: 'Нет доступа' })
   }
 
-  const { title, category, subcategory, description, price, city, address, images } = body
+  const { title, category, description, price, city, address, images } = body
 
   const updated = await prisma.ad.update({
     where: { id },
-    data: { title, category, subcategory, description, price: price ? Number(price) : null, city, address: address || null }
+    data: { title, category, description, price: price ? Number(price) : null, city, address: address || null }
   })
 
   if (images !== undefined) {

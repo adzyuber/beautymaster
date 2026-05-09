@@ -46,41 +46,37 @@
       <!-- Mobile: 3 rows, horizontal scroll -->
       <div v-if="categories" class="sm:hidden overflow-x-auto -mx-4 px-4 pb-2">
         <div class="grid grid-rows-3 grid-flow-col gap-x-5 gap-y-4 w-max">
-          <template v-for="cat in categories.categories" :key="cat.slug">
-            <NuxtLink v-for="sub in cat.subcategories" :key="sub"
-              :to="`/catalog?category=${cat.slug}&subcategory=${encodeURIComponent(sub)}`"
-              class="group flex flex-col items-center gap-2 w-20">
-              <div class="w-16 h-16 rounded-full flex items-center justify-center ring-2 ring-transparent group-active:ring-[#1EC3BD] transition-all shadow-sm"
-                :style="{ backgroundColor: categoryIcons[sub]?.bg ?? '#E0F7F6' }">
-                <svg viewBox="0 0 24 24" class="w-8 h-8" fill="none" stroke="currentColor"
-                  :style="{ color: categoryIcons[sub]?.color ?? '#02282C' }"
-                  v-html="categoryIcons[sub]?.paths">
-                </svg>
-              </div>
-              <div class="text-center text-xs font-black text-[#2D4D3A] leading-tight">{{ tSub(sub) }}</div>
-            </NuxtLink>
-          </template>
+          <NuxtLink v-for="cat in categories.categories" :key="cat"
+            :to="`/catalog?category=${encodeURIComponent(cat)}`"
+            class="group flex flex-col items-center gap-2 w-20">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center ring-2 ring-transparent group-active:ring-[#1EC3BD] transition-all shadow-sm"
+              :style="{ backgroundColor: categoryIcons[cat]?.bg ?? '#E0F7F6' }">
+              <svg viewBox="0 0 24 24" class="w-8 h-8" fill="none" stroke="currentColor"
+                :style="{ color: categoryIcons[cat]?.color ?? '#02282C' }"
+                v-html="categoryIcons[cat]?.paths">
+              </svg>
+            </div>
+            <div class="text-center text-xs font-black text-[#2D4D3A] leading-tight">{{ tCat(cat) }}</div>
+          </NuxtLink>
         </div>
       </div>
 
       <!-- Desktop: grid -->
       <div v-if="categories" class="hidden sm:grid sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
-        <template v-for="cat in categories.categories" :key="cat.slug">
-          <NuxtLink v-for="sub in cat.subcategories" :key="sub"
-            :to="`/catalog?category=${cat.slug}&subcategory=${encodeURIComponent(sub)}`"
-            class="group flex flex-col items-center gap-3">
-            <div class="w-20 h-20 rounded-full flex items-center justify-center ring-2 ring-transparent group-hover:ring-[#1EC3BD] transition-all duration-200 shadow-sm group-hover:shadow-md group-hover:-translate-y-1"
-              :style="{ backgroundColor: categoryIcons[sub]?.bg ?? '#E0F7F6' }">
-              <svg viewBox="0 0 24 24" class="w-10 h-10" fill="none" stroke="currentColor"
-                :style="{ color: categoryIcons[sub]?.color ?? '#02282C' }"
-                v-html="categoryIcons[sub]?.paths">
-              </svg>
-            </div>
-            <div class="text-center">
-              <div class="text-base font-black text-[#2D4D3A] group-hover:text-[#1EC3BD] leading-tight transition-colors">{{ tSub(sub) }}</div>
-            </div>
-          </NuxtLink>
-        </template>
+        <NuxtLink v-for="cat in categories.categories" :key="cat"
+          :to="`/catalog?category=${encodeURIComponent(cat)}`"
+          class="group flex flex-col items-center gap-3">
+          <div class="w-20 h-20 rounded-full flex items-center justify-center ring-2 ring-transparent group-hover:ring-[#1EC3BD] transition-all duration-200 shadow-sm group-hover:shadow-md group-hover:-translate-y-1"
+            :style="{ backgroundColor: categoryIcons[cat]?.bg ?? '#E0F7F6' }">
+            <svg viewBox="0 0 24 24" class="w-10 h-10" fill="none" stroke="currentColor"
+              :style="{ color: categoryIcons[cat]?.color ?? '#02282C' }"
+              v-html="categoryIcons[cat]?.paths">
+            </svg>
+          </div>
+          <div class="text-center">
+            <div class="text-base font-black text-[#2D4D3A] group-hover:text-[#1EC3BD] leading-tight transition-colors">{{ tCat(cat) }}</div>
+          </div>
+        </NuxtLink>
       </div>
       </div>
     </section>
@@ -124,7 +120,7 @@
 
 <script setup lang="ts">
 import { categoryIcons } from '~/utils/categoryIcons'
-const { t, tSub, tCat } = useLocale()
+const { t, tCat } = useLocale()
 const search = ref('')
 const city = ref('')
 const router = useRouter()

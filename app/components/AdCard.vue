@@ -8,13 +8,13 @@
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
       <img v-else
         :src="fallbackImage"
-        :alt="ad.subcategory"
+        :alt="ad.category"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
       <span class="absolute top-3 left-3 flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
-        :style="{ backgroundColor: categoryIcons[ad.subcategory]?.bg ?? '#E0F7F6', color: categoryIcons[ad.subcategory]?.color ?? '#02282C' }">
-        <svg v-if="categoryIcons[ad.subcategory]" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-          v-html="categoryIcons[ad.subcategory].paths" />
-        {{ tSub(ad.subcategory) }}
+        :style="{ backgroundColor: categoryIcons[ad.category]?.bg ?? '#E0F7F6', color: categoryIcons[ad.category]?.color ?? '#02282C' }">
+        <svg v-if="categoryIcons[ad.category]" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          v-html="categoryIcons[ad.category].paths" />
+        {{ tCat(ad.category) }}
       </span>
     </div>
     <div class="p-4">
@@ -43,7 +43,7 @@
 import { categoryIcons } from '~/utils/categoryIcons'
 
 const props = defineProps<{ ad: any }>()
-const { t, tSub } = useLocale()
+const { t, tCat } = useLocale()
 
 const keywordMap: Record<string, string> = {
   'Стоматология': 'dentist,dental',
@@ -65,7 +65,7 @@ const keywordMap: Record<string, string> = {
 }
 
 const fallbackImage = computed(() => {
-  const kw = keywordMap[props.ad.subcategory] || 'beauty,health'
+  const kw = keywordMap[props.ad.category] || 'beauty,health'
   const lock = props.ad.id % 50
   return `https://loremflickr.com/400/300/${kw}?lock=${lock}`
 })

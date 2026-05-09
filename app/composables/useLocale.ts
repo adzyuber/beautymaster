@@ -447,11 +447,6 @@ const messages = {
 }
 
 const categoryNames: Record<string, Record<string, string>> = {
-  ru: { medicine: 'Медицина', beauty: 'Beauty' },
-  en: { medicine: 'Medicine', beauty: 'Beauty' },
-}
-
-const subcategoryNames: Record<string, Record<string, string>> = {
   ru: {
     'Стоматология': 'Стоматология', 'Психология': 'Психология', 'Терапия': 'Терапия',
     'Гинекология': 'Гинекология', 'Реабилитация': 'Реабилитация', 'Массаж': 'Массаж',
@@ -489,13 +484,11 @@ export function useLocale() {
     return (messages[locale.value] as any)[key] ?? (messages.ru as any)[key] ?? key
   }
 
-  function tCat(slug: string): string {
-    return categoryNames[locale.value]?.[slug] ?? categoryNames['ru']?.[slug] ?? slug
+  function tCat(name: string): string {
+    return categoryNames[locale.value]?.[name] ?? categoryNames['ru']?.[name] ?? name
   }
 
-  function tSub(name: string): string {
-    return subcategoryNames[locale.value]?.[name] ?? name
-  }
+  const tSub = tCat
 
   function tError(e: any, fallbackKey: string): string {
     const code = e?.data?.data?.code ?? e?.data?.code

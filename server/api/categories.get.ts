@@ -1,4 +1,4 @@
-const subcategoryImages: Record<string, string> = {
+const categoryImages: Record<string, string> = {
   'Стоматология':         'https://loremflickr.com/400/300/dentist,dental?lock=1',
   'Психология':           'https://loremflickr.com/400/300/psychology,therapy?lock=2',
   'Терапия':              'https://loremflickr.com/400/300/doctor,clinic?lock=3',
@@ -17,30 +17,16 @@ const subcategoryImages: Record<string, string> = {
   'SPA':                  'https://loremflickr.com/400/300/spa,relaxation?lock=16',
 }
 
+const categories = [
+  'Стоматология', 'Психология', 'Терапия', 'Гинекология',
+  'Реабилитация', 'Массаж', 'Диетология', 'ЛФК',
+  'Косметология', 'Маникюр / Педикюр', 'Парикмахер', 'Барбер',
+  'Визажист', 'Лазерная эпиляция', 'Бровист / Лешмейкер', 'SPA'
+]
+
 export default defineEventHandler(() => {
   return {
-    categories: [
-      {
-        name: 'Медицина',
-        slug: 'medicine',
-        icon: '🏥',
-        image: 'https://loremflickr.com/800/400/medical,healthcare?lock=100',
-        subcategories: [
-          'Стоматология', 'Психология', 'Терапия', 'Гинекология',
-          'Реабилитация', 'Массаж', 'Диетология', 'ЛФК'
-        ]
-      },
-      {
-        name: 'Beauty',
-        slug: 'beauty',
-        icon: '💄',
-        image: 'https://loremflickr.com/800/400/beauty,salon?lock=101',
-        subcategories: [
-          'Косметология', 'Маникюр / Педикюр', 'Парикмахер', 'Барбер',
-          'Визажист', 'Лазерная эпиляция', 'Бровист / Лешмейкер', 'SPA'
-        ]
-      }
-    ],
-    subcategoryImages
+    categories,
+    categoryImages
   }
 })

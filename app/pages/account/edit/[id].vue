@@ -14,21 +14,12 @@
           <input v-model="form.title" type="text" required
             class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
         </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.category') }} *</label>
-            <select v-model="form.category" required
-              class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-              <option v-for="cat in categories?.categories" :key="cat.slug" :value="cat.slug">{{ tCat(cat.slug) }}</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.subcategory') }} *</label>
-            <select v-model="form.subcategory" required
-              class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-              <option v-for="sub in currentCat?.subcategories" :key="sub" :value="sub">{{ tSub(sub) }}</option>
-            </select>
-          </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.category') }} *</label>
+          <select v-model="form.category" required
+            class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
+            <option v-for="cat in categories?.categories" :key="cat" :value="cat">{{ tCat(cat) }}</option>
+          </select>
         </div>
         <div>
           <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.description') }} *</label>
@@ -88,7 +79,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
-const { t, tCat, tSub } = useLocale()
+const { t, tCat, tError } = useLocale()
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
@@ -99,7 +90,6 @@ const ad = await $fetch(`/api/ads/${route.params.id}`) as any
 const form = reactive({
   title: ad.title,
   category: ad.category,
-  subcategory: ad.subcategory,
   description: ad.description,
   price: ad.price?.toString() || '',
   city: ad.city,
@@ -109,10 +99,6 @@ const form = reactive({
 
 const loading = ref(false)
 const error = ref('')
-
-const currentCat = computed(() =>
-  categories.value?.categories.find((c: any) => c.slug === form.category)
-)
 
 async function uploadImage(e: Event) {
   const files = Array.from((e.target as HTMLInputElement).files || [])
@@ -137,7 +123,7 @@ async function submit() {
     })
     router.push('/account/ads')
   } catch (e: any) {
-    error.value = e.data?.message || t('form.saveError')
+    error.value = tError(e, 'form.saveError')
   } finally {
     loading.value = false
   }

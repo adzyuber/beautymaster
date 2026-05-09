@@ -42,15 +42,7 @@
           class="h-full px-4 pr-8 text-sm text-gray-700 bg-transparent outline-none appearance-none border-r border-gray-200 cursor-pointer shrink-0"
           style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22 viewBox=%220 0 10 6%22><path d=%22M0 0l5 6 5-6z%22 fill=%22%239ca3af%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center;">
           <option value="">{{ t('catalog.allCats') }}</option>
-          <option v-for="cat in categories?.categories" :key="cat.slug" :value="cat.slug">{{ tCat(cat.slug) }}</option>
-        </select>
-
-        <!-- Subcategory select -->
-        <select v-if="filters.category && currentCat" v-model="filters.subcategory"
-          class="h-full px-4 pr-8 text-sm text-gray-700 bg-transparent outline-none appearance-none border-r border-gray-200 cursor-pointer shrink-0"
-          style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22 viewBox=%220 0 10 6%22><path d=%22M0 0l5 6 5-6z%22 fill=%22%239ca3af%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center;">
-          <option value="">{{ t('catalog.allSubs') }}</option>
-          <option v-for="sub in currentCat.subcategories" :key="sub" :value="sub">{{ tSub(sub) }}</option>
+          <option v-for="cat in categories?.categories" :key="cat" :value="cat">{{ tCat(cat) }}</option>
         </select>
 
         <!-- Search button -->
@@ -76,11 +68,7 @@
         </span>
         <span v-if="filters.category" class="inline-flex items-center gap-1.5 text-sm font-semibold bg-gray-100 text-gray-700 px-3.5 py-1.5 rounded">
           {{ tCat(filters.category) }}
-          <button @click="filters.category = ''; filters.subcategory = ''; applyFilters()" class="hover:text-gray-900 text-base leading-none">×</button>
-        </span>
-        <span v-if="filters.subcategory" class="inline-flex items-center gap-1.5 text-sm font-semibold bg-gray-100 text-gray-700 px-3.5 py-1.5 rounded">
-          {{ tSub(filters.subcategory) }}
-          <button @click="filters.subcategory = ''; applyFilters()" class="hover:text-gray-900 text-base leading-none">×</button>
+          <button @click="filters.category = ''; applyFilters()" class="hover:text-gray-900 text-base leading-none">×</button>
         </span>
         <button @click="resetFilters" class="ml-auto text-sm font-semibold text-[#02282C] hover:text-[#1EC3BD] underline transition-colors">{{ t('catalog.reset') }}</button>
       </div>
@@ -132,26 +120,21 @@
 </template>
 
 <script setup lang="ts">
-const { t, tCat, tSub } = useLocale()
+const { t, tCat } = useLocale()
 const route = useRoute()
 const router = useRouter()
 
 const filters = reactive({
   search: (route.query.search as string) || '',
   city: (route.query.city as string) || '',
-  category: (route.query.category as string) || '',
-  subcategory: (route.query.subcategory as string) || ''
+  category: (route.query.category as string) || ''
 })
 const currentPage = ref(Number(route.query.page) || 1)
 
 const { data: categories } = await useFetch('/api/categories')
 
-const currentCat = computed(() =>
-  categories.value?.categories.find((c: any) => c.slug === filters.category)
-)
-
 const hasActiveFilters = computed(() =>
-  !!(filters.search || filters.city || filters.category || filters.subcategory)
+  !!(filters.search || filters.city || filters.category)
 )
 
 const query = computed(() => ({
@@ -159,8 +142,7 @@ const query = computed(() => ({
   limit: 12,
   search: filters.search || undefined,
   city: filters.city || undefined,
-  category: filters.category || undefined,
-  subcategory: filters.subcategory || undefined
+  category: filters.category || undefined
 }))
 
 const { data, pending, refresh } = await useFetch('/api/ads', { query })
@@ -175,7 +157,6 @@ function resetFilters() {
   filters.search = ''
   filters.city = ''
   filters.category = ''
-  filters.subcategory = ''
   currentPage.value = 1
   refresh()
   router.replace({ query: {} })

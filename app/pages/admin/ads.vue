@@ -42,7 +42,7 @@
         <div class="flex-1 min-w-0">
           <div class="font-semibold text-[#2D4D3A] truncate">{{ ad.title }}</div>
           <div class="text-xs text-[#5B5B5B] mt-0.5">
-            {{ ad.subcategory }} · {{ ad.city }} · <span class="text-gray-400">{{ ad.user.name }}</span>
+            {{ ad.category }} · {{ ad.city }} · <span class="text-gray-400">{{ ad.user.name }}</span>
           </div>
           <div class="flex items-center gap-2 mt-1">
             <span :class="['text-xs font-semibold px-2 py-0.5 rounded-full',

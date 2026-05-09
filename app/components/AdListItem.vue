@@ -9,7 +9,7 @@
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
       <img v-else
         :src="fallbackImage"
-        :alt="ad.subcategory"
+        :alt="ad.category"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
     </div>
 
@@ -18,10 +18,10 @@
       <div>
         <div class="flex items-center gap-2 mb-1">
           <span class="flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-full shrink-0"
-            :style="{ backgroundColor: categoryIcons[ad.subcategory]?.bg ?? '#E0F7F6', color: categoryIcons[ad.subcategory]?.color ?? '#02282C' }">
-            <svg v-if="categoryIcons[ad.subcategory]" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              v-html="categoryIcons[ad.subcategory].paths" />
-            {{ tSub(ad.subcategory) }}
+            :style="{ backgroundColor: categoryIcons[ad.category]?.bg ?? '#E0F7F6', color: categoryIcons[ad.category]?.color ?? '#02282C' }">
+            <svg v-if="categoryIcons[ad.category]" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              v-html="categoryIcons[ad.category].paths" />
+            {{ tCat(ad.category) }}
           </span>
         </div>
         <h3 class="font-semibold text-[#2D4D3A] text-base leading-snug line-clamp-1 group-hover:text-[#3d6650] transition-colors">
@@ -53,7 +53,7 @@
 import { categoryIcons } from '~/utils/categoryIcons'
 
 const props = defineProps<{ ad: any }>()
-const { t, tSub } = useLocale()
+const { t, tCat } = useLocale()
 
 const keywordMap: Record<string, string> = {
   'Стоматология': 'dentist,dental',
@@ -75,7 +75,7 @@ const keywordMap: Record<string, string> = {
 }
 
 const fallbackImage = computed(() => {
-  const kw = keywordMap[props.ad.subcategory] || 'beauty,health'
+  const kw = keywordMap[props.ad.category] || 'beauty,health'
   const lock = props.ad.id % 50
   return `https://loremflickr.com/400/300/${kw}?lock=${lock}`
 })

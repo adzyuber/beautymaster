@@ -52,10 +52,6 @@
                 <dd class="font-medium text-[#2D4D3A] text-sm">{{ tCat(ad.category) }}</dd>
               </div>
               <div class="flex gap-4">
-                <dt class="text-[#5B5B5B] text-sm w-32 shrink-0">{{ t('ad.subcategory') }}</dt>
-                <dd class="font-medium text-[#2D4D3A] text-sm">{{ tSub(ad.subcategory) }}</dd>
-              </div>
-              <div class="flex gap-4">
                 <dt class="text-[#5B5B5B] text-sm w-32 shrink-0">{{ t('ad.city') }}</dt>
                 <dd class="font-medium text-[#2D4D3A] text-sm">{{ ad.city }}</dd>
               </div>
@@ -75,7 +71,7 @@
         <div class="space-y-4">
           <!-- Price + title -->
           <div class="bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
-            <span class="inline-block bg-[#8FD9A8]/20 text-[#2D4D3A] text-xs font-semibold px-3 py-1 rounded-full mb-3">{{ tSub(ad.subcategory) }}</span>
+            <span class="inline-block bg-[#8FD9A8]/20 text-[#2D4D3A] text-xs font-semibold px-3 py-1 rounded-full mb-3">{{ tCat(ad.category) }}</span>
             <h1 class="text-xl font-bold text-[#2D4D3A] mb-3">{{ ad.title }}</h1>
             <div class="text-2xl font-bold text-[#2D4D3A]">
               {{ ad.price ? formatPrice(ad.price) : t('ad.price.negotiable') }}
@@ -169,7 +165,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
-const { t, tCat, tSub } = useLocale()
+const { t, tCat } = useLocale()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
@@ -186,8 +182,8 @@ const keywordMap: Record<string, string> = {
 }
 
 const adFallbackImage = computed(() => {
-  const sub = (ad.value as any)?.subcategory
-  const kw = keywordMap[sub] || 'beauty,health'
+  const cat = (ad.value as any)?.category
+  const kw = keywordMap[cat] || 'beauty,health'
   const lock = (ad.value as any)?.id % 50 || 1
   return `https://loremflickr.com/800/500/${kw}?lock=${lock}`
 })
@@ -197,7 +193,6 @@ const { data: ad, pending } = await useFetch<{
   title: string
   description: string
   category: string
-  subcategory: string
   city: string
   address: string | null
   price: number | null

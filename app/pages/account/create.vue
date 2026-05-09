@@ -16,40 +16,21 @@
             class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.category') }} *</label>
-            <!-- mobile combobox -->
-            <ComboboxField
-              v-model="form.category"
-              :options="categoryOptions"
-              :placeholder="t('form.select')"
-              class="sm:hidden"
-            />
-            <!-- desktop select -->
-            <select v-model="form.category" required
-              class="hidden sm:block w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-              <option value="">{{ t('form.select') }}</option>
-              <option v-for="cat in categories?.categories" :key="cat.slug" :value="cat.slug">{{ tCat(cat.slug) }}</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.subcategory') }} *</label>
-            <!-- mobile combobox -->
-            <ComboboxField
-              v-model="form.subcategory"
-              :options="subcategoryOptions"
-              :placeholder="t('form.select')"
-              :disabled="!form.category"
-              class="sm:hidden"
-            />
-            <!-- desktop select -->
-            <select v-model="form.subcategory" required :disabled="!form.category"
-              class="hidden sm:block w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD] disabled:opacity-50">
-              <option value="">{{ t('form.select') }}</option>
-              <option v-for="sub in currentCat?.subcategories" :key="sub" :value="sub">{{ tSub(sub) }}</option>
-            </select>
-          </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.category') }} *</label>
+          <!-- mobile combobox -->
+          <ComboboxField
+            v-model="form.category"
+            :options="categoryOptions"
+            :placeholder="t('form.select')"
+            class="sm:hidden"
+          />
+          <!-- desktop select -->
+          <select v-model="form.category" required
+            class="hidden sm:block w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
+            <option value="">{{ t('form.select') }}</option>
+            <option v-for="cat in categories?.categories" :key="cat" :value="cat">{{ tCat(cat) }}</option>
+          </select>
         </div>
 
         <div>
@@ -118,7 +99,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
-const { t, tCat, tSub } = useLocale()
+const { t, tCat, tError } = useLocale()
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
@@ -129,7 +110,6 @@ const { data: categories } = await useFetch('/api/categories')
 const form = reactive({
   title: '',
   category: '',
-  subcategory: '',
   description: '',
   price: '',
   city: '',
@@ -141,25 +121,14 @@ const loading = ref(false)
 const uploading = ref(false)
 const error = ref('')
 
-const currentCat = computed(() =>
-  categories.value?.categories.find((c: any) => c.slug === form.category)
-)
-
 const categoryOptions = computed(() =>
-  categories.value?.categories.map((c: any) => ({ value: c.slug, label: tCat(c.slug) })) ?? []
+  categories.value?.categories.map((c: string) => ({ value: c, label: tCat(c) })) ?? []
 )
-
-const subcategoryOptions = computed(() =>
-  currentCat.value?.subcategories.map((s: string) => ({ value: s, label: tSub(s) })) ?? []
-)
-
-watch(() => form.category, () => { form.subcategory = '' })
 
 if (isEdit.value) {
   const ad = await $fetch(`/api/ads/${route.params.id}`) as any
   form.title = ad.title
   form.category = ad.category
-  form.subcategory = ad.subcategory
   form.description = ad.description
   form.price = ad.price?.toString() || ''
   form.city = ad.city
@@ -205,7 +174,7 @@ async function submit() {
     }
     router.push('/account/ads')
   } catch (e: any) {
-    error.value = e.data?.message || t('form.saveError')
+    error.value = tError(e, 'form.saveError')
   } finally {
     loading.value = false
   }

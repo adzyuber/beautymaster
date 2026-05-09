@@ -5,10 +5,10 @@ import { slugify } from '../../utils/slugify'
 export default defineEventHandler(async (event) => {
   const auth = await requireAuth(event)
   const body = await readBody(event)
-  const { title, category, subcategory, description, price, city, address, images } = body
+  const { title, category, description, price, city, address, images } = body
 
-  if (!title || !category || !subcategory || !description || !city) {
-    throw createError({ statusCode: 400, message: 'Заполните все обязательные поля' })
+  if (!title || !category || !description || !city) {
+    throw createError({ statusCode: 400, message: 'Заполните все обязательные поля', data: { code: 'missing_fields' } })
   }
 
   const tempSlug = slugify(title, Date.now())
@@ -17,7 +17,6 @@ export default defineEventHandler(async (event) => {
       userId: auth.userId,
       title,
       category,
-      subcategory,
       description,
       price: price ? Number(price) : null,
       city,
