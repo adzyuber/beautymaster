@@ -58,14 +58,14 @@
       </div>
 
       <!-- Mobile layout -->
-      <div class="sm:hidden flex flex-col bg-white" style="height: 100dvh; padding-bottom: 64px;">
+      <div class="sm:hidden flex flex-col bg-white" style="height: 100dvh;">
 
         <!-- Chat list -->
         <template v-if="!activeChat">
           <div class="shrink-0 px-4 py-3 border-b border-gray-100">
             <h2 class="font-bold text-[#02282C] text-lg">{{ t('account.dialogs') }}</h2>
           </div>
-          <div class="flex-1 min-h-0 overflow-y-auto">
+          <div class="flex-1 min-h-0 overflow-y-auto" style="padding-bottom: 64px;">
             <div v-if="!chatsData?.chats?.length" class="p-8 text-center text-[#5B5B5B]">{{ t('account.noDialogs') }}</div>
             <button v-for="chat in chatsData?.chats" :key="chat.userId" @click="selectChat(chat)"
               class="w-full text-left px-4 py-4 border-b border-gray-100 active:bg-gray-50 transition-colors">
@@ -96,7 +96,7 @@
           </div>
 
           <div ref="msgContainerMobile" class="flex-1 min-h-0 overflow-y-auto bg-white" style="overscroll-behavior: contain;">
-            <div class="min-h-full flex flex-col justify-end p-4 space-y-3">
+            <div class="min-h-full flex flex-col justify-end p-4 space-y-3" style="padding-bottom: 140px;">
               <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
                 <div :class="['max-w-[80%] px-4 py-3 rounded text-sm leading-relaxed',
                   msg.fromUserId === authStore.user?.id ? 'bg-[#02282C] text-white' : 'bg-gray-100 text-[#2D4D3A]']">
@@ -107,7 +107,7 @@
             </div>
           </div>
 
-          <div class="shrink-0 px-3 py-3 border-t border-gray-100 bg-white flex gap-2">
+          <div class="fixed left-0 right-0 z-40 px-3 py-3 border-t border-gray-100 bg-white flex gap-2" style="bottom: 64px;">
             <input v-model="newMsg" type="text" :placeholder="t('account.msgPlaceholder')" @keyup.enter="sendMsg"
               class="flex-1 min-w-0 border border-gray-200 rounded px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
             <button @click="sendMsg" :disabled="!newMsg.trim()"

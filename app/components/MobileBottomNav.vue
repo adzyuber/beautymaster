@@ -1,6 +1,6 @@
 <template>
   <nav class="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex items-stretch h-16 transition-transform duration-300 ease-in-out"
-    :class="{ 'translate-y-full': !isVisible }">
+    :class="{ 'translate-y-full': !isVisible && !pinned }">
     <NuxtLink to="/" class="flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-[#02282C] transition-colors"
       :class="{ '!text-[#02282C]': route.path === '/' }">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,6 +42,7 @@ const route = useRoute()
 const authStore = useAuthStore()
 const { isVisible } = useScrollDirection()
 const { t } = useLocale()
+const pinned = computed(() => route.path === '/account/messages')
 const tr = computed(() => ({
   home: t('nav.home'),
   create: t('nav.create'),
