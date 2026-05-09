@@ -28,3 +28,13 @@ prompt.md
 CLAUDE_INSTRUCTIONS.md
 
 /app/generated/prisma
+
+# Runtime SQLite DB (per-environment, never commit)
+prisma/dev.db
+prisma/*.db-journal
+prisma/*.db-shm
+prisma/*.db-wal
+
+# User-uploaded files (per-environment)
+public/uploads/*
+!public/uploads/.gitkeep
