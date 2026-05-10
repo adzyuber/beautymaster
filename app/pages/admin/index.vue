@@ -4,10 +4,8 @@
     <div class="bg-white rounded shadow-[0_8px_32px_rgba(45,77,58,0.12)] p-8 w-full max-w-md">
       <div class="mb-8">
         <div class="flex items-center justify-center gap-3 mb-3">
-          <img src="/logo.png" alt="Med&Beauty" class="h-12 w-12 object-contain">
-          <div class="text-2xl font-bold">
-            <span class="text-[#2D4D3A]">Med</span><span class="text-[#1EC3BD]">&amp;</span><span class="text-[#2D4D3A]">Beauty</span>
-          </div>
+          <img src="/logo.png" alt="BeautyMaster" class="h-12 w-12 object-contain">
+          <div class="text-2xl font-bold text-[#2D4D3A]">BeautyMaster</div>
         </div>
         <h1 class="text-xl font-bold text-[#2D4D3A] text-center">Admin panel sign in</h1>
       </div>
@@ -31,11 +29,9 @@
   <div v-else class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="flex items-center justify-between mb-8">
       <div class="flex items-center gap-3">
-        <img src="/logo.png" alt="Med&Beauty" class="h-10 w-10 object-contain">
+        <img src="/logo.png" alt="BeautyMaster" class="h-10 w-10 object-contain">
         <div>
-          <div class="text-xl font-bold">
-            <span class="text-[#2D4D3A]">Med</span><span class="text-[#1EC3BD]">&amp;</span><span class="text-[#2D4D3A]">Beauty</span>
-          </div>
+          <div class="text-xl font-bold text-[#2D4D3A]">BeautyMaster</div>
           <h1 class="text-sm font-semibold text-[#5B5B5B] leading-tight">Admin panel</h1>
         </div>
       </div>
