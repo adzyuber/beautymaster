@@ -21,6 +21,12 @@ npx prisma generate
 echo "→ Syncing DB schema..."
 npx prisma db push --accept-data-loss --skip-generate
 
+echo "→ Seeding default settings..."
+npx prisma db execute --stdin <<'SQL'
+INSERT INTO Setting (key, value) VALUES ('emailNotificationsEnabled', 'true')
+ON CONFLICT (key) DO NOTHING;
+SQL
+
 echo "→ Building..."
 npm run build
 
