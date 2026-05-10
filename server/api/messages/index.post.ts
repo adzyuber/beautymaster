@@ -32,9 +32,8 @@ export default defineEventHandler(async (event) => {
       prisma.setting.findUnique({ where: { key: 'emailNotificationsEnabled' } })
     ])
     if (recipient && notifSetting?.value === 'true') {
-      const requestUrl = getRequestURL(event)
-      const baseUrl = `${requestUrl.protocol}//${requestUrl.host}`
-      const chatUrl = `${baseUrl}/account/messages?with=${auth.userId}`
+      const config = useRuntimeConfig()
+      const chatUrl = `${config.appUrl}/account/messages?with=${auth.userId}`
       sendNewMessageEmail({
         to: recipient.email,
         recipientName: recipient.name,
