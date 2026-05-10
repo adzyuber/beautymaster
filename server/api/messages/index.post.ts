@@ -22,11 +22,11 @@ export default defineEventHandler(async (event) => {
   })
 
   // Send email only for the first unread message in this conversation thread
-  const unreadCount = await prisma.message.count({
-    where: { fromUserId: auth.userId, toUserId: recipientId, isRead: false }
+  const prevUnreadCount = await prisma.message.count({
+    where: { fromUserId: auth.userId, toUserId: recipientId, isRead: false, id: { not: msg.id } }
   })
 
-  if (unreadCount === 1) {
+  if (prevUnreadCount === 0) {
     const [recipient, notifSetting] = await Promise.all([
       prisma.user.findUnique({ where: { id: recipientId }, select: { email: true, name: true } }),
       prisma.setting.findUnique({ where: { key: 'emailNotificationsEnabled' } })
