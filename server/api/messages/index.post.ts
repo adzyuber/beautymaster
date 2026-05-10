@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
     ])
     if (recipient && notifSetting?.value === 'true') {
       const config = useRuntimeConfig()
-      const chatUrl = `${config.appUrl}/messages?with=${auth.userId}`
+      const chatUrl = `${config.appUrl}/account/messages?with=${auth.userId}`
       sendNewMessageEmail({
         to: recipient.email,
         recipientName: recipient.name,
