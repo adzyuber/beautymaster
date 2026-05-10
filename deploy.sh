@@ -42,7 +42,8 @@ if [ -f "$NGINX_SITE" ] && ! cmp -s "$APP_DIR/nginx.conf" "$NGINX_SITE"; then
 fi
 
 echo "→ Restarting app..."
-pm2 restart beautymaster 2>/dev/null || pm2 start $APP_DIR/ecosystem.config.cjs
+pm2 delete beautymaster 2>/dev/null || true
+pm2 start $APP_DIR/ecosystem.config.cjs
 pm2 save
 
 echo "✓ Deploy complete"
