@@ -1,11 +1,7 @@
 <template>
   <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 sm:py-10">
 
-    <div v-if="!authStore.isLoggedIn" class="text-center py-20 px-4">
-      <NuxtLink to="/login" class="bg-[#02282C] text-white px-6 py-2.5 rounded font-bold">{{ t('common.loginRequired') }}</NuxtLink>
-    </div>
-
-    <div v-else>
+    <div>
       <!-- Desktop layout -->
       <div class="hidden sm:flex gap-6 h-[600px]">
         <div class="w-72 shrink-0 bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] overflow-hidden flex flex-col">
@@ -130,6 +126,11 @@
 import { useAuthStore } from '~/stores/auth'
 const { t } = useLocale()
 const authStore = useAuthStore()
+const route = useRoute()
+
+if (!authStore.isLoggedIn) {
+  await navigateTo(`/login?redirect=${encodeURIComponent(route.fullPath)}`)
+}
 const { fetchUnread } = useUnreadCount()
 
 const { data: chatsData, refresh: refreshChats } = await useFetch<{
