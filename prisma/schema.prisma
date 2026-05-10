@@ -78,6 +78,7 @@ model Message {
   toUserId   Int
   text       String
   isRead     Boolean  @default(false)
+  emailSent  Boolean  @default(false)
   createdAt  DateTime @default(now())
 
   fromUser   User     @relation("SentMessages", fields: [fromUserId], references: [id])

@@ -22,17 +22,15 @@ export default defineEventHandler(async (event) => {
   })
 
   // Send email only for the first unread message in this conversation thread
-  const prevUnreadCount = await prisma.message.count({
-    where: { fromUserId: auth.userId, toUserId: recipientId, isRead: false, id: { not: msg.id } }
+  const alreadyNotified = await prisma.message.count({
+    where: { fromUserId: auth.userId, toUserId: recipientId, isRead: false, emailSent: true }
   })
 
-  console.log('[email] prevUnreadCount=', prevUnreadCount, 'msgId=', msg.id)
-  if (prevUnreadCount === 0) {
+  if (alreadyNotified === 0) {
     const [recipient, notifSetting] = await Promise.all([
       prisma.user.findUnique({ where: { id: recipientId }, select: { email: true, name: true } }),
       prisma.setting.findUnique({ where: { key: 'emailNotificationsEnabled' } })
     ])
-    console.log('[email] recipient=', recipient?.email, 'setting=', notifSetting?.value)
     if (recipient && notifSetting?.value === 'true') {
       const config = useRuntimeConfig()
       const chatUrl = `${config.appUrl}/messages?with=${auth.userId}`
@@ -43,8 +41,9 @@ export default defineEventHandler(async (event) => {
         messageText: msg.text,
         chatUrl,
         locale: 'ru'
-      }).then(() => console.log('[email] sent OK to', recipient.email))
-        .catch(e => console.error('[email] ERROR:', e.message))
+      }).then(() =>
+        prisma.message.update({ where: { id: msg.id }, data: { emailSent: true } }).catch(() => {})
+      ).catch(console.error)
     }
   }
 
