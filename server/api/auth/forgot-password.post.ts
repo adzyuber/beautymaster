@@ -32,7 +32,9 @@ export default defineEventHandler(async (event) => {
         data: { userId: user.id, tokenHash, expiresAt }
       })
 
-      const resetUrl = `${config.appUrl.replace(/\/+$/, '')}/reset-password?token=${rawToken}`
+      const requestUrl = getRequestURL(event)
+      const baseUrl = `${requestUrl.protocol}//${requestUrl.host}`
+      const resetUrl = `${baseUrl}/reset-password?token=${rawToken}`
 
       try {
         await sendPasswordResetEmail({
