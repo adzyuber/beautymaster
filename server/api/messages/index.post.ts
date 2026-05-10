@@ -26,11 +26,13 @@ export default defineEventHandler(async (event) => {
     where: { fromUserId: auth.userId, toUserId: recipientId, isRead: false, id: { not: msg.id } }
   })
 
+  console.log('[email] prevUnreadCount=', prevUnreadCount, 'msgId=', msg.id)
   if (prevUnreadCount === 0) {
     const [recipient, notifSetting] = await Promise.all([
       prisma.user.findUnique({ where: { id: recipientId }, select: { email: true, name: true } }),
       prisma.setting.findUnique({ where: { key: 'emailNotificationsEnabled' } })
     ])
+    console.log('[email] recipient=', recipient?.email, 'setting=', notifSetting?.value)
     if (recipient && notifSetting?.value === 'true') {
       const config = useRuntimeConfig()
       const chatUrl = `${config.appUrl}/messages?with=${auth.userId}`
@@ -41,7 +43,8 @@ export default defineEventHandler(async (event) => {
         messageText: msg.text,
         chatUrl,
         locale: 'ru'
-      }).catch(console.error)
+      }).then(() => console.log('[email] sent OK to', recipient.email))
+        .catch(e => console.error('[email] ERROR:', e.message))
     }
   }
 
