@@ -38,6 +38,7 @@
       <div class="flex gap-2">
         <NuxtLink to="/admin/users" class="text-sm px-4 py-2 bg-[#2D2D2D] text-white border-2 border-[#2D2D2D] rounded font-semibold hover:bg-[#1a1a1a] hover:border-[#1a1a1a] transition-all">Users</NuxtLink>
         <NuxtLink to="/admin/ads" class="text-sm px-4 py-2 bg-[#2D2D2D] text-white border-2 border-[#2D2D2D] rounded font-semibold hover:bg-[#1a1a1a] hover:border-[#1a1a1a] transition-all">Listings</NuxtLink>
+        <button @click="authStore.logout()" class="text-sm px-4 py-2 border-2 border-[#2D2D2D] rounded font-semibold hover:bg-gray-100 transition-all">Sign out</button>
       </div>
     </div>
 
