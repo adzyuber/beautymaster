@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
-const { t, tCat } = useLocale()
+const { t, tCat, locale } = useLocale()
 const authStore = useAuthStore()
 const { data, pending, refresh } = await useFetch('/api/ads/my')
 
@@ -76,7 +76,7 @@ async function deleteAd(id: number) {
 }
 
 function formatDate(d: string) {
-  return new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
+  return new Date(d).toLocaleDateString(locale.value === 'en' ? 'en-GB' : 'ru-RU', { day: 'numeric', month: 'long' })
 }
 
 useSeoMeta({ title: 'Мои объявления — BeautyMaster' })

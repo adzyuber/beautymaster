@@ -165,7 +165,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
-const { t, tCat } = useLocale()
+const { t, tCat, locale } = useLocale()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
@@ -237,7 +237,7 @@ function formatPrice(price: number) {
 }
 
 function formatDate(d: string) {
-  return new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+  return new Date(d).toLocaleDateString(locale.value === 'en' ? 'en-GB' : 'ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
 useSeoMeta({
