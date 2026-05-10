@@ -17,11 +17,11 @@
     <div class="flex-1 min-w-0 flex flex-col justify-between py-0.5">
       <div>
         <div class="flex items-center gap-2 mb-1">
-          <span class="flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-full shrink-0"
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-full min-w-0 max-w-full overflow-hidden"
             :style="{ backgroundColor: categoryIcons[ad.category]?.bg ?? '#E0F7F6', color: categoryIcons[ad.category]?.color ?? '#02282C' }">
             <svg v-if="categoryIcons[ad.category]" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
               v-html="categoryIcons[ad.category].paths" />
-            {{ tCat(ad.category) }}
+            <span class="truncate">{{ tCat(ad.category) }}</span>
           </span>
         </div>
         <h3 class="font-semibold text-[#2D4D3A] text-base leading-snug line-clamp-1 group-hover:text-[#3d6650] transition-colors">
@@ -34,16 +34,13 @@
         <div class="text-[#2D4D3A] font-bold text-base">
           {{ ad.price ? formatPrice(ad.price) : t('ad.price.negotiable') }}
         </div>
-        <div class="flex items-center gap-3 text-xs text-gray-400">
-          <span class="flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-            </svg>
-            {{ ad.city }}
-          </span>
-          <span>{{ ad.user?.name || 'Специалист' }}</span>
-        </div>
+        <span class="flex items-center gap-1 text-xs text-gray-400 min-w-0">
+          <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <span class="truncate">{{ ad.city }}</span>
+        </span>
       </div>
     </div>
   </NuxtLink>

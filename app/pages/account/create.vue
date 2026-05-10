@@ -39,17 +39,15 @@
             class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD] resize-none"></textarea>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.price') }}</label>
-            <input v-model="form.price" type="number" min="0" :placeholder="t('form.pricePlaceholder')"
-              class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.city') }} *</label>
-            <input v-model="form.city" type="text" required
-              class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-          </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.price') }}</label>
+          <input v-model="form.price" type="number" min="0" :placeholder="t('form.pricePlaceholder')"
+            class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.city') }} *</label>
+          <input v-model="form.city" type="text" required
+            class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
         </div>
 
         <div>
