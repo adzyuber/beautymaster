@@ -129,6 +129,117 @@ const en = {
   ignore: 'If you did not request a password reset, just ignore this email — your password will remain unchanged.'
 }
 
+interface NewMessageEmailParams {
+  to: string
+  recipientName: string
+  senderName: string
+  messageText: string
+  chatUrl: string
+  locale: Locale
+}
+
+export async function sendNewMessageEmail(params: NewMessageEmailParams) {
+  const config = useRuntimeConfig()
+  const client = getClient()
+
+  const { subject, html, text } = renderNewMessageEmail(params)
+
+  const { error } = await client.emails.send({
+    from: config.mailFrom,
+    to: params.to,
+    subject,
+    html,
+    text
+  })
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message ?? JSON.stringify(error)}`)
+  }
+}
+
+function renderNewMessageEmail({ recipientName, senderName, messageText, chatUrl, locale }: NewMessageEmailParams) {
+  const t = locale === 'en' ? enMsg : ruMsg
+  const safeName = escapeHtml(recipientName)
+  const safeSender = escapeHtml(senderName)
+  const safeText = escapeHtml(messageText.length > 200 ? messageText.slice(0, 200) + '…' : messageText)
+
+  const subject = t.subject(safeSender)
+  const text = `${t.hello(safeName)}
+
+${t.intro(safeSender)}
+
+"${safeText}"
+
+${chatUrl}
+
+— BeautyMaster`
+
+  const html = `<!doctype html>
+<html lang="${locale}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>${subject}</title>
+</head>
+<body style="margin:0;padding:0;background:#F5F5F0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#2D2D2D;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F5F5F0;padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(45,77,58,0.08);">
+          <tr>
+            <td style="padding:32px 32px 16px;text-align:center;">
+              <div style="font-size:24px;font-weight:700;letter-spacing:-0.5px;">
+                <span style="color:#1EC3BD;">Beauty</span><span style="color:#2D2D2D;">Master</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 32px 24px;">
+              <h1 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#2D4D3A;">${t.hello(safeName)}</h1>
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#5B5B5B;">${t.intro(safeSender)}</p>
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 20px;width:100%;">
+                <tr>
+                  <td style="background:#F5F5F0;border-left:3px solid #1EC3BD;border-radius:4px;padding:12px 16px;font-size:14px;line-height:1.6;color:#444;">${safeText}</td>
+                </tr>
+              </table>
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+                <tr>
+                  <td>
+                    <a href="${chatUrl}" style="display:inline-block;background:#2D2D2D;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:6px;font-weight:700;font-size:15px;">${t.button}</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 32px 32px;border-top:1px solid #EEE;text-align:center;">
+              <p style="margin:0;font-size:12px;color:#AAA;">BeautyMaster &middot; <a href="https://beautymaster.guru" style="color:#AAA;text-decoration:none;">beautymaster.guru</a></p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+
+  return { subject, html, text }
+}
+
+const ruMsg = {
+  subject: (sender: string) => `Новое сообщение от ${sender} — BeautyMaster`,
+  hello: (name: string) => `Здравствуйте, ${name}!`,
+  intro: (sender: string) => `Вам пришло новое сообщение от <strong>${sender}</strong>:`,
+  button: 'Открыть чат'
+}
+
+const enMsg = {
+  subject: (sender: string) => `New message from ${sender} — BeautyMaster`,
+  hello: (name: string) => `Hello, ${name}!`,
+  intro: (sender: string) => `You have a new message from <strong>${sender}</strong>:`,
+  button: 'Open chat'
+}
+
 function escapeHtml(input: string) {
   return input
     .replace(/&/g, '&amp;')

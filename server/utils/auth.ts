@@ -40,3 +40,9 @@ export async function requireAuth(event: H3Event) {
   if (!user) throw createError({ statusCode: 401, message: 'Unauthorized' })
   return user
 }
+
+export async function requireAdmin(event: H3Event) {
+  const user = await requireAuth(event)
+  if (user.role !== 'admin') throw createError({ statusCode: 403, message: 'Forbidden' })
+  return user
+}

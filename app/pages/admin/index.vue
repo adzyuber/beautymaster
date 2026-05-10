@@ -68,7 +68,7 @@
       </div>
     </div>
 
-    <div class="grid sm:grid-cols-2 gap-6">
+    <div class="grid sm:grid-cols-2 gap-6 mb-6">
       <NuxtLink to="/admin/users"
         class="bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] p-8 hover:shadow-md transition-shadow group">
         <div class="text-4xl mb-3">👥</div>
@@ -81,6 +81,23 @@
         <div class="text-lg font-bold text-[#2D4D3A] group-hover:underline">Listing moderation</div>
         <div class="text-sm text-[#5B5B5B] mt-1">View all listings, change status and delete</div>
       </NuxtLink>
+    </div>
+
+    <div class="bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] p-6">
+      <div class="text-sm font-bold text-[#2D4D3A] mb-4">Notifications</div>
+      <label class="flex items-center gap-3 cursor-pointer select-none">
+        <button type="button" role="switch" :aria-checked="emailNotificationsEnabled"
+          @click="toggleEmailNotifications"
+          :class="emailNotificationsEnabled ? 'bg-[#1EC3BD]' : 'bg-gray-200'"
+          class="relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1EC3BD] focus:ring-offset-2">
+          <span :class="emailNotificationsEnabled ? 'translate-x-5' : 'translate-x-1'"
+            class="inline-block h-4 w-4 mt-1 rounded-full bg-white shadow transition-transform" />
+        </button>
+        <span class="text-sm text-[#2D2D2D]">Email notifications for new messages</span>
+        <span v-if="settingsSaving" class="text-xs text-[#5B5B5B]">Saving...</span>
+        <span v-else-if="settingsSaved" class="text-xs text-green-600">Saved</span>
+      </label>
+      <p class="text-xs text-[#5B5B5B] mt-2 ml-14">When disabled, users will not receive email alerts about new messages.</p>
     </div>
   </div>
 </template>
@@ -96,6 +113,9 @@ const loginError = ref('')
 const loginPending = ref(false)
 const data = ref<any>(null)
 const pending = ref(false)
+const emailNotificationsEnabled = ref(true)
+const settingsSaving = ref(false)
+const settingsSaved = ref(false)
 
 async function login() {
   loginPending.value = true
@@ -124,7 +144,33 @@ async function loadStats() {
   }
 }
 
+async function loadSettings() {
+  const s = await $fetch<Record<string, string>>('/api/admin/settings')
+  emailNotificationsEnabled.value = s.emailNotificationsEnabled === 'true'
+}
+
+async function toggleEmailNotifications() {
+  emailNotificationsEnabled.value = !emailNotificationsEnabled.value
+  settingsSaving.value = true
+  settingsSaved.value = false
+  try {
+    await $fetch('/api/admin/settings', {
+      method: 'PATCH',
+      body: { emailNotificationsEnabled: String(emailNotificationsEnabled.value) }
+    })
+    settingsSaved.value = true
+    setTimeout(() => { settingsSaved.value = false }, 2000)
+  } catch {
+    emailNotificationsEnabled.value = !emailNotificationsEnabled.value
+  } finally {
+    settingsSaving.value = false
+  }
+}
+
 onMounted(() => {
-  if (authStore.isAdmin) loadStats()
+  if (authStore.isAdmin) {
+    loadStats()
+    loadSettings()
+  }
 })
 </script>

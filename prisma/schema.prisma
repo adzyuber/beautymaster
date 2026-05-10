@@ -67,6 +67,11 @@ model AdImage {
   ad        Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
 }
 
+model Setting {
+  key   String @id
+  value String
+}
+
 model Message {
   id         Int      @id @default(autoincrement())
   fromUserId Int
