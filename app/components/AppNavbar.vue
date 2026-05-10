@@ -11,22 +11,44 @@
 
         <!-- Auth + locale -->
         <div class="flex items-center gap-6">
-          <!-- Locale switcher -->
-          <div class="hidden sm:flex items-center gap-2 text-base font-bold">
-            <button @click="setLocale('ru')"
-              :class="locale === 'ru' ? 'text-white' : 'text-white/50 hover:text-white'"
-              class="transition-colors">RU</button>
-            <span class="text-white/30">|</span>
-            <button @click="setLocale('en')"
-              :class="locale === 'en' ? 'text-white' : 'text-white/50 hover:text-white'"
-              class="transition-colors">EN</button>
-          </div>
-
           <template v-if="authStore.isLoggedIn">
+            <!-- Chat link (desktop only) -->
+            <NuxtLink to="/account/messages"
+              class="hidden sm:flex items-center gap-1.5 text-white/80 hover:text-white transition-colors font-medium text-base">
+              <span class="relative">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                <span v-if="unreadCount > 0"
+                  class="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                  {{ unreadCount > 99 ? '99+' : unreadCount }}
+                </span>
+              </span>
+              <span>{{ t('nav.chat') }}</span>
+            </NuxtLink>
+            <!-- Bell (desktop only) -->
+            <button class="hidden sm:flex items-center text-white/80 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2 C12 2 13.5 2 13.5 3.5 C16.5 4.5 19 7.5 19 11 V16 L21.5 19 H2.5 L5 16 V11 C5 7.5 7.5 4.5 10.5 3.5 C10.5 2 12 2 12 2 Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 19 A2.5 2.5 0 0 0 14.5 19" />
+              </svg>
+            </button>
+            <!-- Locale switcher -->
+            <div class="hidden sm:flex items-center gap-2 text-base font-bold">
+              <button @click="setLocale('ru')"
+                :class="locale === 'ru' ? 'text-white' : 'text-white/50 hover:text-white'"
+                class="transition-colors">RU</button>
+              <span class="text-white/30">|</span>
+              <button @click="setLocale('en')"
+                :class="locale === 'en' ? 'text-white' : 'text-white/50 hover:text-white'"
+                class="transition-colors">EN</button>
+            </div>
+            <!-- Place ad -->
             <NuxtLink to="/account/create"
               class="hidden sm:inline-flex items-center gap-1 bg-white text-[#02282C] border-2 border-white px-5 py-2.5 rounded font-extrabold text-base hover:bg-gray-400 hover:border-gray-400 transition-all">
               {{ t('nav.place') }}
             </NuxtLink>
+            <!-- User dropdown -->
             <div class="relative" ref="dropdownRef">
               <button @click="open = !open"
                 class="flex items-center gap-2 text-base font-medium text-white hover:opacity-70 transition-opacity">
@@ -67,6 +89,7 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
 const authStore = useAuthStore()
+const { unreadCount } = useUnreadCount()
 const router = useRouter()
 const open = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)

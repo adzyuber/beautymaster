@@ -26,11 +26,6 @@
             class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('register.phone') }} *</label>
-          <input v-model="form.phone" type="tel" required
-            class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-        </div>
-        <div>
           <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('register.email') }} *</label>
           <input v-model="form.email" type="email" required
             class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
@@ -46,11 +41,20 @@
             class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
         </div>
 
+        <div class="flex items-center gap-3">
+          <input v-model="form.consent" type="checkbox" id="consent"
+            class="h-4 w-4 rounded border-gray-300 text-[#1EC3BD] focus:ring-[#1EC3BD] cursor-pointer flex-shrink-0">
+          <label for="consent" class="text-sm text-[#5B5B5B] cursor-pointer">
+            {{ t('register.consent') }}
+            <NuxtLink to="/privacy" class="text-[#2D4D3A] font-semibold hover:underline">{{ t('register.consentLink') }}</NuxtLink>
+          </label>
+        </div>
+
         <div v-if="error" class="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded">
           {{ error }}
         </div>
 
-        <button type="submit" :disabled="loading"
+        <button type="submit" :disabled="loading || !form.consent"
           class="w-full bg-[#2D2D2D] text-white border-2 border-[#2D2D2D] py-3 rounded font-bold hover:bg-[#1a1a1a] hover:border-[#1a1a1a] transition-all disabled:opacity-50">
           {{ loading ? t('register.loading') : t('register.submit') }}
         </button>
@@ -71,11 +75,15 @@ definePageMeta({ layout: false })
 const { t, locale, setLocale, tError } = useLocale()
 const authStore = useAuthStore()
 const router = useRouter()
-const form = reactive({ name: '', phone: '', email: '', password: '', organization: '' })
+const form = reactive({ name: '', email: '', password: '', organization: '', consent: false })
 const loading = ref(false)
 const error = ref('')
 
 async function submit() {
+  if (!form.consent) {
+    error.value = t('register.consentRequired')
+    return
+  }
   loading.value = true
   error.value = ''
   try {

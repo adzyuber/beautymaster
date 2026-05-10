@@ -5,25 +5,23 @@ import { signToken } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-  const { name, phone, email, password, organization } = body
+  const { name, email, password, organization } = body
 
-  if (!name || !phone || !email || !password) {
+  if (!name || !email || !password) {
     throw createError({ statusCode: 400, message: 'Заполните все обязательные поля', data: { code: 'missing_fields' } })
   }
   if (password.length < 8) {
     throw createError({ statusCode: 400, message: 'Пароль должен содержать минимум 8 символов', data: { code: 'password_too_short' } })
   }
 
-  const existing = await prisma.user.findFirst({
-    where: { OR: [{ email }, { phone }] }
-  })
+  const existing = await prisma.user.findFirst({ where: { email } })
   if (existing) {
-    throw createError({ statusCode: 400, message: 'Email или телефон уже зарегистрирован', data: { code: 'duplicate_account' } })
+    throw createError({ statusCode: 400, message: 'Email уже зарегистрирован', data: { code: 'duplicate_account' } })
   }
 
   const passwordHash = await bcrypt.hash(password, 10)
   const user = await prisma.user.create({
-    data: { name, phone, email, passwordHash, organization: organization || null }
+    data: { name, email, passwordHash, organization: organization || null }
   })
 
   const config = useRuntimeConfig()

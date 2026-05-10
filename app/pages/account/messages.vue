@@ -130,6 +130,7 @@
 import { useAuthStore } from '~/stores/auth'
 const { t } = useLocale()
 const authStore = useAuthStore()
+const { fetchUnread } = useUnreadCount()
 
 const { data: chatsData, refresh: refreshChats } = await useFetch<{
   chats: Array<{ userId: number; userName: string; lastMessage: string; createdAt: string; unread: number }>
@@ -171,6 +172,7 @@ async function selectChat(chat: any) {
   const res = await $fetch<{ messages: any[] }>('/api/messages', { query: { with: chat.userId } })
   msgList.value = res.messages
   refreshChats()
+  fetchUnread()
 }
 
 async function sendMsg() {

@@ -7,14 +7,7 @@
         <span class="text-2xl">✉️</span>
         <div>
           <div class="font-semibold text-[#2D4D3A]">Email</div>
-          <div class="text-[#5B5B5B] text-sm">support@medbeauty.ru</div>
-        </div>
-      </div>
-      <div class="flex items-center gap-4">
-        <span class="text-2xl">📞</span>
-        <div>
-          <div class="font-semibold text-[#2D4D3A]">{{ t('contacts.phone') }}</div>
-          <div class="text-[#5B5B5B] text-sm">+7 (800) 000-00-00</div>
+          <div class="text-[#5B5B5B] text-sm">adzyuber@gmail.com</div>
         </div>
       </div>
     </div>

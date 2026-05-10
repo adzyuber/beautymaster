@@ -19,9 +19,15 @@
 
     <NuxtLink :to="authStore.isLoggedIn ? '/account/messages' : '/login'" class="flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-[#02282C] transition-colors"
       :class="{ '!text-[#02282C]': route.path === '/account/messages' }">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-      </svg>
+      <span class="relative">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+        <span v-if="unreadCount > 0"
+          class="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+          {{ unreadCount > 99 ? '99+' : unreadCount }}
+        </span>
+      </span>
       <span class="text-[10px] font-semibold">{{ tr.chat }}</span>
     </NuxtLink>
 
@@ -40,6 +46,7 @@
 import { useAuthStore } from '~/stores/auth'
 const route = useRoute()
 const authStore = useAuthStore()
+const { unreadCount } = useUnreadCount()
 const { isVisible } = useScrollDirection()
 const { t } = useLocale()
 const pinned = computed(() => route.path === '/account/messages')

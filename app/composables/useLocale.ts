@@ -166,6 +166,10 @@ const messages = {
     'register.hasAccount': 'Уже есть аккаунт?',
     'register.login': 'Войдите',
     'register.error': 'Ошибка регистрации',
+    'register.consent': 'Я даю согласие на обработку персональных данных в соответствии с',
+    'register.consentLink': 'Политикой конфиденциальности',
+    'register.consentAfter': '',
+    'register.consentRequired': 'Необходимо дать согласие на обработку персональных данных',
 
     // About
     'about.title': 'О проекте',
@@ -389,6 +393,10 @@ const messages = {
     'register.hasAccount': 'Already have an account?',
     'register.login': 'Sign in',
     'register.error': 'Registration error',
+    'register.consent': 'I consent to the processing of my personal data in accordance with the',
+    'register.consentLink': 'Privacy Policy',
+    'register.consentAfter': '',
+    'register.consentRequired': 'Please consent to the processing of your personal data to continue',
 
     // About
     'about.title': 'About',

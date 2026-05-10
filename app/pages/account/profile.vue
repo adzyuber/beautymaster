@@ -56,9 +56,13 @@
             <input v-model="form.website" type="url" :placeholder="t('account.websiteHint')"
               class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
           </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('account.phone') }}</label>
+            <input v-model="form.phone" type="tel" placeholder="+421 9XX XXX XXX"
+              class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
+          </div>
           <div class="text-sm text-[#5B5B5B]">
-            <span class="font-medium">Email:</span> {{ authStore.user?.email }} •
-            <span class="font-medium">{{ t('account.phone') }}:</span> {{ authStore.user?.phone }}
+            <span class="font-medium">Email:</span> {{ authStore.user?.email }}
           </div>
 
           <div v-if="saved" class="bg-green-50 text-green-700 text-sm px-4 py-2 rounded">{{ t('account.saved') }}</div>
@@ -127,7 +131,8 @@ async function logout() {
 const form = reactive({
   name: authStore.user?.name || '',
   organization: authStore.user?.organization || '',
-  website: authStore.user?.website || ''
+  website: authStore.user?.website || '',
+  phone: authStore.user?.phone || ''
 })
 
 const saving = ref(false)
@@ -169,7 +174,7 @@ async function save() {
 }
 
 watch(() => authStore.user, (u) => {
-  if (u) { form.name = u.name; form.organization = u.organization || ''; form.website = u.website || '' }
+  if (u) { form.name = u.name; form.organization = u.organization || ''; form.website = u.website || ''; form.phone = u.phone || '' }
 }, { immediate: true })
 
 useSeoMeta({ title: 'Мой профиль — BeautyMaster' })

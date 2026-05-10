@@ -40,7 +40,7 @@ export const useAuthStore = defineStore('auth', {
       this.user = res.user
       return res
     },
-    async register(data: { name: string; phone: string; email: string; password: string; organization?: string }) {
+    async register(data: { name: string; email: string; password: string; organization?: string }) {
       const res = await ofetch<{ user: User }>('/api/auth/register', {
         method: 'POST',
         body: data

@@ -131,6 +131,14 @@ const filters = reactive({
 })
 const currentPage = ref(Number(route.query.page) || 1)
 
+watch(() => route.query, (q) => {
+  filters.search = (q.search as string) || ''
+  filters.city = (q.city as string) || ''
+  filters.category = (q.category as string) || ''
+  currentPage.value = Number(q.page) || 1
+  refresh()
+})
+
 const { data: categories } = await useFetch('/api/categories')
 
 const hasActiveFilters = computed(() =>
