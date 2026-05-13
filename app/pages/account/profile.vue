@@ -91,6 +91,11 @@
           <div class="text-2xl mb-2">💬</div>
           <div class="font-semibold text-[#2D4D3A] group-hover:text-[#3d6650]">{{ t('account.messages') }}</div>
         </NuxtLink>
+        <NuxtLink v-if="authStore.isAdmin" to="/admin"
+          class="bg-[#02282C] rounded p-5 shadow-[0_2px_16px_rgba(45,77,58,0.07)] hover:shadow-[0_8px_32px_rgba(45,77,58,0.14)] transition-all group">
+          <div class="text-2xl mb-2">⚙️</div>
+          <div class="font-semibold text-white group-hover:text-white/80">Admin panel</div>
+        </NuxtLink>
       </div>
 
       <!-- Logout (mobile only) -->

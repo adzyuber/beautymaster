@@ -1,52 +1,36 @@
 <template>
-  <!-- Login form for unauthenticated -->
-  <div v-if="!authStore.isAdmin" class="min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white rounded shadow-[0_8px_32px_rgba(45,77,58,0.12)] p-8 w-full max-w-md">
-      <div class="mb-8">
-        <div class="flex items-center justify-center gap-3 mb-3">
-          <img src="/logo.png" alt="BeautyMaster" class="h-12 w-12 object-contain">
-          <div class="text-2xl font-bold"><span class="text-[#1EC3BD]">Beauty</span><span class="text-[#2D4D3A]">Master</span></div>
-        </div>
-        <h1 class="text-xl font-bold text-[#2D4D3A] text-center">Admin panel sign in</h1>
+  <!-- Login form for unauthenticated (layout wraps in centered container) -->
+  <div v-if="!authStore.isAdmin" class="bg-white rounded shadow-[0_8px_32px_rgba(45,77,58,0.12)] p-8 w-full max-w-md">
+    <div class="mb-8">
+      <div class="flex items-center justify-center gap-3 mb-3">
+        <img src="/logo.png" alt="BeautyMaster" class="h-12 w-12 object-contain">
+        <div class="text-2xl font-bold"><span class="text-[#1EC3BD]">Beauty</span><span class="text-[#2D4D3A]">Master</span></div>
       </div>
-      <form @submit.prevent="login" class="space-y-4">
-        <input v-model="form.login" type="text" placeholder="Email or phone" required
-          class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-        <input v-model="form.password" type="password" placeholder="Password" required
-          class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-        <div v-if="loginError" class="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded">
-          {{ loginError }}
-        </div>
-        <button type="submit" :disabled="loginPending"
-          class="w-full bg-[#2D2D2D] text-white border-2 border-[#2D2D2D] py-3 rounded font-bold hover:bg-[#1a1a1a] hover:border-[#1a1a1a] transition-all disabled:opacity-50">
-          {{ loginPending ? 'Signing in...' : 'Sign in' }}
-        </button>
-      </form>
+      <h1 class="text-xl font-bold text-[#2D4D3A] text-center">Admin panel sign in</h1>
     </div>
+    <form @submit.prevent="login" class="space-y-4">
+      <input v-model="form.login" type="text" placeholder="Email or phone" required
+        class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
+      <input v-model="form.password" type="password" placeholder="Password" required
+        class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
+      <div v-if="loginError" class="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded">
+        {{ loginError }}
+      </div>
+      <button type="submit" :disabled="loginPending"
+        class="w-full bg-[#2D2D2D] text-white border-2 border-[#2D2D2D] py-3 rounded font-bold hover:bg-[#1a1a1a] hover:border-[#1a1a1a] transition-all disabled:opacity-50">
+        {{ loginPending ? 'Signing in...' : 'Sign in' }}
+      </button>
+    </form>
   </div>
 
-  <!-- Admin dashboard -->
+  <!-- Dashboard -->
   <div v-else class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="flex items-center justify-between mb-8">
-      <div class="flex items-center gap-3">
-        <img src="/logo.png" alt="BeautyMaster" class="h-10 w-10 object-contain">
-        <div>
-          <div class="text-xl font-bold"><span class="text-[#1EC3BD]">Beauty</span><span class="text-[#2D4D3A]">Master</span></div>
-          <h1 class="text-sm font-semibold text-[#5B5B5B] leading-tight">Admin panel</h1>
-        </div>
-      </div>
-      <div class="flex gap-2">
-        <NuxtLink to="/admin/users" class="text-sm px-4 py-2 bg-[#2D2D2D] text-white border-2 border-[#2D2D2D] rounded font-semibold hover:bg-[#1a1a1a] hover:border-[#1a1a1a] transition-all">Users</NuxtLink>
-        <NuxtLink to="/admin/ads" class="text-sm px-4 py-2 bg-[#2D2D2D] text-white border-2 border-[#2D2D2D] rounded font-semibold hover:bg-[#1a1a1a] hover:border-[#1a1a1a] transition-all">Listings</NuxtLink>
-        <button @click="authStore.logout()" class="text-sm px-4 py-2 border-2 border-[#2D2D2D] rounded font-semibold hover:bg-gray-100 transition-all">Sign out</button>
-      </div>
-    </div>
 
     <div v-if="pending" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
       <div v-for="i in 4" :key="i" class="bg-white rounded h-28 animate-pulse"></div>
     </div>
 
-    <div v-else-if="data" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+    <div v-else-if="data" class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-10">
       <div class="bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] p-6 text-center">
         <div class="text-3xl font-bold text-[#2D4D3A]">{{ data.users }}</div>
         <div class="text-sm text-[#5B5B5B] mt-1">Users</div>
@@ -59,13 +43,24 @@
         <div class="text-3xl font-bold text-green-600">{{ data.activeAds }}</div>
         <div class="text-sm text-[#5B5B5B] mt-1">Active</div>
       </div>
+      <NuxtLink to="/admin/ads?status=pending"
+        :class="['rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] p-6 text-center transition-shadow hover:shadow-md',
+          data.pendingAds > 0 ? 'bg-amber-50' : 'bg-white']">
+        <div :class="['text-3xl font-bold', data.pendingAds > 0 ? 'text-amber-600' : 'text-[#2D4D3A]']">
+          {{ data.pendingAds }}
+        </div>
+        <div class="text-sm text-[#5B5B5B] mt-1 flex items-center justify-center gap-1">
+          Pending
+          <span v-if="data.pendingAds > 0" class="inline-flex items-center justify-center w-4 h-4 bg-amber-500 text-white text-[10px] font-bold rounded-full">!</span>
+        </div>
+      </NuxtLink>
       <div class="bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] p-6 text-center">
         <div class="text-3xl font-bold text-[#2D4D3A]">{{ data.messages }}</div>
         <div class="text-sm text-[#5B5B5B] mt-1">Messages</div>
       </div>
     </div>
 
-    <div class="grid sm:grid-cols-2 gap-6 mb-6">
+    <div class="grid sm:grid-cols-3 gap-6 mb-6">
       <NuxtLink to="/admin/users"
         class="bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] p-8 hover:shadow-md transition-shadow group">
         <div class="text-4xl mb-3">👥</div>
@@ -77,6 +72,12 @@
         <div class="text-4xl mb-3">📋</div>
         <div class="text-lg font-bold text-[#2D4D3A] group-hover:underline">Listing moderation</div>
         <div class="text-sm text-[#5B5B5B] mt-1">View all listings, change status and delete</div>
+      </NuxtLink>
+      <NuxtLink to="/admin/messages"
+        class="bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] p-8 hover:shadow-md transition-shadow group">
+        <div class="text-4xl mb-3">💬</div>
+        <div class="text-lg font-bold text-[#2D4D3A] group-hover:underline">Messages</div>
+        <div class="text-sm text-[#5B5B5B] mt-1">View all user conversations</div>
       </NuxtLink>
     </div>
 

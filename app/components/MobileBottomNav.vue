@@ -39,6 +39,7 @@
       </svg>
       <span class="text-[10px] font-semibold">{{ tr.profile }}</span>
     </NuxtLink>
+
   </nav>
 </template>
 

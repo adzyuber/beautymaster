@@ -240,6 +240,122 @@ const enMsg = {
   button: 'Open chat'
 }
 
+interface AdModerationEmailParams {
+  to: string
+  name: string
+  adTitle: string
+  adUrl: string
+  rejectionReason?: string
+  locale: Locale
+}
+
+export async function sendAdApprovedEmail(params: AdModerationEmailParams) {
+  const config = useRuntimeConfig()
+  const client = getClient()
+  const { subject, html, text } = renderAdApprovedEmail(params)
+  const { error } = await client.emails.send({ from: config.mailFrom, to: params.to, subject, html, text })
+  if (error) throw new Error(`Resend error: ${error.message ?? JSON.stringify(error)}`)
+}
+
+export async function sendAdRejectedEmail(params: AdModerationEmailParams) {
+  const config = useRuntimeConfig()
+  const client = getClient()
+  const { subject, html, text } = renderAdRejectedEmail(params)
+  const { error } = await client.emails.send({ from: config.mailFrom, to: params.to, subject, html, text })
+  if (error) throw new Error(`Resend error: ${error.message ?? JSON.stringify(error)}`)
+}
+
+function renderAdApprovedEmail({ name, adTitle, adUrl, locale }: AdModerationEmailParams) {
+  const t = locale === 'en' ? enAdApproved : ruAdApproved
+  const safeName = escapeHtml(name)
+  const safeTitle = escapeHtml(adTitle)
+  const subject = t.subject
+  const text = `${t.hello(safeName)}\n\n${t.intro(safeTitle)}\n\n${adUrl}\n\n— BeautyMaster`
+  const html = renderModerationHtml({ locale, subject, safeName, safeTitle, adUrl, t, type: 'approved' })
+  return { subject, html, text }
+}
+
+function renderAdRejectedEmail({ name, adTitle, adUrl, rejectionReason, locale }: AdModerationEmailParams) {
+  const t = locale === 'en' ? enAdRejected : ruAdRejected
+  const safeName = escapeHtml(name)
+  const safeTitle = escapeHtml(adTitle)
+  const safeReason = rejectionReason ? escapeHtml(rejectionReason) : ''
+  const subject = t.subject
+  const text = `${t.hello(safeName)}\n\n${t.intro(safeTitle)}${safeReason ? `\n\n${t.reason}: ${safeReason}` : ''}\n\n— BeautyMaster`
+  const html = renderModerationHtml({ locale, subject, safeName, safeTitle, adUrl, t, type: 'rejected', safeReason })
+  return { subject, html, text }
+}
+
+function renderModerationHtml({ locale, subject, safeName, safeTitle, adUrl, t, type, safeReason }: {
+  locale: string; subject: string; safeName: string; safeTitle: string; adUrl: string
+  t: any; type: 'approved' | 'rejected'; safeReason?: string
+}) {
+  const accentColor = type === 'approved' ? '#22c55e' : '#ef4444'
+  const btnBg = type === 'approved' ? '#2D2D2D' : '#ef4444'
+  return `<!doctype html>
+<html lang="${locale}">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${subject}</title></head>
+<body style="margin:0;padding:0;background:#F5F5F0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#2D2D2D;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F5F5F0;padding:32px 16px;">
+    <tr><td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(45,77,58,0.08);">
+        <tr><td style="padding:32px 32px 16px;text-align:center;">
+          <div style="font-size:24px;font-weight:700;letter-spacing:-0.5px;">
+            <span style="color:#1EC3BD;">Beauty</span><span style="color:#2D2D2D;">Master</span>
+          </div>
+        </td></tr>
+        <tr><td style="padding:8px 32px 24px;">
+          <div style="width:48px;height:48px;border-radius:50%;background:${accentColor}20;display:flex;align-items:center;justify-content:center;margin:0 0 16px;font-size:24px;">${type === 'approved' ? '✓' : '✗'}</div>
+          <h1 style="margin:0 0 12px;font-size:20px;font-weight:700;color:#2D4D3A;">${t.hello(safeName)}</h1>
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#5B5B5B;">${t.intro(safeTitle)}</p>
+          ${safeReason ? `<div style="background:#FEF2F2;border-left:3px solid #ef4444;border-radius:4px;padding:12px 16px;margin:0 0 20px;font-size:14px;line-height:1.6;color:#444;"><strong>${t.reason}:</strong> ${safeReason}</div>` : ''}
+          <table role="presentation" cellpadding="0" cellspacing="0" style="margin:20px 0;">
+            <tr><td>
+              <a href="${adUrl}" style="display:inline-block;background:${btnBg};color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:6px;font-weight:700;font-size:15px;">${t.button}</a>
+            </td></tr>
+          </table>
+        </td></tr>
+        <tr><td style="padding:16px 32px 32px;border-top:1px solid #EEE;text-align:center;">
+          <p style="margin:0;font-size:12px;color:#AAA;">BeautyMaster &middot; <a href="https://beautymaster.guru" style="color:#AAA;text-decoration:none;">beautymaster.guru</a></p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`
+}
+
+const ruAdApproved = {
+  subject: 'Ваше объявление опубликовано — BeautyMaster',
+  hello: (name: string) => `Здравствуйте, ${name}!`,
+  intro: (title: string) => `Ваше объявление <strong>«${title}»</strong> прошло модерацию и теперь опубликовано на сайте.`,
+  button: 'Посмотреть объявление',
+  reason: 'Причина'
+}
+
+const enAdApproved = {
+  subject: 'Your listing has been published — BeautyMaster',
+  hello: (name: string) => `Hello, ${name}!`,
+  intro: (title: string) => `Your listing <strong>"${title}"</strong> has passed moderation and is now published on the site.`,
+  button: 'View listing',
+  reason: 'Reason'
+}
+
+const ruAdRejected = {
+  subject: 'Ваше объявление отклонено — BeautyMaster',
+  hello: (name: string) => `Здравствуйте, ${name}!`,
+  intro: (title: string) => `К сожалению, ваше объявление <strong>«${title}»</strong> не прошло модерацию и было отклонено.`,
+  button: 'Перейти к объявлению',
+  reason: 'Причина отклонения'
+}
+
+const enAdRejected = {
+  subject: 'Your listing has been rejected — BeautyMaster',
+  hello: (name: string) => `Hello, ${name}!`,
+  intro: (title: string) => `Unfortunately, your listing <strong>"${title}"</strong> did not pass moderation and has been rejected.`,
+  button: 'View listing',
+  reason: 'Rejection reason'
+}
+
 function escapeHtml(input: string) {
   return input
     .replace(/&/g, '&amp;')

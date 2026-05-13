@@ -137,9 +137,59 @@
               </button>
             </div>
           </div>
+
+          <!-- Admin controls -->
+          <div v-if="authStore.isAdmin" class="bg-white rounded p-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+            <div class="text-xs font-semibold text-[#5B5B5B] uppercase tracking-wide mb-3">Admin</div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm text-[#2D4D3A]">Status</span>
+              <span :class="['text-xs font-semibold px-2 py-0.5 rounded-full', adStatusClass(ad.status)]">
+                {{ adStatusLabel(ad.status) }}
+              </span>
+            </div>
+            <button
+              @click="ad.status === 'active' ? deactivateModal = true : activateAd()"
+              :disabled="togglingStatus"
+              :class="['w-full py-2 rounded font-semibold text-sm transition-all disabled:opacity-50',
+                ad.status === 'active'
+                  ? 'bg-gray-100 text-[#5B5B5B] hover:bg-gray-200'
+                  : 'bg-green-100 text-green-700 hover:bg-green-200']"
+            >
+              {{ togglingStatus ? 'Saving...' : ad.status === 'active' ? 'Deactivate' : 'Activate' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Deactivate modal -->
+    <Teleport to="body">
+      <div v-if="deactivateModal" class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" @click.self="deactivateModal = false">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+          <h2 class="text-lg font-bold text-[#2D4D3A] mb-1">Deactivate listing</h2>
+          <p class="text-sm text-[#5B5B5B] mb-4 truncate">« {{ ad.title }} »</p>
+          <label class="block text-sm font-medium text-[#2D2D2D] mb-1.5">
+            Reason <span class="text-[#5B5B5B] font-normal">(optional)</span>
+          </label>
+          <textarea
+            v-model="deactivateReason"
+            rows="3"
+            placeholder="Explain why the listing is being deactivated..."
+            class="w-full border border-gray-200 rounded px-3 py-2.5 text-sm outline-none resize-none focus:border-[#1EC3BD] focus:shadow-[0_0_0_3px_rgba(30,195,189,0.12)]"
+          />
+          <div class="flex gap-3 mt-4 justify-end">
+            <button @click="deactivateModal = false"
+              class="px-4 py-2 text-sm text-[#5B5B5B] border border-gray-200 rounded hover:bg-gray-50 font-medium transition-all">
+              Cancel
+            </button>
+            <button @click="confirmDeactivate" :disabled="togglingStatus"
+              class="px-4 py-2 text-sm bg-gray-700 text-white rounded hover:bg-gray-800 font-medium transition-all disabled:opacity-50">
+              {{ togglingStatus ? 'Saving...' : 'Deactivate' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <!-- Message modal -->
     <div v-if="openMessage" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -188,7 +238,7 @@ const adFallbackImage = computed(() => {
   return `https://loremflickr.com/800/500/${kw}?lock=${lock}`
 })
 
-const { data: ad, pending } = await useFetch<{
+const { data: ad, pending, refresh } = await useFetch<{
   id: number
   title: string
   description: string
@@ -198,6 +248,7 @@ const { data: ad, pending } = await useFetch<{
   price: number | null
   userId: number
   slug: string
+  status: string
   createdAt: string
   images: Array<{ id: number; sortOrder: number; adId: number; imageUrl: string }>
   user: { id: number; name: string; email: string; phone: string; organization: string | null; website: string | null; avatarUrl: string | null }
@@ -207,6 +258,9 @@ const activeImg = ref(0)
 const openMessage = ref(false)
 const msgText = ref('')
 const sendingMsg = ref(false)
+const togglingStatus = ref(false)
+const deactivateModal = ref(false)
+const deactivateReason = ref('')
 
 async function sendMessage() {
   if (!msgText.value.trim() || !ad.value) return
@@ -224,6 +278,47 @@ async function sendMessage() {
   } finally {
     sendingMsg.value = false
   }
+}
+
+async function activateAd() {
+  if (!ad.value) return
+  togglingStatus.value = true
+  try {
+    await $fetch(`/api/admin/ads/${ad.value.id}`, { method: 'PATCH', body: { status: 'active' } })
+    await refresh()
+  } finally {
+    togglingStatus.value = false
+  }
+}
+
+async function confirmDeactivate() {
+  if (!ad.value) return
+  togglingStatus.value = true
+  try {
+    await $fetch(`/api/admin/ads/${ad.value.id}`, {
+      method: 'PATCH',
+      body: { status: 'inactive', reason: deactivateReason.value.trim() }
+    })
+    deactivateModal.value = false
+    deactivateReason.value = ''
+    await refresh()
+  } finally {
+    togglingStatus.value = false
+  }
+}
+
+function adStatusClass(status: string) {
+  if (status === 'active') return 'bg-green-100 text-green-700'
+  if (status === 'pending') return 'bg-amber-100 text-amber-700'
+  if (status === 'rejected') return 'bg-red-100 text-red-600'
+  return 'bg-gray-100 text-gray-500'
+}
+
+function adStatusLabel(status: string) {
+  if (status === 'active') return 'Active'
+  if (status === 'pending') return 'Pending'
+  if (status === 'rejected') return 'Rejected'
+  return 'Inactive'
 }
 
 async function deleteAd() {

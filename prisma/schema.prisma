@@ -49,8 +49,9 @@ model Ad {
   price       Float?
   city        String
   address     String?
-  status      String    @default("active")
-  slug        String    @unique
+  status          String    @default("pending")
+  rejectionReason String?
+  slug            String    @unique
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 

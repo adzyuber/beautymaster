@@ -11,14 +11,34 @@ export default defineEventHandler(async (event) => {
   const skip = (page - 1) * limit
 
   const where: any = {}
-  if (query.status) where.status = query.status
+
+  if (query.status) {
+    const statuses = (query.status as string).split(',').map(s => s.trim()).filter(Boolean)
+    where.status = statuses.length === 1 ? statuses[0] : { in: statuses }
+  }
+
+  if (query.category) where.category = query.category
+
+  if (query.city) {
+    const c = query.city as string
+    const variants = [...new Set([c, c.toLowerCase(), c.toUpperCase(), c[0]?.toUpperCase() + c.slice(1).toLowerCase()])]
+    where.city = { contains: variants[0] }
+  }
+
   if (query.search) {
     const s = query.search as string
     const variants = [...new Set([s, s.toLowerCase(), s.toUpperCase(), s[0]?.toUpperCase() + s.slice(1).toLowerCase()])]
-    where.OR = variants.flatMap(v => [
-      { title: { contains: v } },
-      { city: { contains: v } }
-    ])
+    where.title = { contains: variants[0] }
+  }
+
+  if (query.author) {
+    const a = query.author as string
+    where.user = {
+      OR: [
+        { name: { contains: a } },
+        { email: { contains: a } }
+      ]
+    }
   }
 
   const [ads, total] = await Promise.all([

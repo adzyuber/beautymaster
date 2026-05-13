@@ -53,15 +53,15 @@
         </div>
       </div>
 
-      <!-- Mobile layout -->
-      <div class="sm:hidden flex flex-col bg-white" style="height: 100dvh;">
+      <!-- Mobile layout: страница не скроллится (body overflow hidden задан в script) -->
+      <div class="sm:hidden flex flex-col bg-white overflow-hidden" style="height: 100dvh;">
 
         <!-- Chat list -->
         <template v-if="!activeChat">
-          <div class="fixed top-0 left-0 right-0 z-40 px-4 py-3 border-b border-gray-100 bg-white">
+          <div class="px-4 py-3 border-b border-gray-100 shrink-0">
             <h2 class="font-bold text-[#02282C] text-lg">{{ t('account.dialogs') }}</h2>
           </div>
-          <div class="flex-1 min-h-0 overflow-y-auto" style="padding-top: 53px; padding-bottom: 64px;">
+          <div class="flex-1 min-h-0 overflow-y-auto">
             <div v-if="!chatsData?.chats?.length" class="p-8 text-center text-[#5B5B5B]">{{ t('account.noDialogs') }}</div>
             <button v-for="chat in chatsData?.chats" :key="chat.userId" @click="selectChat(chat)"
               class="w-full text-left px-4 py-4 border-b border-gray-100 active:bg-gray-50 transition-colors">
@@ -77,11 +77,12 @@
               </div>
             </button>
           </div>
+          <div class="h-16 shrink-0"></div>
         </template>
 
         <!-- Active chat -->
         <template v-else>
-          <div class="fixed top-0 left-0 right-0 z-40 flex items-center gap-3 px-4 py-3 border-b border-gray-100 bg-white">
+          <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-100 shrink-0">
             <button @click="activeChat = null" class="text-[#02282C] p-1 -ml-1">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -91,10 +92,10 @@
             <span class="font-bold text-[#2D4D3A] text-base truncate">{{ activeChat.userName }}</span>
           </div>
 
-          <div ref="msgContainerMobile" class="flex-1 min-h-0 overflow-y-auto bg-white" style="overscroll-behavior: contain; padding-top: 60px;">
+          <div ref="msgContainerMobile" class="flex-1 min-h-0 overflow-y-auto">
             <div class="min-h-full flex flex-col">
               <div class="flex-1"></div>
-              <div class="p-4 space-y-3" style="padding-bottom: 140px;">
+              <div class="p-4 space-y-3">
                 <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
                   <div :class="['max-w-[80%] px-4 py-3 rounded text-sm leading-relaxed',
                     msg.fromUserId === authStore.user?.id ? 'bg-[#02282C] text-white' : 'bg-gray-100 text-[#2D4D3A]']">
@@ -106,7 +107,7 @@
             </div>
           </div>
 
-          <div class="fixed left-0 right-0 z-40 px-3 py-3 border-t border-gray-100 bg-white flex gap-2" style="bottom: 64px;">
+          <div class="px-3 py-3 border-t border-gray-100 flex gap-2 shrink-0">
             <input v-model="newMsg" type="text" :placeholder="t('account.msgPlaceholder')" @keyup.enter="sendMsg"
               class="flex-1 min-w-0 border border-gray-200 rounded px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
             <button @click="sendMsg" :disabled="!newMsg.trim()"
@@ -116,6 +117,7 @@
               </svg>
             </button>
           </div>
+          <div class="h-16 shrink-0"></div>
         </template>
       </div>
     </div>
@@ -127,6 +129,9 @@ import { useAuthStore } from '~/stores/auth'
 const { t } = useLocale()
 const authStore = useAuthStore()
 const route = useRoute()
+
+onMounted(() => { window.scrollTo(0, 0); document.body.style.overflow = 'hidden' })
+onUnmounted(() => { document.body.style.overflow = '' })
 
 if (!authStore.isLoggedIn) {
   await navigateTo(`/login?redirect=${encodeURIComponent(route.fullPath)}`)

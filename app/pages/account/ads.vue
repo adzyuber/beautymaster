@@ -34,18 +34,21 @@
           <div class="flex-1 min-w-0">
             <div class="font-semibold text-[#2D4D3A] truncate">{{ ad.title }}</div>
             <div class="text-sm text-[#5B5B5B] mt-0.5">{{ tCat(ad.category) }} · {{ ad.city }}</div>
-            <div class="flex items-center gap-3 mt-2">
-              <span :class="['text-xs font-semibold px-2 py-0.5 rounded-full',
-                ad.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500']">
-                {{ ad.status === 'active' ? t('account.active') : t('account.inactive') }}
+            <div class="flex items-center gap-2 mt-2 flex-wrap">
+              <span :class="['text-xs font-semibold px-2 py-0.5 rounded-full', statusClass(ad.status)]">
+                {{ statusLabel(ad.status) }}
               </span>
               <span class="text-xs text-gray-400">{{ formatDate(ad.createdAt) }}</span>
+            </div>
+            <div v-if="ad.status === 'rejected' && ad.rejectionReason"
+              class="mt-2 text-xs text-red-600 bg-red-50 rounded px-2 py-1.5 leading-relaxed">
+              <span class="font-semibold">{{ t('account.rejectionReason') }}:</span> {{ ad.rejectionReason }}
             </div>
           </div>
         </div>
         <!-- actions -->
         <div class="flex gap-2 sm:shrink-0">
-          <NuxtLink :to="`/ad/${ad.slug}`"
+          <NuxtLink v-if="ad.status === 'active'" :to="`/ad/${ad.slug}`"
             class="flex-1 sm:flex-none text-center text-sm px-3 py-2 bg-[#8FD9A8]/20 text-[#2D4D3A] rounded hover:bg-[#8FD9A8]/40 font-medium transition-all">
             {{ t('account.view') }}
           </NuxtLink>
@@ -77,6 +80,20 @@ async function deleteAd(id: number) {
 
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString(locale.value === 'en' ? 'en-GB' : 'ru-RU', { day: 'numeric', month: 'long' })
+}
+
+function statusClass(status: string) {
+  if (status === 'active') return 'bg-green-100 text-green-700'
+  if (status === 'pending') return 'bg-yellow-100 text-yellow-700'
+  if (status === 'rejected') return 'bg-red-100 text-red-600'
+  return 'bg-gray-100 text-gray-500'
+}
+
+function statusLabel(status: string) {
+  if (status === 'active') return t('account.active')
+  if (status === 'pending') return t('account.pending')
+  if (status === 'rejected') return t('account.rejected')
+  return t('account.inactive')
 }
 
 useSeoMeta({ title: 'Мои объявления — BeautyMaster' })
