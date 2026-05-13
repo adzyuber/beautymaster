@@ -16,7 +16,9 @@
           </svg>
         </button>
       </div>
-      <NotificationBell :dark="false" />
+      <div class="bg-[#02282C] shrink-0 flex items-center justify-center px-4 py-3.5 rounded">
+        <NotificationBell />
+      </div>
     </div>
   </div>
 </template>
