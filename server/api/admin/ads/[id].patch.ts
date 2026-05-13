@@ -28,12 +28,31 @@ export default defineEventHandler(async (event) => {
   const ad = await prisma.ad.update({
     where: { id },
     data: updateData,
-    include: { user: { select: { name: true, email: true } } }
+    include: { user: { select: { id: true, name: true, email: true } } }
   })
 
   const config = useRuntimeConfig()
   const appUrl = config.appUrl || 'https://beautymaster.guru'
   const adUrl = `${appUrl}/ad/${ad.slug}`
+
+  // Determine notification type
+  let notifType: string | null = null
+  if (body.action === 'approve' || body.status === 'active') notifType = 'ad_approved'
+  else if (body.action === 'reject') notifType = 'ad_rejected'
+  else if (body.status === 'inactive') notifType = 'ad_inactive'
+
+  if (notifType) {
+    await prisma.notification.create({
+      data: {
+        userId: ad.user.id,
+        type: notifType,
+        adId: ad.id,
+        adTitle: ad.title,
+        adSlug: ad.slug,
+        reason: body.reason?.trim() || null
+      }
+    }).catch(() => {})
+  }
 
   if (body.action === 'approve' || body.action === 'reject') {
     try {

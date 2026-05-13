@@ -227,6 +227,19 @@ const messages = {
     'common.sending': 'Отправляем...',
     'common.msgPlaceholder': 'Введите ваше сообщение...',
     'common.deleteConfirm': 'Удалить объявление?',
+
+    // Notifications
+    'notif.title': 'Уведомления',
+    'notif.markAllRead': 'Прочитать все',
+    'notif.empty': 'Нет уведомлений',
+    'notif.approved': 'Объявление одобрено',
+    'notif.rejected': 'Объявление отклонено',
+    'notif.inactive': 'Объявление деактивировано',
+    'notif.updated': 'Статус изменён',
+    'notif.justNow': 'Только что',
+    'notif.minutesAgo': '{n} мин. назад',
+    'notif.hoursAgo': '{n} ч. назад',
+    'notif.daysAgo': '{n} дн. назад',
   },
 
   en: {
@@ -457,6 +470,19 @@ const messages = {
     'common.sending': 'Sending...',
     'common.msgPlaceholder': 'Enter your message...',
     'common.deleteConfirm': 'Delete listing?',
+
+    // Notifications
+    'notif.title': 'Notifications',
+    'notif.markAllRead': 'Mark all read',
+    'notif.empty': 'No notifications',
+    'notif.approved': 'Listing approved',
+    'notif.rejected': 'Listing rejected',
+    'notif.inactive': 'Listing deactivated',
+    'notif.updated': 'Status updated',
+    'notif.justNow': 'Just now',
+    'notif.minutesAgo': '{n} min ago',
+    'notif.hoursAgo': '{n} h ago',
+    'notif.daysAgo': '{n} d ago',
   }
 }
 
@@ -494,8 +520,12 @@ export function useLocale() {
     cookie.value = l
   }
 
-  function t(key: string): string {
-    return (messages[locale.value] as any)[key] ?? (messages.ru as any)[key] ?? key
+  function t(key: string, params?: Record<string, any>): string {
+    let msg: string = (messages[locale.value] as any)[key] ?? (messages.ru as any)[key] ?? key
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => { msg = msg.replace(`{${k}}`, String(v)) })
+    }
+    return msg
   }
 
   function tCat(name: string): string {

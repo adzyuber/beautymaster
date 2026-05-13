@@ -24,6 +24,7 @@ model User {
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
   resetTokens      PasswordResetToken[]
+  notifications    Notification[]
 }
 
 model PasswordResetToken {
@@ -84,4 +85,21 @@ model Message {
 
   fromUser   User     @relation("SentMessages", fields: [fromUserId], references: [id])
   toUser     User     @relation("ReceivedMessages", fields: [toUserId], references: [id])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  type      String   // 'ad_approved' | 'ad_rejected' | 'ad_inactive' | 'ad_active'
+  adId      Int
+  adTitle   String
+  adSlug    String
+  reason    String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
 }
