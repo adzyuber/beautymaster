@@ -2,7 +2,8 @@
   <div class="relative" ref="bellRef">
     <button
       @click="toggle"
-      class="flex items-center text-white/80 hover:text-white transition-colors"
+      class="flex items-center transition-colors"
+      :class="dark ? 'text-white/80 hover:text-white' : 'text-[#02282C]/70 hover:text-[#02282C]'"
       :aria-label="t('notif.title')"
     >
       <span class="relative">
@@ -74,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+const props = withDefaults(defineProps<{ dark?: boolean }>(), { dark: true })
 const { notifCount, fetchUnread } = useUnreadCount()
 const { t } = useLocale()
 

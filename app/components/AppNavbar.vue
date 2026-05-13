@@ -27,7 +27,7 @@
               <span>{{ t('nav.chat') }}</span>
             </NuxtLink>
             <!-- Bell (desktop only) -->
-            <NotificationBell />
+            <NotificationBell class="hidden sm:flex" />
             <!-- Locale switcher -->
             <div class="hidden sm:flex items-center gap-2 text-base font-bold">
               <button @click="setLocale('ru')"
