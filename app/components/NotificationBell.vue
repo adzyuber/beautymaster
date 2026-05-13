@@ -2,7 +2,7 @@
   <div class="relative" ref="bellRef">
     <button
       @click="toggle"
-      class="hidden sm:flex items-center text-white/80 hover:text-white transition-colors"
+      class="flex items-center text-white/80 hover:text-white transition-colors"
       :aria-label="t('notif.title')"
     >
       <span class="relative">
@@ -22,7 +22,7 @@
     <Transition name="dropdown">
       <div
         v-if="open"
-        class="absolute right-0 mt-2 w-80 bg-white rounded shadow-lg border border-gray-100 z-50 overflow-hidden"
+        class="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 bg-white rounded shadow-lg border border-gray-100 z-50 overflow-hidden"
       >
         <div class="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
           <span class="font-semibold text-sm text-gray-800">{{ t('notif.title') }}</span>
