@@ -24,7 +24,8 @@
               <img
                 :src="ad.images?.[activeImg]?.imageUrl || adFallbackImage"
                 :alt="ad.title"
-                class="w-full h-full object-cover">
+                @click="ad.images?.length && openLightbox(activeImg)"
+                :class="['w-full h-full object-cover', ad.images?.length && 'cursor-zoom-in']">
               <button @click="router.back()"
                 class="sm:hidden absolute top-3 left-3 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,6 +182,56 @@
       </div>
     </div>
 
+    <!-- Image lightbox -->
+    <Teleport to="body">
+      <div v-if="lightboxOpen && ad?.images?.length"
+        class="fixed inset-0 z-[60] bg-black/95 flex items-center justify-center select-none"
+        @click.self="closeLightbox"
+        @touchstart.passive="onTouchStart"
+        @touchend.passive="onTouchEnd">
+        <!-- Top bar -->
+        <div class="absolute top-0 inset-x-0 flex items-center justify-between px-4 py-3 text-white text-sm z-10 pointer-events-none">
+          <span class="bg-black/40 rounded-full px-3 py-1 font-medium">{{ activeImg + 1 }} / {{ ad.images.length }}</span>
+          <button @click="closeLightbox" aria-label="Close"
+            class="w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center pointer-events-auto transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Prev -->
+        <button v-if="ad.images.length > 1" @click="prevImg" aria-label="Previous"
+          class="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/40 hover:bg-black/60 items-center justify-center text-white transition-colors z-10">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+
+        <!-- Image -->
+        <img
+          :src="ad.images[activeImg]?.imageUrl"
+          :alt="ad.title"
+          @click.stop
+          class="max-h-[90vh] max-w-[95vw] object-contain"
+          draggable="false">
+
+        <!-- Next -->
+        <button v-if="ad.images.length > 1" @click="nextImg" aria-label="Next"
+          class="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/40 hover:bg-black/60 items-center justify-center text-white transition-colors z-10">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+
+        <!-- Mobile dots -->
+        <div v-if="ad.images.length > 1" class="sm:hidden absolute bottom-6 inset-x-0 flex items-center justify-center gap-1.5">
+          <span v-for="(_, i) in ad.images" :key="i"
+            :class="['w-1.5 h-1.5 rounded-full transition-all', i === activeImg ? 'bg-white w-4' : 'bg-white/40']"/>
+        </div>
+      </div>
+    </Teleport>
+
     <!-- Deactivate modal -->
     <Teleport to="body">
       <div v-if="deactivateModal" class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" @click.self="deactivateModal = false">
@@ -282,6 +333,54 @@ const sendingMsg = ref(false)
 const togglingStatus = ref(false)
 const deactivateModal = ref(false)
 const deactivateReason = ref('')
+
+const lightboxOpen = ref(false)
+const touchStartX = ref(0)
+const touchStartY = ref(0)
+
+function openLightbox(i: number) {
+  activeImg.value = i
+  lightboxOpen.value = true
+}
+function closeLightbox() { lightboxOpen.value = false }
+function nextImg() {
+  const n = ad.value?.images?.length || 0
+  if (n > 1) activeImg.value = (activeImg.value + 1) % n
+}
+function prevImg() {
+  const n = ad.value?.images?.length || 0
+  if (n > 1) activeImg.value = (activeImg.value - 1 + n) % n
+}
+function onTouchStart(e: TouchEvent) {
+  touchStartX.value = e.touches[0]?.clientX ?? 0
+  touchStartY.value = e.touches[0]?.clientY ?? 0
+}
+function onTouchEnd(e: TouchEvent) {
+  const endX = e.changedTouches[0]?.clientX ?? 0
+  const endY = e.changedTouches[0]?.clientY ?? 0
+  const dx = endX - touchStartX.value
+  const dy = endY - touchStartY.value
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+    dx < 0 ? nextImg() : prevImg()
+  } else if (dy > 80 && Math.abs(dy) > Math.abs(dx)) {
+    closeLightbox()
+  }
+}
+function onKeydown(e: KeyboardEvent) {
+  if (!lightboxOpen.value) return
+  if (e.key === 'Escape') closeLightbox()
+  else if (e.key === 'ArrowRight') nextImg()
+  else if (e.key === 'ArrowLeft') prevImg()
+}
+watch(lightboxOpen, (open) => {
+  if (typeof document === 'undefined') return
+  document.body.style.overflow = open ? 'hidden' : ''
+})
+onMounted(() => { window.addEventListener('keydown', onKeydown) })
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKeydown)
+  if (typeof document !== 'undefined') document.body.style.overflow = ''
+})
 
 async function sendMessage() {
   if (!msgText.value.trim() || !ad.value) return
