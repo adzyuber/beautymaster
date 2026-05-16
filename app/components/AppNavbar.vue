@@ -47,7 +47,8 @@
             <div class="relative" ref="dropdownRef">
               <button @click="open = !open"
                 class="flex items-center gap-2 text-base font-medium text-white hover:opacity-70 transition-opacity">
-                <div class="w-8 h-8 rounded-full bg-[#8FD9A8] text-[#2D4D3A] flex items-center justify-center font-bold text-xs overflow-hidden">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs overflow-hidden"
+                  :style="userColor(authStore.user?.name)">
                   <img v-if="authStore.user?.avatarUrl" :src="authStore.user.avatarUrl" class="w-full h-full object-cover">
                   <span v-else>{{ authStore.user?.name?.charAt(0).toUpperCase() }}</span>
                 </div>
@@ -83,6 +84,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
+import { userColor } from '~/utils/userColor'
 const authStore = useAuthStore()
 const { unreadCount } = useUnreadCount()
 const router = useRouter()

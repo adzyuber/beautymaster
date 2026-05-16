@@ -24,10 +24,12 @@
           </button>
           <div class="flex items-center gap-3">
             <div class="flex -space-x-2">
-              <div class="w-8 h-8 bg-[#8FD9A8] rounded-full flex items-center justify-center text-[#2D4D3A] text-xs font-bold ring-2 ring-white">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+                :style="userColor(active.user1.name)">
                 {{ active.user1.name.charAt(0) }}
               </div>
-              <div class="w-8 h-8 bg-[#1EC3BD]/30 rounded-full flex items-center justify-center text-[#2D4D3A] text-xs font-bold ring-2 ring-white">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+                :style="userColor(active.user2.name)">
                 {{ active.user2.name.charAt(0) }}
               </div>
             </div>
@@ -44,7 +46,8 @@
           <div v-for="msg in messages" :key="msg.id">
             <div :class="['flex gap-2 items-end', msg.fromUser.id === active.user1.id ? 'justify-start' : 'justify-end']">
               <div v-if="msg.fromUser.id === active.user1.id"
-                class="w-6 h-6 bg-[#8FD9A8] rounded-full flex items-center justify-center text-[#2D4D3A] text-xs font-bold shrink-0 mb-0.5">
+                class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5"
+                :style="userColor(msg.fromUser.name)">
                 {{ msg.fromUser.name.charAt(0) }}
               </div>
               <div class="max-w-[75%]">
@@ -60,7 +63,8 @@
                 </div>
               </div>
               <div v-if="msg.fromUser.id === active.user2.id"
-                class="w-6 h-6 bg-[#1EC3BD]/30 rounded-full flex items-center justify-center text-[#2D4D3A] text-xs font-bold shrink-0 mb-0.5">
+                class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5"
+                :style="userColor(msg.fromUser.name)">
                 {{ msg.fromUser.name.charAt(0) }}
               </div>
             </div>
@@ -101,10 +105,12 @@
           >
             <div class="flex items-start gap-2.5">
               <div class="flex -space-x-2 shrink-0 mt-0.5">
-                <div class="w-7 h-7 bg-[#8FD9A8] rounded-full flex items-center justify-center text-[#2D4D3A] text-xs font-bold ring-2 ring-white">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+                  :style="userColor(conv.user1.name)">
                   {{ conv.user1.name.charAt(0) }}
                 </div>
-                <div class="w-7 h-7 bg-[#1EC3BD]/30 rounded-full flex items-center justify-center text-[#2D4D3A] text-xs font-bold ring-2 ring-white">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+                  :style="userColor(conv.user2.name)">
                   {{ conv.user2.name.charAt(0) }}
                 </div>
               </div>
@@ -159,10 +165,12 @@
           >
             <div class="flex items-start gap-2.5">
               <div class="flex -space-x-2 shrink-0 mt-0.5">
-                <div class="w-7 h-7 bg-[#8FD9A8] rounded-full flex items-center justify-center text-[#2D4D3A] text-xs font-bold ring-2 ring-white">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+                  :style="userColor(conv.user1.name)">
                   {{ conv.user1.name.charAt(0) }}
                 </div>
-                <div class="w-7 h-7 bg-[#1EC3BD]/30 rounded-full flex items-center justify-center text-[#2D4D3A] text-xs font-bold ring-2 ring-white">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+                  :style="userColor(conv.user2.name)">
                   {{ conv.user2.name.charAt(0) }}
                 </div>
               </div>
@@ -191,10 +199,12 @@
         <template v-else>
           <div class="p-4 border-b border-gray-100 flex items-center gap-3">
             <div class="flex -space-x-2">
-              <div class="w-9 h-9 bg-[#8FD9A8] rounded-full flex items-center justify-center text-[#2D4D3A] text-sm font-bold ring-2 ring-white">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ring-2 ring-white"
+                :style="userColor(active.user1.name)">
                 {{ active.user1.name.charAt(0) }}
               </div>
-              <div class="w-9 h-9 bg-[#1EC3BD]/30 rounded-full flex items-center justify-center text-[#2D4D3A] text-sm font-bold ring-2 ring-white">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ring-2 ring-white"
+                :style="userColor(active.user2.name)">
                 {{ active.user2.name.charAt(0) }}
               </div>
             </div>
@@ -210,7 +220,8 @@
             <div v-for="msg in messages" :key="msg.id">
               <div :class="['flex gap-2 items-end', msg.fromUser.id === active.user1.id ? 'justify-start' : 'justify-end']">
                 <div v-if="msg.fromUser.id === active.user1.id"
-                  class="w-6 h-6 bg-[#8FD9A8] rounded-full flex items-center justify-center text-[#2D4D3A] text-xs font-bold shrink-0 mb-0.5">
+                  class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5"
+                  :style="userColor(msg.fromUser.name)">
                   {{ msg.fromUser.name.charAt(0) }}
                 </div>
                 <div class="max-w-[65%]">
@@ -226,7 +237,8 @@
                   </div>
                 </div>
                 <div v-if="msg.fromUser.id === active.user2.id"
-                  class="w-6 h-6 bg-[#1EC3BD]/30 rounded-full flex items-center justify-center text-[#2D4D3A] text-xs font-bold shrink-0 mb-0.5">
+                  class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5"
+                  :style="userColor(msg.fromUser.name)">
                   {{ msg.fromUser.name.charAt(0) }}
                 </div>
               </div>
@@ -240,6 +252,7 @@
 </template>
 
 <script setup lang="ts">
+import { userColor } from '~/utils/userColor'
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 useSeoMeta({ title: 'Messages — BeautyMaster Admin' })
 

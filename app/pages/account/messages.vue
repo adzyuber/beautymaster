@@ -14,7 +14,8 @@
               :class="['w-full text-left p-4 border-b border-gray-50 hover:bg-gray-50 transition-colors',
                 activeChat?.userId === chat.userId ? 'bg-[#8FD9A8]/10 border-l-4 border-l-[#2D4D3A]' : '']">
               <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-[#8FD9A8] rounded-full flex items-center justify-center text-[#2D4D3A] text-sm font-bold shrink-0">{{ chat.userName?.charAt(0) }}</div>
+                <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+                  :style="userColor(chat.userName)">{{ chat.userName?.charAt(0) }}</div>
                 <div class="flex-1 min-w-0">
                   <div class="flex justify-between items-center">
                     <span class="font-semibold text-[#2D4D3A] text-sm truncate">{{ chat.userName }}</span>
@@ -32,7 +33,8 @@
           </div>
           <template v-else>
             <div class="p-4 border-b border-gray-100 flex items-center gap-3">
-              <div class="w-9 h-9 bg-[#8FD9A8] rounded-full flex items-center justify-center text-[#2D4D3A] text-sm font-bold">{{ activeChat.userName?.charAt(0) }}</div>
+              <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold"
+                :style="userColor(activeChat.userName)">{{ activeChat.userName?.charAt(0) }}</div>
               <span class="font-bold text-[#2D4D3A]">{{ activeChat.userName }}</span>
             </div>
             <div ref="msgContainerDesktop" class="flex-1 overflow-y-auto p-4 space-y-3">
@@ -71,7 +73,8 @@
             <button v-for="chat in chatsData?.chats" :key="chat.userId" @click="selectChat(chat)"
               class="w-full text-left px-4 py-4 border-b border-gray-100 active:bg-gray-50 transition-colors">
               <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-[#8FD9A8] rounded-full flex items-center justify-center text-[#2D4D3A] font-bold text-lg shrink-0">{{ chat.userName?.charAt(0) }}</div>
+                <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shrink-0"
+                  :style="userColor(chat.userName)">{{ chat.userName?.charAt(0) }}</div>
                 <div class="flex-1 min-w-0">
                   <div class="flex justify-between items-center mb-0.5">
                     <span class="font-bold text-[#2D4D3A] text-base truncate">{{ chat.userName }}</span>
@@ -93,7 +96,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
               </svg>
             </button>
-            <div class="w-9 h-9 bg-[#8FD9A8] rounded-full flex items-center justify-center text-[#2D4D3A] font-bold shrink-0">{{ activeChat.userName?.charAt(0) }}</div>
+            <div class="w-9 h-9 rounded-full flex items-center justify-center font-bold shrink-0"
+              :style="userColor(activeChat.userName)">{{ activeChat.userName?.charAt(0) }}</div>
             <span class="font-bold text-[#2D4D3A] text-base truncate">{{ activeChat.userName }}</span>
           </div>
 
@@ -131,6 +135,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
+import { userColor } from '~/utils/userColor'
 const { t } = useLocale()
 const authStore = useAuthStore()
 const route = useRoute()

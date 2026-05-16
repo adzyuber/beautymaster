@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 py-0 sm:py-10">
     <div v-if="pending" class="animate-pulse space-y-4">
       <div class="h-8 bg-gray-200 rounded w-1/2"></div>
       <div class="h-96 bg-gray-200 rounded"></div>
@@ -15,11 +15,11 @@
         <span class="text-[#2D4D3A] font-medium truncate">{{ ad.title }}</span>
       </nav>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-px sm:gap-8">
         <!-- Left -->
-        <div class="lg:col-span-2 space-y-6">
+        <div class="lg:col-span-2 space-y-px sm:space-y-6">
           <!-- Images -->
-          <div class="bg-white rounded overflow-hidden shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+          <div class="bg-white sm:rounded overflow-hidden shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <div class="relative aspect-video bg-gray-100">
               <img
                 :src="ad.images?.[activeImg]?.imageUrl || adFallbackImage"
@@ -43,22 +43,29 @@
             </div>
           </div>
 
-          <!-- Mobile title + price -->
-          <div class="sm:hidden bg-white rounded px-5 py-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
-            <h1 class="text-lg font-bold text-[#2D4D3A] leading-snug mb-2">{{ ad.title }}</h1>
+          <!-- Mobile + tablet title + price -->
+          <div class="lg:hidden bg-white sm:rounded px-5 py-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+            <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full mb-2"
+              :style="{ backgroundColor: categoryIcons[ad.category]?.bg ?? '#E0F7F6', color: categoryIcons[ad.category]?.color ?? '#02282C' }">
+              <svg v-if="categoryIcons[ad.category]" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                v-html="categoryIcons[ad.category].paths" />
+              <span>{{ tCat(ad.category) }}</span>
+            </span>
+            <div class="text-[13px] text-[#5B5B5B] mb-1">{{ t('ad.publishedOn') }} {{ formatDate(ad.createdAt) }}</div>
+            <h1 class="text-lg font-normal text-[#2D4D3A] leading-snug mb-2">{{ ad.title }}</h1>
             <div class="text-2xl font-bold text-[#2D4D3A]">
               {{ ad.price ? formatPrice(ad.price) : t('ad.price.negotiable') }}
             </div>
           </div>
 
           <!-- Description -->
-          <div class="bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+          <div class="bg-white sm:rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <h2 class="font-bold text-[#2D4D3A] text-lg mb-3">{{ t('ad.description') }}</h2>
-            <p class="text-[#5B5B5B] whitespace-pre-line leading-relaxed">{{ ad.description }}</p>
+            <p class="text-[15px] sm:text-base text-[#5B5B5B] whitespace-pre-line leading-relaxed">{{ ad.description }}</p>
           </div>
 
           <!-- Details -->
-          <div class="bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+          <div class="bg-white sm:rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <h2 class="font-bold text-[#2D4D3A] text-lg mb-4">{{ t('ad.details') }}</h2>
             <dl class="space-y-3">
               <div class="flex gap-4">
@@ -73,19 +80,16 @@
                 <dt class="text-[#5B5B5B] text-sm w-32 shrink-0">{{ t('ad.address') }}</dt>
                 <dd class="font-medium text-[#2D4D3A] text-sm">{{ ad.address }}</dd>
               </div>
-              <div class="flex gap-4">
-                <dt class="text-[#5B5B5B] text-sm w-32 shrink-0">{{ t('ad.date') }}</dt>
-                <dd class="font-medium text-[#2D4D3A] text-sm">{{ formatDate(ad.createdAt) }}</dd>
-              </div>
             </dl>
           </div>
         </div>
 
         <!-- Right sidebar -->
-        <div class="space-y-4">
-          <!-- Price + title -->
-          <div class="hidden sm:block bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+        <div class="space-y-px sm:space-y-4">
+          <!-- Price + title (desktop sidebar) -->
+          <div class="hidden lg:block bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <span class="inline-block bg-[#8FD9A8]/20 text-[#2D4D3A] text-xs font-semibold px-3 py-1 rounded-full mb-3">{{ tCat(ad.category) }}</span>
+            <div class="text-[13px] text-[#5B5B5B] mb-1">{{ t('ad.publishedOn') }} {{ formatDate(ad.createdAt) }}</div>
             <h1 class="text-xl font-bold text-[#2D4D3A] mb-3">{{ ad.title }}</h1>
             <div class="text-2xl font-bold text-[#2D4D3A]">
               {{ ad.price ? formatPrice(ad.price) : t('ad.price.negotiable') }}
@@ -93,11 +97,12 @@
           </div>
 
           <!-- Contacts -->
-          <div class="bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+          <div class="bg-white sm:rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <h3 class="font-bold text-[#2D4D3A] mb-4">{{ t('ad.contacts') }}</h3>
             <div class="space-y-3">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-[#8FD9A8] rounded-full overflow-hidden flex items-center justify-center text-[#2D4D3A] text-lg font-bold">
+                <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center text-lg font-bold"
+                  :style="userColor(ad.user?.name)">
                   <img v-if="ad.user?.avatarUrl" :src="ad.user.avatarUrl" class="w-full h-full object-cover">
                   <span v-else>{{ ad.user?.name?.charAt(0) }}</span>
                 </div>
@@ -139,7 +144,7 @@
           </div>
 
           <!-- Own ad actions -->
-          <div v-if="authStore.user?.id === ad.userId" class="bg-white rounded p-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+          <div v-if="authStore.user?.id === ad.userId" class="bg-white sm:rounded p-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <div class="flex gap-2">
               <NuxtLink :to="`/account/edit/${ad.id}`"
                 class="flex-1 text-center bg-[#8FD9A8]/20 text-[#2D4D3A] py-2 rounded font-semibold text-sm hover:bg-[#8FD9A8]/40 transition-all">
@@ -153,7 +158,7 @@
           </div>
 
           <!-- Admin controls -->
-          <div v-if="authStore.isAdmin" class="bg-white rounded p-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+          <div v-if="authStore.isAdmin" class="bg-white sm:rounded p-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <div class="text-xs font-semibold text-[#5B5B5B] uppercase tracking-wide mb-3">Admin</div>
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm text-[#2D4D3A]">Status</span>
@@ -229,6 +234,8 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
+import { categoryIcons } from '~/utils/categoryIcons'
+import { userColor } from '~/utils/userColor'
 const { t, tCat, locale } = useLocale()
 const route = useRoute()
 const router = useRouter()

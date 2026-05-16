@@ -22,9 +22,10 @@
         <div class="flex items-center gap-5 mb-6">
           <!-- Avatar -->
           <div class="relative shrink-0">
-            <div class="w-20 h-20 rounded-full overflow-hidden bg-[#8FD9A8] flex items-center justify-center">
+            <div class="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center"
+              :style="userColor(authStore.user?.name)">
               <img v-if="authStore.user?.avatarUrl" :src="authStore.user.avatarUrl" class="w-full h-full object-cover">
-              <span v-else class="text-[#2D4D3A] text-2xl font-bold">{{ authStore.user?.name?.charAt(0).toUpperCase() }}</span>
+              <span v-else class="text-2xl font-bold">{{ authStore.user?.name?.charAt(0).toUpperCase() }}</span>
             </div>
             <label class="absolute -bottom-1 -right-1 w-7 h-7 bg-[#8FD9A8] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#1a1a1a] hover:border-[#1a1a1a] transition-all shadow-sm"
               :title="t('account.avatarChange')">
@@ -134,6 +135,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
+import { userColor } from '~/utils/userColor'
 const { t, locale, setLocale } = useLocale()
 const authStore = useAuthStore()
 const router = useRouter()
