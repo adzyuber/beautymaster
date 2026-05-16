@@ -6,7 +6,7 @@
     <!-- Filters bar (desktop only) -->
     <div class="mb-6 hidden sm:block">
       <!-- Search row -->
-      <div class="flex h-14 rounded overflow-hidden bg-white border-2 border-transparent shadow-[0_2px_16px_rgba(0,0,0,0.24)] transition-all duration-200 focus-within:border-[#1EC3BD] focus-within:shadow-[0_4px_24px_rgba(30,195,189,0.22)]">
+      <div class="flex h-14 rounded bg-white border-2 border-transparent shadow-[0_2px_16px_rgba(0,0,0,0.24)] transition-all duration-200 focus-within:border-[#1EC3BD] focus-within:shadow-[0_4px_24px_rgba(30,195,189,0.22)]">
         <!-- Search input -->
         <div class="flex items-center flex-1 min-w-0">
           <div class="pl-4 text-gray-400 shrink-0">
@@ -23,7 +23,7 @@
         <div class="w-px bg-gray-200 my-2 shrink-0"></div>
 
         <!-- City input -->
-        <div class="flex items-center w-40 shrink-0">
+        <div class="flex items-center w-52 shrink-0">
           <div class="pl-3 text-gray-400 shrink-0">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -37,17 +37,21 @@
         <!-- Divider -->
         <div class="w-px bg-gray-200 my-2 shrink-0"></div>
 
-        <!-- Category select -->
-        <select v-model="filters.category"
-          class="h-full px-4 pr-8 text-sm text-gray-700 bg-transparent outline-none appearance-none border-r border-gray-200 cursor-pointer shrink-0"
-          style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22 viewBox=%220 0 10 6%22><path d=%22M0 0l5 6 5-6z%22 fill=%22%239ca3af%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center;">
-          <option value="">{{ t('catalog.allCats') }}</option>
-          <option v-for="cat in categories?.categories" :key="cat" :value="cat">{{ tCat(cat) }}</option>
-        </select>
+        <!-- Category combobox -->
+        <div class="relative h-full w-52 shrink-0 border-r border-gray-200">
+          <ComboboxField
+            v-model="filters.category"
+            :options="categoryOptions"
+            :placeholder="t('catalog.allCats')"
+            wrap-class="relative h-full"
+            input-class="w-full h-full px-3 pr-8 text-base text-gray-700 bg-transparent outline-none placeholder-gray-400"
+            @update:model-value="applyFilters"
+          />
+        </div>
 
         <!-- Search button -->
         <button @click="applyFilters"
-          class="shrink-0 bg-[#02282C] text-white font-bold px-8 text-base hover:bg-[#011a1d] transition-colors flex items-center gap-2">
+          class="shrink-0 bg-[#02282C] text-white font-bold px-8 text-base hover:bg-[#011a1d] transition-colors flex items-center gap-2 rounded-r">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
           </svg>
@@ -140,6 +144,11 @@ watch(() => route.query, (q) => {
 })
 
 const { data: categories } = await useFetch('/api/categories')
+
+const categoryOptions = computed(() => [
+  { value: '', label: t('catalog.allCats') },
+  ...(categories.value?.categories.map((c: string) => ({ value: c, label: tCat(c) })) ?? [])
+])
 
 const hasActiveFilters = computed(() =>
   !!(filters.search || filters.city || filters.category)

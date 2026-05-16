@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div :class="wrapClass ?? 'relative'">
     <input
       v-model="query"
       type="text"
@@ -9,7 +9,7 @@
       @focus="open = true"
       @input="open = true"
       @blur="onBlur"
-      class="w-full border border-gray-200 rounded px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-[#1EC3BD] disabled:opacity-50 bg-white"
+      :class="inputClass ?? 'w-full border border-gray-200 rounded px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-[#1EC3BD] disabled:opacity-50 bg-white'"
     >
     <button
       type="button"
@@ -49,6 +49,8 @@ const props = defineProps<{
   options: Option[]
   placeholder?: string
   disabled?: boolean
+  inputClass?: string
+  wrapClass?: string
 }>()
 
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()

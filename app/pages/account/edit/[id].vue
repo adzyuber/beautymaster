@@ -16,10 +16,11 @@
         </div>
         <div>
           <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.category') }} *</label>
-          <select v-model="form.category" required
-            class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-            <option v-for="cat in categories?.categories" :key="cat" :value="cat">{{ tCat(cat) }}</option>
-          </select>
+          <ComboboxField
+            v-model="form.category"
+            :options="categoryOptions"
+            :placeholder="t('form.select')"
+          />
         </div>
         <div>
           <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.description') }} *</label>
@@ -86,6 +87,10 @@ const route = useRoute()
 
 const { data: categories } = await useFetch('/api/categories')
 const ad = await $fetch(`/api/ads/${route.params.id}`) as any
+
+const categoryOptions = computed(() =>
+  categories.value?.categories.map((c: string) => ({ value: c, label: tCat(c) })) ?? []
+)
 
 const form = reactive({
   title: ad.title,

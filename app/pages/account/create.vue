@@ -18,19 +18,11 @@
 
         <div>
           <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('form.category') }} *</label>
-          <!-- mobile combobox -->
           <ComboboxField
             v-model="form.category"
             :options="categoryOptions"
             :placeholder="t('form.select')"
-            class="sm:hidden"
           />
-          <!-- desktop select -->
-          <select v-model="form.category" required
-            class="hidden sm:block w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-            <option value="">{{ t('form.select') }}</option>
-            <option v-for="cat in categories?.categories" :key="cat" :value="cat">{{ tCat(cat) }}</option>
-          </select>
         </div>
 
         <div>
