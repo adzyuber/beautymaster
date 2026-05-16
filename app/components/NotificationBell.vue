@@ -23,14 +23,14 @@
     <Transition name="dropdown">
       <div
         v-if="open"
-        class="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 bg-white rounded shadow-lg border border-gray-100 z-50 overflow-hidden"
+        class="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-[440px] bg-white rounded shadow-lg border border-gray-100 z-50 overflow-hidden"
       >
         <div class="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
-          <span class="font-semibold text-sm text-gray-800">{{ t('notif.title') }}</span>
+          <span class="font-semibold text-base text-gray-800">{{ t('notif.title') }}</span>
           <button
             v-if="notifications.some(n => !n.isRead)"
             @click="markAllRead"
-            class="text-xs text-[#1EC3BD] hover:underline"
+            class="text-sm text-[#1EC3BD] hover:underline"
           >
             {{ t('notif.markAllRead') }}
           </button>
@@ -66,7 +66,7 @@
             </svg>
           </div>
           <p class="text-sm font-semibold text-gray-700">{{ t('notif.empty') }}</p>
-          <p class="text-sm text-gray-400 mt-1 leading-relaxed">{{ t('notif.emptyDesc') }}</p>
+          <p class="text-base text-gray-400 mt-1 leading-relaxed">{{ t('notif.emptyDesc') }}</p>
         </div>
 
         <ul v-else class="max-h-80 overflow-y-auto divide-y divide-gray-50">
@@ -108,15 +108,15 @@
             <!-- Content -->
             <div class="flex-1 min-w-0">
               <div class="flex items-start justify-between gap-1">
-                <p class="text-sm font-semibold text-gray-800 truncate">{{ label(n.type) }}</p>
+                <p class="text-base font-semibold text-gray-800 truncate">{{ label(n.type) }}</p>
                 <span v-if="!n.isRead" class="mt-1 w-2 h-2 rounded-full bg-[#1EC3BD] shrink-0"></span>
               </div>
-              <p class="text-sm text-gray-500 truncate mt-0.5">{{ n.adTitle }}</p>
-              <p class="text-sm text-gray-400 mt-0.5 leading-relaxed">{{ labelDesc(n.type) }}</p>
-              <div v-if="n.reason" class="mt-1.5 px-2 py-1 bg-red-50 border border-red-100 rounded text-sm text-red-500 leading-snug">
+              <p class="text-base text-gray-500 truncate mt-0.5">{{ n.adTitle }}</p>
+              <p class="text-base text-gray-400 mt-0.5 leading-relaxed">{{ labelDesc(n.type) }}</p>
+              <div v-if="n.reason" class="mt-1.5 px-2 py-1 bg-red-50 border border-red-100 rounded text-base text-red-500 leading-snug">
                 <span class="font-medium">{{ t('notif.reasonLabel') }}</span> {{ n.reason }}
               </div>
-              <p class="text-sm text-gray-300 mt-1.5">{{ timeAgo(n.createdAt) }}</p>
+              <p class="text-sm text-gray-400 mt-1.5">{{ timeAgo(n.createdAt) }}</p>
             </div>
 
             <!-- Delete -->
