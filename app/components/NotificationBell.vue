@@ -105,12 +105,12 @@
                 <p class="text-sm font-semibold text-gray-800 truncate">{{ label(n.type) }}</p>
                 <span v-if="!n.isRead" class="mt-1 w-2 h-2 rounded-full bg-[#1EC3BD] shrink-0"></span>
               </div>
-              <p class="text-xs text-gray-500 truncate mt-0.5">{{ n.adTitle }}</p>
-              <p class="text-xs text-gray-400 mt-0.5 leading-relaxed">{{ labelDesc(n.type) }}</p>
-              <div v-if="n.reason" class="mt-1.5 px-2 py-1 bg-red-50 border border-red-100 rounded text-xs text-red-500 leading-snug">
+              <p class="text-sm text-gray-500 truncate mt-0.5">{{ n.adTitle }}</p>
+              <p class="text-sm text-gray-400 mt-0.5 leading-relaxed">{{ labelDesc(n.type) }}</p>
+              <div v-if="n.reason" class="mt-1.5 px-2 py-1 bg-red-50 border border-red-100 rounded text-sm text-red-500 leading-snug">
                 <span class="font-medium">{{ t('notif.reasonLabel') }}</span> {{ n.reason }}
               </div>
-              <p class="text-[11px] text-gray-300 mt-1.5">{{ timeAgo(n.createdAt) }}</p>
+              <p class="text-xs text-gray-300 mt-1.5">{{ timeAgo(n.createdAt) }}</p>
             </div>
 
             <!-- Delete -->
