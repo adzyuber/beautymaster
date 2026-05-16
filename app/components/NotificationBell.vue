@@ -71,25 +71,54 @@
             :class="{ 'bg-[#f0fffe]': !n.isRead }"
             @click="openAd(n)"
           >
-            <span class="mt-0.5 shrink-0">
-              <span v-if="n.type === 'ad_approved'" class="text-green-500 text-base">✓</span>
-              <span v-else-if="n.type === 'ad_rejected'" class="text-red-500 text-base">✕</span>
-              <span v-else class="text-yellow-500 text-base">⏸</span>
-            </span>
+            <!-- Icon -->
+            <div class="mt-0.5 shrink-0">
+              <!-- approved -->
+              <div v-if="n.type === 'ad_approved'" class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <!-- rejected -->
+              <div v-else-if="n.type === 'ad_rejected'" class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </div>
+              <!-- inactive -->
+              <div v-else-if="n.type === 'ad_inactive'" class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
+                <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                </svg>
+              </div>
+              <!-- other -->
+              <div v-else class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Content -->
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-800 truncate">{{ n.adTitle }}</p>
-              <p class="text-xs text-gray-500 mt-0.5">{{ label(n.type) }}</p>
-              <p v-if="n.reason" class="text-xs text-gray-400 mt-0.5 truncate">{{ n.reason }}</p>
-              <p class="text-xs text-gray-300 mt-1">{{ timeAgo(n.createdAt) }}</p>
+              <div class="flex items-start justify-between gap-1">
+                <p class="text-sm font-semibold text-gray-800 truncate">{{ label(n.type) }}</p>
+                <span v-if="!n.isRead" class="mt-1 w-2 h-2 rounded-full bg-[#1EC3BD] shrink-0"></span>
+              </div>
+              <p class="text-xs text-gray-500 truncate mt-0.5">{{ n.adTitle }}</p>
+              <p class="text-xs text-gray-400 mt-0.5 leading-relaxed">{{ labelDesc(n.type) }}</p>
+              <div v-if="n.reason" class="mt-1.5 px-2 py-1 bg-red-50 border border-red-100 rounded text-xs text-red-500 leading-snug">
+                <span class="font-medium">{{ t('notif.reasonLabel') }}</span> {{ n.reason }}
+              </div>
+              <p class="text-[11px] text-gray-300 mt-1.5">{{ timeAgo(n.createdAt) }}</p>
             </div>
-            <div class="flex flex-col items-end gap-1 shrink-0">
-              <span v-if="!n.isRead" class="mt-1.5 w-2 h-2 rounded-full bg-[#1EC3BD]"></span>
-              <button
-                @click.stop="deleteNotif(n)"
-                class="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-400 transition-all text-base leading-none mt-auto"
-                :aria-label="t('notif.delete')"
-              >×</button>
-            </div>
+
+            <!-- Delete -->
+            <button
+              @click.stop="deleteNotif(n)"
+              class="opacity-0 group-hover:opacity-100 self-start mt-0.5 text-gray-300 hover:text-red-400 transition-all text-lg leading-none shrink-0"
+              :aria-label="t('notif.delete')"
+            >×</button>
           </li>
         </ul>
       </div>
@@ -156,6 +185,13 @@ function label(type: string) {
   if (type === 'ad_rejected') return t('notif.rejected')
   if (type === 'ad_inactive') return t('notif.inactive')
   return t('notif.updated')
+}
+
+function labelDesc(type: string) {
+  if (type === 'ad_approved') return t('notif.approvedDesc')
+  if (type === 'ad_rejected') return t('notif.rejectedDesc')
+  if (type === 'ad_inactive') return t('notif.inactiveDesc')
+  return t('notif.updatedDesc')
 }
 
 function timeAgo(date: string) {
