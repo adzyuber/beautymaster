@@ -3,12 +3,12 @@
 
     <div>
       <!-- Desktop layout -->
-      <div class="hidden sm:flex gap-6 h-[600px]">
+      <div class="hidden sm:flex gap-6 min-h-[600px]">
         <div class="w-72 shrink-0 bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] overflow-hidden flex flex-col">
           <div class="p-4 border-b border-gray-100">
             <h3 class="font-bold text-[#2D4D3A] text-sm">{{ t('account.dialogs') }}</h3>
           </div>
-          <div class="flex-1 overflow-y-auto">
+          <div class="flex-1">
             <div v-if="!chatsData?.chats?.length" class="p-6 text-center text-[#5B5B5B] text-sm">{{ t('account.noDialogs') }}</div>
             <button v-for="chat in chatsData?.chats" :key="chat.userId" @click="selectChat(chat)"
               :class="['w-full text-left p-4 border-b border-gray-50 hover:bg-gray-50 transition-colors',
@@ -37,7 +37,7 @@
                 :style="userColor(activeChat.userName)">{{ activeChat.userName?.charAt(0) }}</div>
               <span class="font-bold text-[#2D4D3A]">{{ activeChat.userName }}</span>
             </div>
-            <div ref="msgContainerDesktop" class="flex-1 overflow-y-auto p-4 space-y-3">
+            <div ref="msgContainerDesktop" class="flex-1 p-4 space-y-3">
               <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
                 <div :class="['max-w-[70%] px-4 py-2.5 rounded text-sm', msg.fromUserId === authStore.user?.id ? 'bg-[#8FD9A8] text-[#2D4D3A]' : 'bg-gray-100 text-[#2D4D3A]']">{{ msg.text }}</div>
               </div>
@@ -55,8 +55,8 @@
         </div>
       </div>
 
-      <!-- Mobile layout: страница не скроллится (body overflow hidden задан в script) -->
-      <div class="sm:hidden flex flex-col bg-white overflow-hidden fixed inset-x-0 z-40" :style="{ top: mobileTop, height: mobileHeight }">
+      <!-- Mobile layout -->
+      <div class="sm:hidden flex flex-col bg-white min-h-[calc(100dvh-4rem)]">
 
         <!-- Chat list -->
         <template v-if="!activeChat">
@@ -68,7 +68,7 @@
             </button>
             <h2 class="text-2xl font-bold text-[#02282C]">{{ t('account.dialogs') }}</h2>
           </div>
-          <div class="flex-1 min-h-0 overflow-y-auto">
+          <div class="flex-1">
             <div v-if="!chatsData?.chats?.length" class="p-8 text-center text-[#5B5B5B]">{{ t('account.noDialogs') }}</div>
             <button v-for="chat in chatsData?.chats" :key="chat.userId" @click="selectChat(chat)"
               class="w-full text-left px-4 py-4 border-b border-gray-100 active:bg-gray-50 transition-colors">
@@ -101,9 +101,8 @@
             <span class="font-bold text-[#2D4D3A] text-base truncate">{{ activeChat.userName }}</span>
           </div>
 
-          <div ref="msgContainerMobile" class="flex-1 min-h-0 overflow-y-auto">
-            <div class="min-h-full flex flex-col">
-              <div class="flex-1"></div>
+          <div ref="msgContainerMobile" class="flex-1">
+            <div class="flex flex-col">
               <div class="p-4 space-y-3">
                 <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
                   <div :class="['max-w-[80%] px-4 py-3 rounded text-sm leading-relaxed',
@@ -140,39 +139,6 @@ const { t } = useLocale()
 const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
-
-const mobileHeight = ref('100dvh')
-const mobileTop = ref('0px')
-
-function updateMobileHeight() {
-  const vv = window.visualViewport
-  if (vv) {
-    mobileHeight.value = `${vv.height}px`
-    mobileTop.value = `${vv.offsetTop}px`
-  } else {
-    mobileHeight.value = '100dvh'
-    mobileTop.value = '0px'
-  }
-  if (activeChat.value) requestAnimationFrame(() => scrollToBottom())
-}
-
-onMounted(() => {
-  window.scrollTo(0, 0)
-  document.body.style.overflow = 'hidden'
-  document.documentElement.style.overflow = 'hidden'
-  updateMobileHeight()
-  const vv = window.visualViewport
-  vv?.addEventListener('resize', updateMobileHeight)
-  vv?.addEventListener('scroll', updateMobileHeight)
-})
-
-onUnmounted(() => {
-  document.body.style.overflow = ''
-  document.documentElement.style.overflow = ''
-  const vv = window.visualViewport
-  vv?.removeEventListener('resize', updateMobileHeight)
-  vv?.removeEventListener('scroll', updateMobileHeight)
-})
 
 if (!authStore.isLoggedIn) {
   await navigateTo(`/login?redirect=${encodeURIComponent(route.fullPath)}`)
