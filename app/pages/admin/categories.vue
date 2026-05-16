@@ -28,110 +28,175 @@
       </div>
 
       <div v-for="(cat, idx) in categories" :key="cat.id">
+        <!-- Desktop row -->
         <div
-          class="px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-[#f8faf9] transition-colors"
+          class="hidden sm:flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-[#f8faf9] transition-colors"
           :class="{ 'opacity-60': !cat.isActive }"
         >
-          <div class="flex items-start sm:items-center gap-3">
-            <div class="w-6 shrink-0 flex flex-col items-center text-gray-400">
-              <button
-                :disabled="idx === 0"
-                @click="move(idx, -1)"
-                class="w-6 h-5 sm:w-5 sm:h-4 flex items-center justify-center hover:text-[#1EC3BD] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                title="Up"
-              >
-                <svg class="w-3.5 h-3.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
-              </button>
-              <button
-                :disabled="idx === categories.length - 1"
-                @click="move(idx, 1)"
-                class="w-6 h-5 sm:w-5 sm:h-4 flex items-center justify-center hover:text-[#1EC3BD] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                title="Down"
-              >
-                <svg class="w-3.5 h-3.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-              </button>
-            </div>
-
-            <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-              :style="{ backgroundColor: cat.iconBg }">
-              <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor"
-                :style="{ color: cat.iconColor }"
-                v-html="cat.iconSvg" />
-            </div>
-
-            <div class="flex-1 min-w-0">
-              <div class="font-semibold text-[#2D4D3A] text-sm truncate">{{ cat.nameRu }}</div>
-              <div class="text-xs text-[#5B5B5B] truncate">{{ cat.nameEn }}</div>
-              <div class="text-[11px] text-gray-400 font-mono truncate sm:hidden">{{ cat.slug }}</div>
-            </div>
-
-            <div class="hidden sm:block w-44 shrink-0 text-xs text-gray-500 truncate font-mono">{{ cat.slug }}</div>
-
-            <div class="hidden sm:block w-28 shrink-0 text-xs">
-              <button
-                @click="toggleExpand(cat.id)"
-                class="text-[#1EC3BD] hover:underline font-medium"
-              >{{ cat.subcategories.length }} item{{ cat.subcategories.length === 1 ? '' : 's' }} {{ expanded[cat.id] ? '▴' : '▾' }}</button>
-            </div>
-
-            <div class="hidden sm:block w-24 shrink-0">
-              <button
-                @click="toggleActive(cat)"
-                :class="[
-                  'text-xs font-semibold px-2 py-0.5 rounded-full transition-all',
-                  cat.isActive ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                ]"
-              >{{ cat.isActive ? 'Active' : 'Hidden' }}</button>
-            </div>
-
-            <div class="hidden sm:flex w-32 shrink-0 items-center justify-end gap-1.5">
-              <button
-                @click="openEdit(cat)"
-                class="text-xs px-2.5 py-1 bg-[#8FD9A8]/20 text-[#2D4D3A] rounded hover:bg-[#8FD9A8]/40 font-medium transition-all"
-              >Edit</button>
-              <button
-                @click="deleteCategory(cat)"
-                class="text-xs px-2.5 py-1 bg-red-50 text-red-500 rounded hover:bg-red-100 font-medium transition-all"
-              >Delete</button>
-            </div>
+          <div class="w-6 shrink-0 flex flex-col items-center text-gray-400">
+            <button
+              :disabled="idx === 0"
+              @click="move(idx, -1)"
+              class="w-5 h-4 flex items-center justify-center hover:text-[#1EC3BD] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              title="Up"
+            >
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
+            </button>
+            <button
+              :disabled="idx === categories.length - 1"
+              @click="move(idx, 1)"
+              class="w-5 h-4 flex items-center justify-center hover:text-[#1EC3BD] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              title="Down"
+            >
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+            </button>
           </div>
 
-          <!-- Mobile actions row -->
-          <div class="sm:hidden flex items-center gap-1.5 mt-2.5 overflow-x-auto pb-0.5 -mx-1 px-1">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+            :style="{ backgroundColor: cat.iconBg }">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor"
+              :style="{ color: cat.iconColor }"
+              v-html="cat.iconSvg" />
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <div class="font-semibold text-[#2D4D3A] text-sm truncate">{{ cat.nameRu }}</div>
+            <div class="text-xs text-[#5B5B5B] truncate">{{ cat.nameEn }}</div>
+          </div>
+
+          <div class="w-44 shrink-0 text-xs text-gray-500 truncate font-mono">{{ cat.slug }}</div>
+
+          <div class="w-28 shrink-0 text-xs">
+            <button
+              @click="toggleExpand(cat.id)"
+              class="text-[#1EC3BD] hover:underline font-medium"
+            >{{ cat.subcategories.length }} item{{ cat.subcategories.length === 1 ? '' : 's' }} {{ expanded[cat.id] ? '▴' : '▾' }}</button>
+          </div>
+
+          <div class="w-24 shrink-0">
             <button
               @click="toggleActive(cat)"
               :class="[
-                'text-[11px] font-semibold px-2 py-1 rounded-full whitespace-nowrap shrink-0 transition-all',
-                cat.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
+                'text-xs font-semibold px-2 py-0.5 rounded-full transition-all',
+                cat.isActive ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
               ]"
             >{{ cat.isActive ? 'Active' : 'Hidden' }}</button>
-            <button
-              @click="toggleExpand(cat.id)"
-              class="text-[11px] px-2 py-1 whitespace-nowrap shrink-0 bg-[#1EC3BD]/10 text-[#1EC3BD] rounded font-medium"
-            >{{ cat.subcategories.length }} sub {{ expanded[cat.id] ? '▴' : '▾' }}</button>
+          </div>
+
+          <div class="w-32 shrink-0 flex items-center justify-end gap-1.5">
             <button
               @click="openEdit(cat)"
-              class="text-[11px] px-2.5 py-1 whitespace-nowrap shrink-0 bg-[#8FD9A8]/20 text-[#2D4D3A] rounded font-medium"
+              class="text-xs px-2.5 py-1 bg-[#8FD9A8]/20 text-[#2D4D3A] rounded hover:bg-[#8FD9A8]/40 font-medium transition-all"
             >Edit</button>
             <button
               @click="deleteCategory(cat)"
-              class="text-[11px] px-2.5 py-1 whitespace-nowrap shrink-0 bg-red-50 text-red-500 rounded font-medium"
+              class="text-xs px-2.5 py-1 bg-red-50 text-red-500 rounded hover:bg-red-100 font-medium transition-all"
+            >Delete</button>
+          </div>
+        </div>
+
+        <!-- Mobile card -->
+        <div
+          class="sm:hidden px-4 py-4 border-b border-gray-100 last:border-0"
+          :class="{ 'opacity-60': !cat.isActive }"
+        >
+          <!-- Header: icon + name + status toggle -->
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
+              :style="{ backgroundColor: cat.iconBg }">
+              <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor"
+                :style="{ color: cat.iconColor }"
+                v-html="cat.iconSvg" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-[#2D4D3A] text-base leading-tight truncate">{{ cat.nameRu }}</div>
+              <div class="text-sm text-[#5B5B5B] truncate">{{ cat.nameEn }}</div>
+              <div class="text-xs text-gray-400 font-mono truncate mt-0.5">{{ cat.slug }}</div>
+            </div>
+            <button
+              @click="toggleActive(cat)"
+              :aria-label="cat.isActive ? 'Hide' : 'Activate'"
+              :class="[
+                'shrink-0 relative inline-flex h-7 w-12 rounded-full transition-colors focus:outline-none',
+                cat.isActive ? 'bg-[#1EC3BD]' : 'bg-gray-300'
+              ]"
+            >
+              <span :class="cat.isActive ? 'translate-x-6' : 'translate-x-1'"
+                class="inline-block h-5 w-5 mt-1 rounded-full bg-white shadow transition-transform" />
+            </button>
+          </div>
+
+          <!-- Reorder + actions -->
+          <div class="flex items-center gap-2 mt-3">
+            <div class="flex shrink-0 rounded-lg border border-gray-200 overflow-hidden">
+              <button
+                :disabled="idx === 0"
+                @click="move(idx, -1)"
+                class="w-11 h-11 flex items-center justify-center text-[#5B5B5B] active:bg-gray-100 disabled:opacity-30 disabled:bg-transparent"
+                title="Move up"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
+              </button>
+              <div class="w-px bg-gray-200"></div>
+              <button
+                :disabled="idx === categories.length - 1"
+                @click="move(idx, 1)"
+                class="w-11 h-11 flex items-center justify-center text-[#5B5B5B] active:bg-gray-100 disabled:opacity-30 disabled:bg-transparent"
+                title="Move down"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+            </div>
+            <button
+              @click="toggleExpand(cat.id)"
+              :class="[
+                'flex-1 h-11 px-3 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 transition-colors',
+                expanded[cat.id] ? 'bg-[#1EC3BD]/15 text-[#1EC3BD]' : 'bg-[#1EC3BD]/10 text-[#1EC3BD] active:bg-[#1EC3BD]/20'
+              ]"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/>
+              </svg>
+              <span>{{ cat.subcategories.length }}</span>
+              <svg class="w-3.5 h-3.5 transition-transform" :class="expanded[cat.id] ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Edit/Delete -->
+          <div class="grid grid-cols-2 gap-2 mt-2">
+            <button
+              @click="openEdit(cat)"
+              class="h-11 rounded-lg bg-[#8FD9A8]/25 text-[#2D4D3A] font-semibold text-sm active:bg-[#8FD9A8]/45 transition-colors"
+            >Edit</button>
+            <button
+              @click="deleteCategory(cat)"
+              class="h-11 rounded-lg bg-red-50 text-red-500 font-semibold text-sm active:bg-red-100 transition-colors"
             >Delete</button>
           </div>
         </div>
 
         <!-- Subcategories panel -->
-        <div v-if="expanded[cat.id]" class="bg-[#f8faf9] border-b border-gray-100 px-4 py-3">
-          <div class="text-xs font-semibold text-[#5B5B5B] uppercase tracking-wide mb-2 sm:ml-9">Subcategories</div>
+        <div v-if="expanded[cat.id]" class="bg-[#f8faf9] border-b border-gray-100 px-4 py-3 sm:py-4">
+          <div class="flex items-center justify-between mb-3 sm:ml-9">
+            <div class="text-xs font-semibold text-[#5B5B5B] uppercase tracking-wide">Subcategories</div>
+            <button
+              @click="openCreateSub(cat)"
+              class="sm:hidden text-sm font-semibold text-[#1EC3BD] active:opacity-70"
+            >+ Add</button>
+          </div>
           <div v-if="!cat.subcategories.length" class="sm:ml-9 text-sm text-gray-400 mb-2">No subcategories</div>
-          <div v-for="sub in cat.subcategories" :key="sub.id"
-            class="sm:ml-9 py-1.5 border-b border-gray-100 last:border-0">
-            <div class="flex items-start sm:items-center gap-3">
+
+          <!-- Desktop sub rows -->
+          <div class="hidden sm:block">
+            <div v-for="sub in cat.subcategories" :key="sub.id"
+              class="sm:ml-9 py-1.5 border-b border-gray-100 last:border-0 flex items-center gap-3">
               <div class="flex-1 min-w-0">
                 <div class="text-sm text-[#2D4D3A] truncate">{{ sub.nameRu }} <span class="text-gray-400 text-xs">/ {{ sub.nameEn }}</span></div>
                 <div class="text-xs text-gray-400 font-mono truncate">{{ sub.slug }}</div>
               </div>
-              <div class="hidden sm:flex items-center gap-2 shrink-0">
+              <div class="flex items-center gap-2 shrink-0">
                 <button
                   @click="toggleSubActive(sub)"
                   :class="[
@@ -149,28 +214,47 @@
                 >Delete</button>
               </div>
             </div>
-            <!-- Mobile sub actions -->
-            <div class="sm:hidden flex items-center gap-1.5 mt-1.5">
-              <button
-                @click="toggleSubActive(sub)"
-                :class="[
-                  'text-[10px] font-semibold px-1.5 py-0.5 rounded-full transition-all',
-                  sub.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
-                ]"
-              >{{ sub.isActive ? 'Active' : 'Hidden' }}</button>
-              <button
-                @click="openEditSub(cat, sub)"
-                class="text-[11px] px-2 py-0.5 bg-[#8FD9A8]/20 text-[#2D4D3A] rounded font-medium"
-              >Edit</button>
-              <button
-                @click="deleteSub(cat, sub)"
-                class="text-[11px] px-2 py-0.5 bg-red-50 text-red-500 rounded font-medium"
-              >Delete</button>
+          </div>
+
+          <!-- Mobile sub cards -->
+          <div class="sm:hidden space-y-2">
+            <div v-for="sub in cat.subcategories" :key="sub.id"
+              class="bg-white rounded-lg p-3"
+              :class="{ 'opacity-60': !sub.isActive }">
+              <div class="flex items-center gap-3">
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium text-[#2D4D3A] truncate">{{ sub.nameRu }}</div>
+                  <div class="text-xs text-[#5B5B5B] truncate">{{ sub.nameEn }}</div>
+                  <div class="text-[11px] text-gray-400 font-mono truncate">{{ sub.slug }}</div>
+                </div>
+                <button
+                  @click="toggleSubActive(sub)"
+                  :aria-label="sub.isActive ? 'Hide' : 'Activate'"
+                  :class="[
+                    'shrink-0 relative inline-flex h-6 w-11 rounded-full transition-colors focus:outline-none',
+                    sub.isActive ? 'bg-[#1EC3BD]' : 'bg-gray-300'
+                  ]"
+                >
+                  <span :class="sub.isActive ? 'translate-x-6' : 'translate-x-1'"
+                    class="inline-block h-4 w-4 mt-1 rounded-full bg-white shadow transition-transform" />
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-2 mt-2">
+                <button
+                  @click="openEditSub(cat, sub)"
+                  class="h-10 rounded-md bg-[#8FD9A8]/25 text-[#2D4D3A] font-semibold text-sm active:bg-[#8FD9A8]/45 transition-colors"
+                >Edit</button>
+                <button
+                  @click="deleteSub(cat, sub)"
+                  class="h-10 rounded-md bg-red-50 text-red-500 font-semibold text-sm active:bg-red-100 transition-colors"
+                >Delete</button>
+              </div>
             </div>
           </div>
+
           <button
             @click="openCreateSub(cat)"
-            class="sm:ml-9 mt-2 text-xs text-[#1EC3BD] hover:underline font-medium"
+            class="hidden sm:block sm:ml-9 mt-2 text-xs text-[#1EC3BD] hover:underline font-medium"
           >+ Add subcategory</button>
         </div>
       </div>
