@@ -9,12 +9,12 @@
     <main class="flex-1 pt-[60px] sm:pt-[72px] pb-16 sm:pb-0"
       :class="{
         '!pt-0 sm:!pt-[72px]': $route.path === '/account/messages',
-        '!pt-0': ['/account/profile', '/account/create', '/privacy'].includes($route.path),
+        '!pt-0': ['/account/profile', '/account/create', '/account/notifications', '/privacy'].includes($route.path),
         '!pb-0': $route.path === '/account/messages',
         'bg-white sm:bg-transparent': $route.path === '/account/messages'
       }">
       <slot />
     </main>
-    <AppFooter :class="{ 'hidden sm:block': ['/account/create', '/account/messages', '/account/profile'].includes($route.path) }" />
+    <AppFooter :class="{ 'hidden sm:block': ['/account/create', '/account/messages', '/account/profile', '/account/notifications'].includes($route.path) }" />
   </div>
 </template>

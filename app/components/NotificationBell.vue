@@ -69,7 +69,7 @@
           <p class="text-base text-gray-400 mt-2 leading-relaxed">{{ t('notif.emptyDesc') }}</p>
         </div>
 
-        <ul v-else class="max-h-80 overflow-y-auto divide-y divide-gray-50">
+        <ul v-else class="max-h-[480px] overflow-y-auto divide-y divide-gray-50">
           <li
             v-for="n in notifications"
             :key="n.id"
