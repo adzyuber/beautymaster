@@ -120,24 +120,22 @@ const seed = [
 async function main() {
   console.log('Seeding categories...')
 
+  let inserted = 0
   for (let i = 0; i < seed.length; i++) {
     const c = seed[i]
-    await prisma.category.upsert({
-      where: { slug: c.slug },
-      update: {
-        nameRu: c.nameRu, nameEn: c.nameEn,
-        iconBg: c.iconBg, iconColor: c.iconColor, iconSvg: c.iconSvg,
-        imageUrl: c.imageUrl, sortOrder: i,
-      },
-      create: {
+    const existing = await prisma.category.findUnique({ where: { slug: c.slug } })
+    if (existing) continue
+    await prisma.category.create({
+      data: {
         slug: c.slug,
         nameRu: c.nameRu, nameEn: c.nameEn,
         iconBg: c.iconBg, iconColor: c.iconColor, iconSvg: c.iconSvg,
         imageUrl: c.imageUrl, sortOrder: i, isActive: true,
       },
     })
+    inserted++
   }
-  console.log(`Upserted ${seed.length} categories`)
+  console.log(`Inserted ${inserted} new categories (${seed.length - inserted} already existed)`)
 
   console.log('Re-linking existing Ad.category strings to slugs...')
   const nameToSlug = new Map(seed.map(c => [c.nameRu, c.slug]))
