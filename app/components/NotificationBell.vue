@@ -26,7 +26,7 @@
         class="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-[440px] bg-white rounded shadow-lg border border-gray-100 z-50 overflow-hidden"
       >
         <div class="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
-          <span class="font-semibold text-base text-gray-800">{{ t('notif.title') }}</span>
+          <span class="font-semibold text-lg text-gray-800">{{ t('notif.title') }}</span>
           <button
             v-if="notifications.some(n => !n.isRead)"
             @click="markAllRead"

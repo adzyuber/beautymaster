@@ -14,7 +14,7 @@
           <template v-if="authStore.isLoggedIn">
             <!-- Chat link (desktop only) -->
             <NuxtLink to="/account/messages"
-              class="hidden sm:flex items-center gap-1.5 text-white/80 hover:text-white transition-colors font-medium text-base">
+              class="hidden sm:flex items-center gap-1.5 text-white/80 hover:text-white transition-colors font-medium text-lg">
               <span class="relative">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
