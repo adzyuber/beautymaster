@@ -105,6 +105,16 @@
               </div>
             </div>
 
+            <!-- Ad image -->
+            <div class="shrink-0">
+              <img
+                v-if="n.adImageUrl"
+                :src="n.adImageUrl"
+                class="w-12 h-12 rounded object-cover"
+              >
+              <div v-else class="w-12 h-12 rounded bg-gray-100"></div>
+            </div>
+
             <!-- Content -->
             <div class="flex-1 min-w-0">
               <div class="flex items-start justify-between gap-1">

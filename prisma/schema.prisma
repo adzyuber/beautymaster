@@ -92,9 +92,10 @@ model Notification {
   userId    Int
   type      String   // 'ad_approved' | 'ad_rejected' | 'ad_inactive' | 'ad_active'
   adId      Int
-  adTitle   String
-  adSlug    String
-  reason    String?
+  adTitle    String
+  adSlug     String
+  adImageUrl String?
+  reason     String?
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 

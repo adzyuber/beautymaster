@@ -28,7 +28,10 @@ export default defineEventHandler(async (event) => {
   const ad = await prisma.ad.update({
     where: { id },
     data: updateData,
-    include: { user: { select: { id: true, name: true, email: true } } }
+    include: {
+      user: { select: { id: true, name: true, email: true } },
+      images: { orderBy: { sortOrder: 'asc' }, take: 1 }
+    }
   })
 
   const config = useRuntimeConfig()
@@ -49,6 +52,7 @@ export default defineEventHandler(async (event) => {
         adId: ad.id,
         adTitle: ad.title,
         adSlug: ad.slug,
+        adImageUrl: ad.images[0]?.imageUrl || null,
         reason: body.reason?.trim() || null
       }
     }).catch(() => {})
