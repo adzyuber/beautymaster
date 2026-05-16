@@ -231,7 +231,8 @@ const messages = {
     // Notifications
     'notif.title': 'Уведомления',
     'notif.markAllRead': 'Прочитать все',
-    'notif.empty': 'Нет уведомлений',
+    'notif.empty': 'Уведомлений пока нет',
+    'notif.emptyDesc': 'Здесь появятся статусы ваших объявлений — одобрение, отклонение или деактивация',
     'notif.approved': 'Объявление опубликовано',
     'notif.approvedDesc': 'Прошло модерацию и теперь видно всем пользователям',
     'notif.rejected': 'Объявление отклонено',
@@ -481,7 +482,8 @@ const messages = {
     // Notifications
     'notif.title': 'Notifications',
     'notif.markAllRead': 'Mark all read',
-    'notif.empty': 'No notifications',
+    'notif.empty': 'No notifications yet',
+    'notif.emptyDesc': 'Listing status updates will appear here — approvals, rejections and deactivations',
     'notif.approved': 'Listing approved',
     'notif.rejected': 'Listing rejected',
     'notif.inactive': 'Listing deactivated',
