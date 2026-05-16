@@ -84,7 +84,7 @@
         <!-- Right sidebar -->
         <div class="space-y-4">
           <!-- Price + title -->
-          <div class="bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+          <div class="hidden sm:block bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <span class="inline-block bg-[#8FD9A8]/20 text-[#2D4D3A] text-xs font-semibold px-3 py-1 rounded-full mb-3">{{ tCat(ad.category) }}</span>
             <h1 class="text-xl font-bold text-[#2D4D3A] mb-3">{{ ad.title }}</h1>
             <div class="text-2xl font-bold text-[#2D4D3A]">
