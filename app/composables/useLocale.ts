@@ -240,6 +240,8 @@ const messages = {
     'notif.minutesAgo': '{n} мин. назад',
     'notif.hoursAgo': '{n} ч. назад',
     'notif.daysAgo': '{n} дн. назад',
+    'notif.newMessages': 'Новых сообщений: {n}',
+    'notif.delete': 'Удалить уведомление',
   },
 
   en: {
@@ -483,6 +485,8 @@ const messages = {
     'notif.minutesAgo': '{n} min ago',
     'notif.hoursAgo': '{n} h ago',
     'notif.daysAgo': '{n} d ago',
+    'notif.newMessages': '{n} new messages',
+    'notif.delete': 'Delete notification',
   }
 }
 

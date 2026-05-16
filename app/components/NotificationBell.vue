@@ -12,10 +12,10 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 19 A2.5 2.5 0 0 0 14.5 19" />
         </svg>
         <span
-          v-if="notifCount > 0"
+          v-if="totalBadge > 0"
           class="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none"
         >
-          {{ notifCount > 99 ? '99+' : notifCount }}
+          {{ totalBadge > 99 ? '99+' : totalBadge }}
         </span>
       </span>
     </button>
@@ -36,6 +36,22 @@
           </button>
         </div>
 
+        <!-- Unread messages banner -->
+        <NuxtLink
+          v-if="unreadCount > 0"
+          to="/account/messages"
+          @click="open = false"
+          class="flex items-center gap-3 px-4 py-2.5 bg-[#f0fffe] border-b border-[#c8f5f3] hover:bg-[#e0faf8] transition-colors"
+        >
+          <span class="text-[#1EC3BD] text-base">✉</span>
+          <span class="text-sm text-[#02282C] font-medium">
+            {{ t('notif.newMessages', { n: unreadCount }) }}
+          </span>
+          <svg class="ml-auto w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </NuxtLink>
+
         <div v-if="loading" class="py-8 flex justify-center">
           <svg class="animate-spin h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
@@ -51,7 +67,7 @@
           <li
             v-for="n in notifications"
             :key="n.id"
-            class="flex gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer"
+            class="flex gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer group"
             :class="{ 'bg-[#f0fffe]': !n.isRead }"
             @click="openAd(n)"
           >
@@ -66,7 +82,14 @@
               <p v-if="n.reason" class="text-xs text-gray-400 mt-0.5 truncate">{{ n.reason }}</p>
               <p class="text-xs text-gray-300 mt-1">{{ timeAgo(n.createdAt) }}</p>
             </div>
-            <span v-if="!n.isRead" class="mt-1.5 w-2 h-2 rounded-full bg-[#1EC3BD] shrink-0"></span>
+            <div class="flex flex-col items-end gap-1 shrink-0">
+              <span v-if="!n.isRead" class="mt-1.5 w-2 h-2 rounded-full bg-[#1EC3BD]"></span>
+              <button
+                @click.stop="deleteNotif(n)"
+                class="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-400 transition-all text-base leading-none mt-auto"
+                :aria-label="t('notif.delete')"
+              >×</button>
+            </div>
           </li>
         </ul>
       </div>
@@ -76,8 +99,10 @@
 
 <script setup lang="ts">
 const props = withDefaults(defineProps<{ dark?: boolean; iconSize?: string }>(), { dark: true, iconSize: 'w-5 h-5' })
-const { notifCount, fetchUnread } = useUnreadCount()
+const { notifCount, unreadCount, fetchUnread } = useUnreadCount()
 const { t } = useLocale()
+
+const totalBadge = computed(() => notifCount.value + unreadCount.value)
 
 const bellRef = ref<HTMLElement | null>(null)
 const open = ref(false)
@@ -110,13 +135,20 @@ async function markAllRead() {
 
 const router = useRouter()
 async function openAd(n: any) {
+  if (!n.adSlug) return
   if (!n.isRead) {
     n.isRead = true
+    $fetch(`/api/notifications/${n.id}`, { method: 'PATCH' }).catch(() => {})
     await fetchUnread()
-    $fetch('/api/notifications/read-all', { method: 'PATCH' }).catch(() => {})
   }
   open.value = false
   router.push(`/ad/${n.adSlug}`)
+}
+
+async function deleteNotif(n: any) {
+  notifications.value = notifications.value.filter(x => x.id !== n.id)
+  if (!n.isRead) await fetchUnread()
+  $fetch(`/api/notifications/${n.id}`, { method: 'DELETE' }).catch(() => {})
 }
 
 function label(type: string) {
