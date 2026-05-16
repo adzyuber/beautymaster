@@ -66,7 +66,7 @@
             </svg>
           </div>
           <p class="text-sm font-semibold text-gray-700">{{ t('notif.empty') }}</p>
-          <p class="text-xs text-gray-400 mt-1 leading-relaxed">{{ t('notif.emptyDesc') }}</p>
+          <p class="text-sm text-gray-400 mt-1 leading-relaxed">{{ t('notif.emptyDesc') }}</p>
         </div>
 
         <ul v-else class="max-h-80 overflow-y-auto divide-y divide-gray-50">
@@ -116,7 +116,7 @@
               <div v-if="n.reason" class="mt-1.5 px-2 py-1 bg-red-50 border border-red-100 rounded text-sm text-red-500 leading-snug">
                 <span class="font-medium">{{ t('notif.reasonLabel') }}</span> {{ n.reason }}
               </div>
-              <p class="text-xs text-gray-300 mt-1.5">{{ timeAgo(n.createdAt) }}</p>
+              <p class="text-sm text-gray-300 mt-1.5">{{ timeAgo(n.createdAt) }}</p>
             </div>
 
             <!-- Delete -->
