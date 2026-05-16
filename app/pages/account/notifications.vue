@@ -8,7 +8,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
-        <h1 class="text-2xl font-bold text-gray-800">{{ t('notif.title') }}</h1>
+        <h1 class="text-2xl font-bold text-[#02282C]">{{ t('notif.title') }}</h1>
       </div>
       <button
         v-if="notifications.some(n => !n.isRead)"

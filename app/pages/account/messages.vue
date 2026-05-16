@@ -58,8 +58,13 @@
 
         <!-- Chat list -->
         <template v-if="!activeChat">
-          <div class="px-4 py-3 border-b border-gray-100 shrink-0">
-            <h2 class="font-bold text-[#02282C] text-lg">{{ t('account.dialogs') }}</h2>
+          <div class="flex items-center gap-3 px-4 py-4 border-b border-gray-100 bg-white shrink-0">
+            <button @click="router.back()" class="text-gray-500 hover:text-gray-800 transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <h2 class="text-2xl font-bold text-[#02282C]">{{ t('account.dialogs') }}</h2>
           </div>
           <div class="flex-1 min-h-0 overflow-y-auto">
             <div v-if="!chatsData?.chats?.length" class="p-8 text-center text-[#5B5B5B]">{{ t('account.noDialogs') }}</div>
@@ -129,6 +134,7 @@ import { useAuthStore } from '~/stores/auth'
 const { t } = useLocale()
 const authStore = useAuthStore()
 const route = useRoute()
+const router = useRouter()
 
 onMounted(() => { window.scrollTo(0, 0); document.body.style.overflow = 'hidden' })
 onUnmounted(() => { document.body.style.overflow = '' })

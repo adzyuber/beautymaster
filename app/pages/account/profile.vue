@@ -1,6 +1,15 @@
 <template>
+  <div>
+    <div class="sm:hidden flex items-center gap-3 px-4 py-4 border-b border-gray-100 bg-white">
+      <button @click="router.back()" class="text-gray-500 hover:text-gray-800 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <h1 class="text-2xl font-bold text-[#02282C]">{{ t('account.profile') }}</h1>
+    </div>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <h1 class="text-2xl font-bold text-[#2D4D3A] mb-8">{{ t('account.profile') }}</h1>
+    <h1 class="hidden sm:block text-2xl font-bold text-[#02282C] mb-8">{{ t('account.profile') }}</h1>
 
     <div v-if="!authStore.isLoggedIn" class="text-center py-20">
       <p class="text-[#5B5B5B] mb-4">{{ t('account.loginHint') }}</p>
@@ -119,6 +128,7 @@
           class="px-4 py-1.5 rounded-full text-sm font-bold transition-all">EN</button>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
