@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
       const unread = await prisma.message.count({
         where: { fromUserId: otherId, toUserId: auth.userId, isRead: false }
       })
-      chats.push({ userId: otherId, userName: other.name, userAvatarUrl: other.avatarUrl, lastMessage: msg.text, createdAt: msg.createdAt, unread })
+      chats.push({ userId: otherId, userName: other.name, userAvatarUrl: other.avatarUrl, lastMessage: msg.text, lastImageUrl: msg.imageUrl, createdAt: msg.createdAt, unread })
     }
   }
   return { chats }

@@ -5,10 +5,13 @@ import { sendNewMessageEmail } from '../../utils/mailer'
 export default defineEventHandler(async (event) => {
   const auth = await requireAuth(event)
   const body = await readBody(event)
-  const { toUserId, text } = body
+  const { toUserId, text, imageUrl } = body
 
-  if (!toUserId || !text?.trim()) {
-    throw createError({ statusCode: 400, message: 'Укажите получателя и текст' })
+  const trimmedText = typeof text === 'string' ? text.trim() : ''
+  const cleanImageUrl = typeof imageUrl === 'string' && imageUrl.startsWith('/uploads/') ? imageUrl : null
+
+  if (!toUserId || (!trimmedText && !cleanImageUrl)) {
+    throw createError({ statusCode: 400, message: 'Укажите получателя и текст или картинку' })
   }
   if (toUserId === auth.userId) {
     throw createError({ statusCode: 400, message: 'Нельзя писать самому себе' })
@@ -17,8 +20,8 @@ export default defineEventHandler(async (event) => {
   const recipientId = Number(toUserId)
 
   const msg = await prisma.message.create({
-    data: { fromUserId: auth.userId, toUserId: recipientId, text: text.trim() },
-    include: { fromUser: { select: { id: true, name: true } } }
+    data: { fromUserId: auth.userId, toUserId: recipientId, text: trimmedText, imageUrl: cleanImageUrl },
+    include: { fromUser: { select: { id: true, name: true, avatarUrl: true } } }
   })
 
   // Send email only for the first unread message in this conversation thread
@@ -38,7 +41,7 @@ export default defineEventHandler(async (event) => {
         to: recipient.email,
         recipientName: recipient.name,
         senderName: msg.fromUser.name,
-        messageText: msg.text,
+        messageText: msg.text || (msg.imageUrl ? '📷 Изображение' : ''),
         chatUrl,
         locale: 'ru'
       }).then(() =>

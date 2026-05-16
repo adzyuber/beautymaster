@@ -24,7 +24,7 @@
                     <span class="font-semibold text-[#2D4D3A] text-sm truncate">{{ chat.userName }}</span>
                     <span v-if="chat.unread > 0" class="bg-[#2D4D3A] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center shrink-0">{{ chat.unread }}</span>
                   </div>
-                  <p class="text-xs text-[#5B5B5B] truncate mt-0.5">{{ chat.lastMessage }}</p>
+                  <p class="text-xs text-[#5B5B5B] truncate mt-0.5">{{ chat.lastMessage || (chat.lastImageUrl ? t('account.imagePreview') : '') }}</p>
                 </div>
               </div>
             </button>
@@ -45,14 +45,25 @@
             </div>
             <div ref="msgContainerDesktop" class="flex-1 p-4 space-y-3">
               <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
-                <div :class="['max-w-[70%] px-4 py-2.5 rounded text-sm', msg.fromUserId === authStore.user?.id ? 'bg-[#8FD9A8] text-[#2D4D3A]' : 'bg-gray-100 text-[#2D4D3A]']">{{ msg.text }}</div>
+                <a v-if="msg.imageUrl" :href="msg.imageUrl" target="_blank" rel="noopener"
+                  class="max-w-[70%] block rounded overflow-hidden">
+                  <img :src="msg.imageUrl" class="block max-h-72 w-auto object-contain rounded">
+                </a>
+                <div v-else :class="['max-w-[70%] px-4 py-2.5 rounded text-sm', msg.fromUserId === authStore.user?.id ? 'bg-[#8FD9A8] text-[#2D4D3A]' : 'bg-gray-100 text-[#2D4D3A]']">{{ msg.text }}</div>
               </div>
               <div ref="msgEndDesktop"></div>
             </div>
-            <div class="p-4 border-t border-gray-100 flex gap-3">
-              <input v-model="newMsg" type="text" :placeholder="t('account.msgPlaceholder')" @keyup.enter="sendMsg"
-                class="flex-1 border border-gray-200 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-              <button @click="sendMsg" :disabled="!newMsg.trim()"
+            <div class="p-4 border-t border-gray-100 flex gap-3 items-center">
+              <button @click="fileInputDesktop?.click()" :disabled="uploading" :title="t('account.attachImage')"
+                class="text-gray-500 hover:text-[#02282C] transition-colors disabled:opacity-40 shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                </svg>
+              </button>
+              <input ref="fileInputDesktop" type="file" accept="image/*" class="hidden" @change="onPickImage">
+              <input v-model="newMsg" type="text" :placeholder="t('account.msgPlaceholder')" @keyup.enter="sendMsg" :disabled="uploading"
+                class="flex-1 border border-gray-200 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD] disabled:opacity-60">
+              <button @click="sendMsg" :disabled="!newMsg.trim() || uploading"
                 class="bg-[#02282C] text-white px-5 py-2.5 rounded font-bold hover:bg-[#011a1d] transition-all disabled:opacity-40">
                 {{ t('account.send') }}
               </button>
@@ -89,7 +100,7 @@
                     <span class="font-bold text-[#2D4D3A] text-base truncate">{{ chat.userName }}</span>
                     <span v-if="chat.unread > 0" class="bg-[#02282C] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center shrink-0 ml-2">{{ chat.unread }}</span>
                   </div>
-                  <p class="text-sm text-[#5B5B5B] truncate">{{ chat.lastMessage }}</p>
+                  <p class="text-sm text-[#5B5B5B] truncate">{{ chat.lastMessage || (chat.lastImageUrl ? t('account.imagePreview') : '') }}</p>
                 </div>
               </div>
             </button>
@@ -117,7 +128,11 @@
             <div class="flex flex-col">
               <div class="p-4 space-y-3">
                 <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
-                  <div :class="['max-w-[80%] px-4 py-3 rounded text-sm leading-relaxed',
+                  <a v-if="msg.imageUrl" :href="msg.imageUrl" target="_blank" rel="noopener"
+                    class="max-w-[80%] block rounded overflow-hidden">
+                    <img :src="msg.imageUrl" class="block max-h-80 w-auto object-contain rounded">
+                  </a>
+                  <div v-else :class="['max-w-[80%] px-4 py-3 rounded text-sm leading-relaxed',
                     msg.fromUserId === authStore.user?.id ? 'bg-[#02282C] text-white' : 'bg-gray-100 text-[#2D4D3A]']">
                     {{ msg.text }}
                   </div>
@@ -127,10 +142,17 @@
             </div>
           </div>
 
-          <div class="px-3 py-3 border-t border-gray-100 flex gap-2 shrink-0">
-            <input v-model="newMsg" type="text" :placeholder="t('account.msgPlaceholder')" @keyup.enter="sendMsg"
-              class="flex-1 min-w-0 border border-gray-200 rounded px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
-            <button @click="sendMsg" :disabled="!newMsg.trim()"
+          <div class="px-3 py-3 border-t border-gray-100 flex gap-2 shrink-0 items-center">
+            <button @click="fileInputMobile?.click()" :disabled="uploading" :title="t('account.attachImage')"
+              class="text-gray-500 hover:text-[#02282C] transition-colors disabled:opacity-40 shrink-0 p-1">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+              </svg>
+            </button>
+            <input ref="fileInputMobile" type="file" accept="image/*" class="hidden" @change="onPickImage">
+            <input v-model="newMsg" type="text" :placeholder="t('account.msgPlaceholder')" @keyup.enter="sendMsg" :disabled="uploading"
+              class="flex-1 min-w-0 border border-gray-200 rounded px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#1EC3BD] disabled:opacity-60">
+            <button @click="sendMsg" :disabled="!newMsg.trim() || uploading"
               class="bg-[#02282C] text-white px-4 py-3 rounded font-bold disabled:opacity-40 flex items-center justify-center shrink-0">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
@@ -158,16 +180,19 @@ if (!authStore.isLoggedIn) {
 const { fetchUnread } = useUnreadCount()
 
 const { data: chatsData, refresh: refreshChats } = await useFetch<{
-  chats: Array<{ userId: number; userName: string; userAvatarUrl: string | null; lastMessage: string; createdAt: string; unread: number }>
+  chats: Array<{ userId: number; userName: string; userAvatarUrl: string | null; lastMessage: string; lastImageUrl: string | null; createdAt: string; unread: number }>
 }>('/api/messages')
 
 const activeChat = ref<any>(null)
 const msgList = ref<any[]>([])
 const newMsg = ref('')
+const uploading = ref(false)
 const msgContainerDesktop = ref<HTMLElement | null>(null)
 const msgContainerMobile = ref<HTMLElement | null>(null)
 const msgEndDesktop = ref<HTMLElement | null>(null)
 const msgEndMobile = ref<HTMLElement | null>(null)
+const fileInputDesktop = ref<HTMLInputElement | null>(null)
+const fileInputMobile = ref<HTMLInputElement | null>(null)
 
 function scrollToBottom() {
   requestAnimationFrame(() => {
@@ -208,6 +233,29 @@ async function sendMsg() {
   }) as any
   msgList.value.push(msg)
   newMsg.value = ''
+  refreshChats()
+}
+
+async function onPickImage(e: Event) {
+  const input = e.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+  if (!file || !activeChat.value) return
+  if (!file.type.startsWith('image/')) return
+  uploading.value = true
+  try {
+    const fd = new FormData()
+    fd.append('file', file)
+    const { url } = await $fetch<{ url: string }>('/api/upload', { method: 'POST', body: fd })
+    const msg = await $fetch('/api/messages', {
+      method: 'POST',
+      body: { toUserId: activeChat.value.userId, imageUrl: url }
+    }) as any
+    msgList.value.push(msg)
+    refreshChats()
+  } finally {
+    uploading.value = false
+  }
 }
 
 useSeoMeta({ title: () => `${t('nav.messages')} — BeautyMaster` })

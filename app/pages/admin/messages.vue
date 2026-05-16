@@ -58,7 +58,10 @@
                   :class="msg.fromUser.id === active.user1.id ? 'text-left' : 'text-right'">
                   {{ msg.fromUser.name }} · {{ formatTime(msg.createdAt) }}
                 </div>
-                <div :class="['px-3 py-2 rounded text-sm leading-relaxed',
+                <a v-if="msg.imageUrl" :href="msg.imageUrl" target="_blank" rel="noopener" class="block rounded overflow-hidden">
+                  <img :src="msg.imageUrl" class="block max-h-64 w-auto object-contain rounded">
+                </a>
+                <div v-else :class="['px-3 py-2 rounded text-sm leading-relaxed',
                   msg.fromUser.id === active.user1.id
                     ? 'bg-gray-100 text-[#2D4D3A] rounded-tl-none'
                     : 'bg-[#8FD9A8]/40 text-[#2D4D3A] rounded-tr-none']">
@@ -124,7 +127,7 @@
                 <div class="text-xs font-semibold text-[#2D4D3A] truncate">
                   {{ conv.user1.name }} & {{ conv.user2.name }}
                 </div>
-                <div class="text-xs text-[#5B5B5B] truncate mt-0.5">{{ conv.lastMessage }}</div>
+                <div class="text-xs text-[#5B5B5B] truncate mt-0.5">{{ conv.lastMessage || (conv.lastImageUrl ? '📷 Image' : '') }}</div>
                 <div class="flex items-center justify-between mt-1">
                   <span class="text-[10px] text-gray-400">{{ formatDate(conv.lastAt) }}</span>
                   <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full">{{ conv.count }} msg</span>
@@ -186,7 +189,7 @@
                 <div class="text-xs font-semibold text-[#2D4D3A] truncate">
                   {{ conv.user1.name }} & {{ conv.user2.name }}
                 </div>
-                <div class="text-xs text-[#5B5B5B] truncate mt-0.5">{{ conv.lastMessage }}</div>
+                <div class="text-xs text-[#5B5B5B] truncate mt-0.5">{{ conv.lastMessage || (conv.lastImageUrl ? '📷 Image' : '') }}</div>
                 <div class="flex items-center justify-between mt-1">
                   <span class="text-[10px] text-gray-400">{{ formatDate(conv.lastAt) }}</span>
                   <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full">{{ conv.count }} msg</span>
@@ -240,7 +243,10 @@
                     :class="msg.fromUser.id === active.user1.id ? 'text-left' : 'text-right'">
                     {{ msg.fromUser.name }} · {{ formatTime(msg.createdAt) }}
                   </div>
-                  <div :class="['px-3 py-2 rounded text-sm leading-relaxed',
+                  <a v-if="msg.imageUrl" :href="msg.imageUrl" target="_blank" rel="noopener" class="block rounded overflow-hidden">
+                    <img :src="msg.imageUrl" class="block max-h-64 w-auto object-contain rounded">
+                  </a>
+                  <div v-else :class="['px-3 py-2 rounded text-sm leading-relaxed',
                     msg.fromUser.id === active.user1.id
                       ? 'bg-gray-100 text-[#2D4D3A] rounded-tl-none'
                       : 'bg-[#8FD9A8]/40 text-[#2D4D3A] rounded-tr-none']">

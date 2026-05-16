@@ -96,6 +96,8 @@ const messages = {
     'account.selectDialog': 'Выберите диалог для просмотра',
     'account.msgPlaceholder': 'Написать сообщение...',
     'account.send': 'Отправить',
+    'account.imagePreview': '📷 Изображение',
+    'account.attachImage': 'Прикрепить изображение',
     'account.createTitle': 'Разместить объявление',
     'account.editTitle': 'Редактировать объявление',
 
@@ -348,6 +350,8 @@ const messages = {
     'account.selectDialog': 'Select a chat to view',
     'account.msgPlaceholder': 'Write a message...',
     'account.send': 'Send',
+    'account.imagePreview': '📷 Image',
+    'account.attachImage': 'Attach image',
     'account.createTitle': 'Post an ad',
     'account.editTitle': 'Edit ad',
 

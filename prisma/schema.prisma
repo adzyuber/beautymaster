@@ -78,7 +78,8 @@ model Message {
   id         Int      @id @default(autoincrement())
   fromUserId Int
   toUserId   Int
-  text       String
+  text       String   @default("")
+  imageUrl   String?
   isRead     Boolean  @default(false)
   emailSent  Boolean  @default(false)
   createdAt  DateTime @default(now())

@@ -36,6 +36,7 @@ export default defineEventHandler(async (event) => {
         user1: { id: user1.id, name: user1.name, avatarUrl: user1.avatarUrl },
         user2: { id: user2.id, name: user2.name, avatarUrl: user2.avatarUrl },
         lastMessage: msg.text,
+        lastImageUrl: msg.imageUrl,
         lastAt: msg.createdAt,
         count
       })
