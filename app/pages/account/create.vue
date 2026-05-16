@@ -99,13 +99,13 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
-const { t, tCat, tError } = useLocale()
+const { t, locale, tError } = useLocale()
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
 const isEdit = computed(() => !!route.params.id)
-const { data: categories } = await useFetch('/api/categories')
+const { categories } = await useCategories()
 
 const form = reactive({
   title: '',
@@ -122,7 +122,7 @@ const uploading = ref(false)
 const error = ref('')
 
 const categoryOptions = computed(() =>
-  categories.value?.categories.map((c: string) => ({ value: c, label: tCat(c) })) ?? []
+  categories.value.map(c => ({ value: c.slug, label: locale.value === 'en' ? c.nameEn : c.nameRu }))
 )
 
 if (isEdit.value) {

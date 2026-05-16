@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <div class="grid sm:grid-cols-3 gap-6 mb-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
       <NuxtLink to="/admin/users"
         class="bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] p-8 hover:shadow-md transition-shadow group">
         <div class="text-4xl mb-3">👥</div>
@@ -72,6 +72,12 @@
         <div class="text-4xl mb-3">📋</div>
         <div class="text-lg font-bold text-[#2D4D3A] group-hover:underline">Listing moderation</div>
         <div class="text-sm text-[#5B5B5B] mt-1">View all listings, change status and delete</div>
+      </NuxtLink>
+      <NuxtLink to="/admin/categories"
+        class="bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] p-8 hover:shadow-md transition-shadow group">
+        <div class="text-4xl mb-3">🗂️</div>
+        <div class="text-lg font-bold text-[#2D4D3A] group-hover:underline">Categories</div>
+        <div class="text-sm text-[#5B5B5B] mt-1">Manage categories, icons and subcategories</div>
       </NuxtLink>
       <NuxtLink to="/admin/messages"
         class="bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] p-8 hover:shadow-md transition-shadow group">

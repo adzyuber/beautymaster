@@ -47,10 +47,10 @@
           <!-- Mobile + tablet title + price -->
           <div class="lg:hidden bg-white sm:rounded px-5 py-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full mb-2"
-              :style="{ backgroundColor: categoryIcons[ad.category]?.bg ?? '#E0F7F6', color: categoryIcons[ad.category]?.color ?? '#02282C' }">
-              <svg v-if="categoryIcons[ad.category]" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                v-html="categoryIcons[ad.category].paths" />
-              <span>{{ tCat(ad.category) }}</span>
+              :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
+              <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                v-html="cat.iconSvg" />
+              <span>{{ catName }}</span>
             </span>
             <div class="text-[13px] text-[#5B5B5B] mb-1">{{ t('ad.publishedOn') }} {{ formatDate(ad.createdAt) }}</div>
             <h1 class="text-lg font-normal text-[#2D4D3A] leading-snug mb-2">{{ ad.title }}</h1>
@@ -71,7 +71,7 @@
             <dl class="space-y-3">
               <div class="flex gap-4">
                 <dt class="text-[#5B5B5B] text-sm w-32 shrink-0">{{ t('ad.category') }}</dt>
-                <dd class="font-medium text-[#2D4D3A] text-sm">{{ tCat(ad.category) }}</dd>
+                <dd class="font-medium text-[#2D4D3A] text-sm">{{ catName }}</dd>
               </div>
               <div class="flex gap-4">
                 <dt class="text-[#5B5B5B] text-sm w-32 shrink-0">{{ t('ad.city') }}</dt>
@@ -89,7 +89,7 @@
         <div class="space-y-px sm:space-y-4">
           <!-- Price + title (desktop sidebar) -->
           <div class="hidden lg:block bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
-            <span class="inline-block bg-[#8FD9A8]/20 text-[#2D4D3A] text-xs font-semibold px-3 py-1 rounded-full mb-3">{{ tCat(ad.category) }}</span>
+            <span class="inline-block bg-[#8FD9A8]/20 text-[#2D4D3A] text-xs font-semibold px-3 py-1 rounded-full mb-3">{{ catName }}</span>
             <div class="text-[13px] text-[#5B5B5B] mb-1">{{ t('ad.publishedOn') }} {{ formatDate(ad.createdAt) }}</div>
             <h1 class="text-xl font-bold text-[#2D4D3A] mb-3">{{ ad.title }}</h1>
             <div class="text-2xl font-bold text-[#2D4D3A]">
@@ -242,29 +242,19 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
-import { categoryIcons } from '~/utils/categoryIcons'
 import { userColor } from '~/utils/userColor'
-const { t, tCat, locale } = useLocale()
+const { t, locale } = useLocale()
+const { getCategory } = await useCategories()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
-const keywordMap: Record<string, string> = {
-  'Стоматология': 'dentist,dental', 'Психология': 'psychology,therapy',
-  'Терапия': 'doctor,clinic', 'Гинекология': 'medical,healthcare',
-  'Реабилитация': 'rehabilitation,physiotherapy', 'Массаж': 'massage,spa',
-  'Диетология': 'nutrition,healthy-food', 'ЛФК': 'fitness,exercise',
-  'Косметология': 'cosmetology,skincare', 'Маникюр / Педикюр': 'manicure,nails',
-  'Парикмахер': 'hairdresser,haircut', 'Барбер': 'barbershop,barber',
-  'Визажист': 'makeup,beauty', 'Лазерная эпиляция': 'laser,beauty-salon',
-  'Бровист / Лешмейкер': 'eyebrows,lashes', 'SPA': 'spa,relaxation',
-}
+const cat = computed(() => getCategory((ad.value as any)?.category))
+const catName = computed(() => locale.value === 'en' ? cat.value.nameEn : cat.value.nameRu)
 
 const adFallbackImage = computed(() => {
-  const cat = (ad.value as any)?.category
-  const kw = keywordMap[cat] || 'beauty,health'
   const lock = (ad.value as any)?.id % 50 || 1
-  return `https://loremflickr.com/800/500/${kw}?lock=${lock}`
+  return cat.value.imageUrl || `https://loremflickr.com/800/500/beauty,health?lock=${lock}`
 })
 
 const { data: ad, pending, refresh } = await useFetch<{

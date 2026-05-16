@@ -71,7 +71,7 @@
           <button @click="filters.city = ''; applyFilters()" class="hover:text-gray-900 text-base leading-none">×</button>
         </span>
         <span v-if="filters.category" class="inline-flex items-center gap-1.5 text-sm font-semibold bg-gray-100 text-gray-700 px-3.5 py-1.5 rounded">
-          {{ tCat(filters.category) }}
+          {{ catName(filters.category) }}
           <button @click="filters.category = ''; applyFilters()" class="hover:text-gray-900 text-base leading-none">×</button>
         </span>
         <button @click="resetFilters" class="ml-auto text-sm font-semibold text-[#02282C] hover:text-[#1EC3BD] underline transition-colors">{{ t('catalog.reset') }}</button>
@@ -124,7 +124,7 @@
 </template>
 
 <script setup lang="ts">
-const { t, tCat } = useLocale()
+const { t, locale } = useLocale()
 const route = useRoute()
 const router = useRouter()
 
@@ -143,11 +143,16 @@ watch(() => route.query, (q) => {
   refresh()
 })
 
-const { data: categories } = await useFetch('/api/categories')
+const { categories, getCategory } = await useCategories()
+
+function catName(slug: string) {
+  const c = getCategory(slug)
+  return locale.value === 'en' ? c.nameEn : c.nameRu
+}
 
 const categoryOptions = computed(() => [
   { value: '', label: t('catalog.allCats') },
-  ...(categories.value?.categories.map((c: string) => ({ value: c, label: tCat(c) })) ?? [])
+  ...categories.value.map(c => ({ value: c.slug, label: locale.value === 'en' ? c.nameEn : c.nameRu }))
 ])
 
 const hasActiveFilters = computed(() =>

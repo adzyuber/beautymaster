@@ -33,7 +33,7 @@
           </div>
           <div class="flex-1 min-w-0">
             <div class="font-semibold text-[#2D4D3A] truncate">{{ ad.title }}</div>
-            <div class="text-sm text-[#5B5B5B] mt-0.5">{{ tCat(ad.category) }} · {{ ad.city }}</div>
+            <div class="text-sm text-[#5B5B5B] mt-0.5">{{ catName(ad.category) }} · {{ ad.city }}</div>
             <div class="flex items-center gap-2 mt-2 flex-wrap">
               <span :class="['text-xs font-semibold px-2 py-0.5 rounded-full', statusClass(ad.status)]">
                 {{ statusLabel(ad.status) }}
@@ -68,9 +68,15 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
-const { t, tCat, locale } = useLocale()
+const { t, locale } = useLocale()
+const { getCategory } = await useCategories()
 const authStore = useAuthStore()
 const { data, pending, refresh } = await useFetch('/api/ads/my')
+
+function catName(slug: string) {
+  const c = getCategory(slug)
+  return locale.value === 'en' ? c.nameEn : c.nameRu
+}
 
 async function deleteAd(id: number) {
   if (!confirm(t('common.deleteConfirm'))) return

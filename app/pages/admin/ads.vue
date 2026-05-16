@@ -140,7 +140,7 @@
         @change="page = 1; refresh()"
       >
         <option value="">All categories</option>
-        <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+        <option v-for="cat in categories" :key="cat.slug" :value="cat.slug">{{ cat.nameRu }}</option>
       </select>
 
       <button
@@ -191,7 +191,7 @@
             <div class="flex items-start gap-2">
               <div class="flex-1 min-w-0">
                 <div class="font-semibold text-[#2D4D3A] truncate text-sm">{{ ad.title }}</div>
-                <div class="text-xs text-[#5B5B5B] mt-0.5 truncate">{{ ad.category }} · {{ ad.city }} · {{ ad.user.name }}</div>
+                <div class="text-xs text-[#5B5B5B] mt-0.5 truncate">{{ catName(ad.category) }} · {{ ad.city }} · {{ ad.user.name }}</div>
               </div>
               <div class="shrink-0 text-right">
                 <span :class="['text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap', adStatusClass(ad.status)]">
@@ -248,7 +248,7 @@
           </div>
           <div class="flex-1 min-w-0">
             <div class="font-semibold text-[#2D4D3A] truncate text-sm">{{ ad.title }}</div>
-            <div class="text-xs text-[#5B5B5B] mt-0.5 truncate">{{ ad.category }} · {{ ad.city }} · {{ ad.user.name }}</div>
+            <div class="text-xs text-[#5B5B5B] mt-0.5 truncate">{{ catName(ad.category) }} · {{ ad.city }} · {{ ad.user.name }}</div>
             <div v-if="ad.rejectionReason" class="mt-1 text-xs text-red-500 bg-red-50 rounded px-2 py-1 leading-relaxed truncate">
               {{ ad.rejectionReason }}
             </div>
@@ -420,11 +420,10 @@ function selectSugg(field: SuggField, value: string) {
   loadAds()
 }
 
-const categories = [
-  'Стоматология', 'Психология', 'Терапия', 'Гинекология', 'Реабилитация',
-  'Массаж', 'Диетология', 'ЛФК', 'Косметология', 'Маникюр / Педикюр',
-  'Парикмахер', 'Барбер', 'Визажист', 'Лазерная эпиляция', 'Бровист / Лешмейкер', 'SPA',
-]
+const { categories, getCategory } = await useCategories()
+function catName(slug: string) {
+  return getCategory(slug).nameRu || slug
+}
 
 const rejectModal = reactive({
   open: false,

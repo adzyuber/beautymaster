@@ -9,7 +9,7 @@
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
       <img v-else
         :src="fallbackImage"
-        :alt="ad.category"
+        :alt="catName"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
     </div>
 
@@ -18,10 +18,10 @@
       <div>
         <div class="flex items-center gap-2 mb-1">
           <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-full min-w-0 max-w-full overflow-hidden"
-            :style="{ backgroundColor: categoryIcons[ad.category]?.bg ?? '#E0F7F6', color: categoryIcons[ad.category]?.color ?? '#02282C' }">
-            <svg v-if="categoryIcons[ad.category]" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              v-html="categoryIcons[ad.category].paths" />
-            <span class="truncate">{{ tCat(ad.category) }}</span>
+            :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
+            <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              v-html="cat.iconSvg" />
+            <span class="truncate">{{ catName }}</span>
           </span>
         </div>
         <h3 class="font-semibold text-[#2D4D3A] text-base leading-snug line-clamp-1 group-hover:text-[#3d6650] transition-colors">
@@ -47,34 +47,15 @@
 </template>
 
 <script setup lang="ts">
-import { categoryIcons } from '~/utils/categoryIcons'
-
 const props = defineProps<{ ad: any }>()
-const { t, tCat } = useLocale()
+const { t, locale } = useLocale()
+const { getCategory } = await useCategories()
 
-const keywordMap: Record<string, string> = {
-  'Стоматология': 'dentist,dental',
-  'Психология': 'psychology,therapy',
-  'Терапия': 'doctor,clinic',
-  'Гинекология': 'medical,healthcare',
-  'Реабилитация': 'rehabilitation,physiotherapy',
-  'Массаж': 'massage,spa',
-  'Диетология': 'nutrition,healthy-food',
-  'ЛФК': 'fitness,exercise',
-  'Косметология': 'cosmetology,skincare',
-  'Маникюр / Педикюр': 'manicure,nails',
-  'Парикмахер': 'hairdresser,haircut',
-  'Барбер': 'barbershop,barber',
-  'Визажист': 'makeup,beauty',
-  'Лазерная эпиляция': 'laser,beauty-salon',
-  'Бровист / Лешмейкер': 'eyebrows,lashes',
-  'SPA': 'spa,relaxation',
-}
+const cat = computed(() => getCategory(props.ad.category))
+const catName = computed(() => locale.value === 'en' ? cat.value.nameEn : cat.value.nameRu)
 
 const fallbackImage = computed(() => {
-  const kw = keywordMap[props.ad.category] || 'beauty,health'
-  const lock = props.ad.id % 50
-  return `https://loremflickr.com/400/300/${kw}?lock=${lock}`
+  return cat.value.imageUrl || `https://loremflickr.com/400/300/beauty,health?lock=${(props.ad.id % 50) || 1}`
 })
 
 function formatPrice(price: number) {

@@ -44,37 +44,37 @@
       <h2 class="text-2xl font-bold text-[#2D4D3A] mb-2">{{ t('home.categories.title') }} <span class="sm:hidden">Beauty<span class="text-[#1EC3BD]">Master</span></span></h2>
       <p class="text-[#5B5B5B] mb-8">{{ t('home.categories.subtitle') }}</p>
       <!-- Mobile: 3 rows, horizontal scroll -->
-      <div v-if="categories" class="sm:hidden overflow-x-auto -mx-4 px-4 pb-2">
+      <div v-if="categories.length" class="sm:hidden overflow-x-auto -mx-4 px-4 pb-2">
         <div class="grid grid-rows-3 grid-flow-col gap-x-5 gap-y-4 w-max">
-          <NuxtLink v-for="cat in categories.categories" :key="cat"
-            :to="`/catalog?category=${encodeURIComponent(cat)}`"
+          <NuxtLink v-for="cat in categories" :key="cat.slug"
+            :to="`/catalog?category=${encodeURIComponent(cat.slug)}`"
             class="group flex flex-col items-center gap-2 w-20">
             <div class="w-16 h-16 rounded-full flex items-center justify-center ring-2 ring-transparent group-active:ring-[#1EC3BD] transition-all shadow-sm"
-              :style="{ backgroundColor: categoryIcons[cat]?.bg ?? '#E0F7F6' }">
+              :style="{ backgroundColor: cat.iconBg }">
               <svg viewBox="0 0 24 24" class="w-8 h-8" fill="none" stroke="currentColor"
-                :style="{ color: categoryIcons[cat]?.color ?? '#02282C' }"
-                v-html="categoryIcons[cat]?.paths">
+                :style="{ color: cat.iconColor }"
+                v-html="cat.iconSvg">
               </svg>
             </div>
-            <div class="text-center text-xs font-black text-[#2D4D3A] leading-tight">{{ tCat(cat) }}</div>
+            <div class="text-center text-xs font-black text-[#2D4D3A] leading-tight">{{ locale === 'en' ? cat.nameEn : cat.nameRu }}</div>
           </NuxtLink>
         </div>
       </div>
 
       <!-- Desktop: grid -->
-      <div v-if="categories" class="hidden sm:grid sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
-        <NuxtLink v-for="cat in categories.categories" :key="cat"
-          :to="`/catalog?category=${encodeURIComponent(cat)}`"
+      <div v-if="categories.length" class="hidden sm:grid sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
+        <NuxtLink v-for="cat in categories" :key="cat.slug"
+          :to="`/catalog?category=${encodeURIComponent(cat.slug)}`"
           class="group flex flex-col items-center gap-3">
           <div class="w-20 h-20 rounded-full flex items-center justify-center ring-2 ring-transparent group-hover:ring-[#1EC3BD] transition-all duration-200 shadow-sm group-hover:shadow-md group-hover:-translate-y-1"
-            :style="{ backgroundColor: categoryIcons[cat]?.bg ?? '#E0F7F6' }">
+            :style="{ backgroundColor: cat.iconBg }">
             <svg viewBox="0 0 24 24" class="w-10 h-10" fill="none" stroke="currentColor"
-              :style="{ color: categoryIcons[cat]?.color ?? '#02282C' }"
-              v-html="categoryIcons[cat]?.paths">
+              :style="{ color: cat.iconColor }"
+              v-html="cat.iconSvg">
             </svg>
           </div>
           <div class="text-center">
-            <div class="text-base font-black text-[#2D4D3A] group-hover:text-[#1EC3BD] leading-tight transition-colors">{{ tCat(cat) }}</div>
+            <div class="text-base font-black text-[#2D4D3A] group-hover:text-[#1EC3BD] leading-tight transition-colors">{{ locale === 'en' ? cat.nameEn : cat.nameRu }}</div>
           </div>
         </NuxtLink>
       </div>
@@ -119,13 +119,12 @@
 </template>
 
 <script setup lang="ts">
-import { categoryIcons } from '~/utils/categoryIcons'
-const { t, tCat } = useLocale()
+const { t, locale } = useLocale()
 const search = ref('')
 const city = ref('')
 const router = useRouter()
 
-const { data: categories } = await useFetch('/api/categories')
+const { categories } = await useCategories()
 const { data: ads } = await useFetch('/api/ads', { query: { limit: 8 } })
 
 function goSearch() {

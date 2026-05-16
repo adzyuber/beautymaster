@@ -80,16 +80,16 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
-const { t, tCat, tError } = useLocale()
+const { t, locale, tError } = useLocale()
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
-const { data: categories } = await useFetch('/api/categories')
+const { categories } = await useCategories()
 const ad = await $fetch(`/api/ads/${route.params.id}`) as any
 
 const categoryOptions = computed(() =>
-  categories.value?.categories.map((c: string) => ({ value: c, label: tCat(c) })) ?? []
+  categories.value.map(c => ({ value: c.slug, label: locale.value === 'en' ? c.nameEn : c.nameRu }))
 )
 
 const form = reactive({

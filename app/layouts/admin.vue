@@ -95,6 +95,7 @@ const navItems = [
   { to: '/admin', label: 'Dashboard' },
   { to: '/admin/users', label: 'Users' },
   { to: '/admin/ads', label: 'Listings', badge: true },
+  { to: '/admin/categories', label: 'Categories' },
   { to: '/admin/messages', label: 'Messages' },
 ]
 

@@ -512,25 +512,6 @@ const messages = {
   }
 }
 
-const categoryNames: Record<string, Record<string, string>> = {
-  ru: {
-    'Стоматология': 'Стоматология', 'Психология': 'Психология', 'Терапия': 'Терапия',
-    'Гинекология': 'Гинекология', 'Реабилитация': 'Реабилитация', 'Массаж': 'Массаж',
-    'Диетология': 'Диетология', 'ЛФК': 'ЛФК', 'Косметология': 'Косметология',
-    'Маникюр / Педикюр': 'Маникюр / Педикюр', 'Парикмахер': 'Парикмахер',
-    'Барбер': 'Барбер', 'Визажист': 'Визажист', 'Лазерная эпиляция': 'Лазерная эпиляция',
-    'Бровист / Лешмейкер': 'Бровист / Лешмейкер', 'SPA': 'SPA',
-  },
-  en: {
-    'Стоматология': 'Dentistry', 'Психология': 'Psychology', 'Терапия': 'Therapy',
-    'Гинекология': 'Gynecology', 'Реабилитация': 'Rehabilitation', 'Массаж': 'Massage',
-    'Диетология': 'Dietology', 'ЛФК': 'Exercise Therapy', 'Косметология': 'Cosmetology',
-    'Маникюр / Педикюр': 'Manicure / Pedicure', 'Парикмахер': 'Hairdresser',
-    'Барбер': 'Barber', 'Визажист': 'Makeup Artist', 'Лазерная эпиляция': 'Laser Hair Removal',
-    'Бровист / Лешмейкер': 'Brow / Lash Artist', 'SPA': 'SPA',
-  },
-}
-
 export function useLocale() {
   const cookie = useCookie<'ru' | 'en'>('locale', {
     default: () => 'en',
@@ -554,12 +535,6 @@ export function useLocale() {
     return msg
   }
 
-  function tCat(name: string): string {
-    return categoryNames[locale.value]?.[name] ?? categoryNames['ru']?.[name] ?? name
-  }
-
-  const tSub = tCat
-
   function tError(e: any, fallbackKey: string): string {
     const code = e?.data?.data?.code ?? e?.data?.code
     if (code) {
@@ -570,5 +545,5 @@ export function useLocale() {
     return e?.data?.message || t(fallbackKey)
   }
 
-  return { locale, setLocale, t, tCat, tSub, tError }
+  return { locale, setLocale, t, tError }
 }
