@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!hideOnRoutes.includes(route.path)" class="sm:hidden fixed top-0 left-0 right-0 z-50 bg-gray-100 px-4 py-3">
+  <div v-if="!isHidden" class="sm:hidden fixed top-0 left-0 right-0 z-50 bg-gray-100 px-4 py-3">
     <div class="flex items-center gap-3">
       <div class="flex-1 flex items-center rounded overflow-hidden bg-white shadow">
         <div class="flex items-center pl-4 text-gray-400 shrink-0">
@@ -46,6 +46,7 @@ const authStore = useAuthStore()
 const { notifCount, unreadCount } = useUnreadCount()
 const totalBadge = computed(() => notifCount.value + unreadCount.value)
 const hideOnRoutes = ['/account/messages', '/account/profile', '/account/create', '/account/notifications', '/privacy']
+const isHidden = computed(() => hideOnRoutes.includes(route.path) || route.path.startsWith('/ad/'))
 
 function goSearch() {
   if (search.value.trim()) {

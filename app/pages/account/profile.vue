@@ -8,7 +8,7 @@
       </button>
       <h1 class="text-2xl font-bold text-[#02282C]">{{ t('account.profile') }}</h1>
     </div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-10 sm:py-10">
     <h1 class="hidden sm:block text-2xl font-bold text-[#02282C] mb-8">{{ t('account.profile') }}</h1>
 
     <div v-if="!authStore.isLoggedIn" class="text-center py-20">

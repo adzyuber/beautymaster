@@ -7,7 +7,7 @@
 
     <div v-else-if="ad">
       <!-- Breadcrumb -->
-      <nav class="text-sm text-[#5B5B5B] mb-6 flex gap-2">
+      <nav class="hidden sm:flex text-sm text-[#5B5B5B] mb-6 gap-2">
         <NuxtLink to="/" class="hover:text-[#2D4D3A]">{{ t('nav.home') }}</NuxtLink>
         <span>/</span>
         <NuxtLink to="/catalog" class="hover:text-[#2D4D3A]">{{ t('nav.catalog') }}</NuxtLink>
@@ -25,6 +25,12 @@
                 :src="ad.images?.[activeImg]?.imageUrl || adFallbackImage"
                 :alt="ad.title"
                 class="w-full h-full object-cover">
+              <button @click="router.back()"
+                class="sm:hidden absolute top-3 left-3 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+                </svg>
+              </button>
             </div>
             <!-- Thumbnails -->
             <div v-if="ad.images?.length > 1" class="flex gap-2 p-3 overflow-x-auto">
@@ -34,6 +40,14 @@
                   i === activeImg ? 'border-[#2D4D3A]' : 'border-transparent opacity-60 hover:opacity-100']">
                 <img :src="img.imageUrl" class="w-full h-full object-cover">
               </button>
+            </div>
+          </div>
+
+          <!-- Mobile title + price -->
+          <div class="sm:hidden bg-white rounded px-5 py-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
+            <h1 class="text-lg font-bold text-[#2D4D3A] leading-snug mb-2">{{ ad.title }}</h1>
+            <div class="text-2xl font-bold text-[#2D4D3A]">
+              {{ ad.price ? formatPrice(ad.price) : t('ad.price.negotiable') }}
             </div>
           </div>
 
