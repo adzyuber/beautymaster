@@ -77,34 +77,6 @@
             :class="{ 'bg-[#f0fffe]': !n.isRead }"
             @click="openAd(n)"
           >
-            <!-- Icon -->
-            <div class="mt-0.5 shrink-0">
-              <!-- approved -->
-              <div v-if="n.type === 'ad_approved'" class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                </svg>
-              </div>
-              <!-- rejected -->
-              <div v-else-if="n.type === 'ad_rejected'" class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
-                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-              </div>
-              <!-- inactive -->
-              <div v-else-if="n.type === 'ad_inactive'" class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
-                <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-                </svg>
-              </div>
-              <!-- other -->
-              <div v-else class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z"/>
-                </svg>
-              </div>
-            </div>
-
             <!-- Ad image -->
             <div class="shrink-0">
               <img
