@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
       },
       orderBy: { createdAt: 'asc' },
       include: {
-        fromUser: { select: { id: true, name: true } }
+        fromUser: { select: { id: true, name: true, avatarUrl: true } }
       }
     })
     await prisma.message.updateMany({
@@ -32,8 +32,8 @@ export default defineEventHandler(async (event) => {
     },
     orderBy: { createdAt: 'desc' },
     include: {
-      fromUser: { select: { id: true, name: true } },
-      toUser: { select: { id: true, name: true } }
+      fromUser: { select: { id: true, name: true, avatarUrl: true } },
+      toUser: { select: { id: true, name: true, avatarUrl: true } }
     }
   })
 
@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
       const unread = await prisma.message.count({
         where: { fromUserId: otherId, toUserId: auth.userId, isRead: false }
       })
-      chats.push({ userId: otherId, userName: other.name, lastMessage: msg.text, createdAt: msg.createdAt, unread })
+      chats.push({ userId: otherId, userName: other.name, userAvatarUrl: other.avatarUrl, lastMessage: msg.text, createdAt: msg.createdAt, unread })
     }
   }
   return { chats }

@@ -8,8 +8,8 @@ export default defineEventHandler(async (event) => {
   const messages = await prisma.message.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
-      fromUser: { select: { id: true, name: true } },
-      toUser: { select: { id: true, name: true } }
+      fromUser: { select: { id: true, name: true, avatarUrl: true } },
+      toUser: { select: { id: true, name: true, avatarUrl: true } }
     }
   })
 
@@ -33,8 +33,8 @@ export default defineEventHandler(async (event) => {
       })
       conversations.push({
         key,
-        user1: { id: user1.id, name: user1.name },
-        user2: { id: user2.id, name: user2.name },
+        user1: { id: user1.id, name: user1.name, avatarUrl: user1.avatarUrl },
+        user2: { id: user2.id, name: user2.name, avatarUrl: user2.avatarUrl },
         lastMessage: msg.text,
         lastAt: msg.createdAt,
         count

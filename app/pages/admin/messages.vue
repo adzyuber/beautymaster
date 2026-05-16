@@ -24,13 +24,15 @@
           </button>
           <div class="flex items-center gap-3">
             <div class="flex -space-x-2">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+              <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white overflow-hidden"
                 :style="userColor(active.user1.name)">
-                {{ active.user1.name.charAt(0) }}
+                <img v-if="active.user1.avatarUrl" :src="active.user1.avatarUrl" class="w-full h-full object-cover">
+                <span v-else>{{ active.user1.name.charAt(0) }}</span>
               </div>
-              <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+              <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white overflow-hidden"
                 :style="userColor(active.user2.name)">
-                {{ active.user2.name.charAt(0) }}
+                <img v-if="active.user2.avatarUrl" :src="active.user2.avatarUrl" class="w-full h-full object-cover">
+                <span v-else>{{ active.user2.name.charAt(0) }}</span>
               </div>
             </div>
             <div>
@@ -46,9 +48,10 @@
           <div v-for="msg in messages" :key="msg.id">
             <div :class="['flex gap-2 items-end', msg.fromUser.id === active.user1.id ? 'justify-start' : 'justify-end']">
               <div v-if="msg.fromUser.id === active.user1.id"
-                class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5"
+                class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5 overflow-hidden"
                 :style="userColor(msg.fromUser.name)">
-                {{ msg.fromUser.name.charAt(0) }}
+                <img v-if="msg.fromUser.avatarUrl" :src="msg.fromUser.avatarUrl" class="w-full h-full object-cover">
+                <span v-else>{{ msg.fromUser.name.charAt(0) }}</span>
               </div>
               <div class="max-w-[75%]">
                 <div class="text-[10px] text-gray-400 mb-1 px-1"
@@ -63,9 +66,10 @@
                 </div>
               </div>
               <div v-if="msg.fromUser.id === active.user2.id"
-                class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5"
+                class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5 overflow-hidden"
                 :style="userColor(msg.fromUser.name)">
-                {{ msg.fromUser.name.charAt(0) }}
+                <img v-if="msg.fromUser.avatarUrl" :src="msg.fromUser.avatarUrl" class="w-full h-full object-cover">
+                <span v-else>{{ msg.fromUser.name.charAt(0) }}</span>
               </div>
             </div>
           </div>
@@ -105,13 +109,15 @@
           >
             <div class="flex items-start gap-2.5">
               <div class="flex -space-x-2 shrink-0 mt-0.5">
-                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white overflow-hidden"
                   :style="userColor(conv.user1.name)">
-                  {{ conv.user1.name.charAt(0) }}
+                  <img v-if="conv.user1.avatarUrl" :src="conv.user1.avatarUrl" class="w-full h-full object-cover">
+                  <span v-else>{{ conv.user1.name.charAt(0) }}</span>
                 </div>
-                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white overflow-hidden"
                   :style="userColor(conv.user2.name)">
-                  {{ conv.user2.name.charAt(0) }}
+                  <img v-if="conv.user2.avatarUrl" :src="conv.user2.avatarUrl" class="w-full h-full object-cover">
+                  <span v-else>{{ conv.user2.name.charAt(0) }}</span>
                 </div>
               </div>
               <div class="flex-1 min-w-0">
@@ -165,13 +171,15 @@
           >
             <div class="flex items-start gap-2.5">
               <div class="flex -space-x-2 shrink-0 mt-0.5">
-                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white overflow-hidden"
                   :style="userColor(conv.user1.name)">
-                  {{ conv.user1.name.charAt(0) }}
+                  <img v-if="conv.user1.avatarUrl" :src="conv.user1.avatarUrl" class="w-full h-full object-cover">
+                  <span v-else>{{ conv.user1.name.charAt(0) }}</span>
                 </div>
-                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white"
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-white overflow-hidden"
                   :style="userColor(conv.user2.name)">
-                  {{ conv.user2.name.charAt(0) }}
+                  <img v-if="conv.user2.avatarUrl" :src="conv.user2.avatarUrl" class="w-full h-full object-cover">
+                  <span v-else>{{ conv.user2.name.charAt(0) }}</span>
                 </div>
               </div>
               <div class="flex-1 min-w-0">
@@ -199,13 +207,15 @@
         <template v-else>
           <div class="p-4 border-b border-gray-100 flex items-center gap-3">
             <div class="flex -space-x-2">
-              <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ring-2 ring-white"
+              <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ring-2 ring-white overflow-hidden"
                 :style="userColor(active.user1.name)">
-                {{ active.user1.name.charAt(0) }}
+                <img v-if="active.user1.avatarUrl" :src="active.user1.avatarUrl" class="w-full h-full object-cover">
+                <span v-else>{{ active.user1.name.charAt(0) }}</span>
               </div>
-              <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ring-2 ring-white"
+              <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ring-2 ring-white overflow-hidden"
                 :style="userColor(active.user2.name)">
-                {{ active.user2.name.charAt(0) }}
+                <img v-if="active.user2.avatarUrl" :src="active.user2.avatarUrl" class="w-full h-full object-cover">
+                <span v-else>{{ active.user2.name.charAt(0) }}</span>
               </div>
             </div>
             <div>
@@ -220,9 +230,10 @@
             <div v-for="msg in messages" :key="msg.id">
               <div :class="['flex gap-2 items-end', msg.fromUser.id === active.user1.id ? 'justify-start' : 'justify-end']">
                 <div v-if="msg.fromUser.id === active.user1.id"
-                  class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5"
+                  class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5 overflow-hidden"
                   :style="userColor(msg.fromUser.name)">
-                  {{ msg.fromUser.name.charAt(0) }}
+                  <img v-if="msg.fromUser.avatarUrl" :src="msg.fromUser.avatarUrl" class="w-full h-full object-cover">
+                  <span v-else>{{ msg.fromUser.name.charAt(0) }}</span>
                 </div>
                 <div class="max-w-[65%]">
                   <div class="text-[10px] text-gray-400 mb-1 px-1"
@@ -237,9 +248,10 @@
                   </div>
                 </div>
                 <div v-if="msg.fromUser.id === active.user2.id"
-                  class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5"
+                  class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mb-0.5 overflow-hidden"
                   :style="userColor(msg.fromUser.name)">
-                  {{ msg.fromUser.name.charAt(0) }}
+                  <img v-if="msg.fromUser.avatarUrl" :src="msg.fromUser.avatarUrl" class="w-full h-full object-cover">
+                  <span v-else>{{ msg.fromUser.name.charAt(0) }}</span>
                 </div>
               </div>
             </div>

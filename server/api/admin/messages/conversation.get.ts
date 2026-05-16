@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     },
     orderBy: { createdAt: 'asc' },
     include: {
-      fromUser: { select: { id: true, name: true } }
+      fromUser: { select: { id: true, name: true, avatarUrl: true } }
     }
   })
 
