@@ -45,10 +45,10 @@
             </div>
             <div ref="msgContainerDesktop" class="flex-1 p-4 space-y-3">
               <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
-                <a v-if="msg.imageUrl" :href="msg.imageUrl" target="_blank" rel="noopener"
-                  class="max-w-[70%] block rounded overflow-hidden">
+                <button v-if="msg.imageUrl" type="button" @click="openImage(msg.imageUrl)"
+                  class="max-w-[70%] block rounded overflow-hidden cursor-zoom-in">
                   <img :src="msg.imageUrl" class="block max-h-72 w-auto object-contain rounded">
-                </a>
+                </button>
                 <div v-else :class="['max-w-[70%] px-4 py-2.5 rounded text-sm', msg.fromUserId === authStore.user?.id ? 'bg-[#8FD9A8] text-[#2D4D3A]' : 'bg-gray-100 text-[#2D4D3A]']">{{ msg.text }}</div>
               </div>
               <div ref="msgEndDesktop"></div>
@@ -128,10 +128,10 @@
             <div class="flex flex-col">
               <div class="p-4 space-y-3">
                 <div v-for="msg in msgList" :key="msg.id" :class="['flex', msg.fromUserId === authStore.user?.id ? 'justify-end' : 'justify-start']">
-                  <a v-if="msg.imageUrl" :href="msg.imageUrl" target="_blank" rel="noopener"
-                    class="max-w-[80%] block rounded overflow-hidden">
+                  <button v-if="msg.imageUrl" type="button" @click="openImage(msg.imageUrl)"
+                    class="max-w-[80%] block rounded overflow-hidden cursor-zoom-in">
                     <img :src="msg.imageUrl" class="block max-h-80 w-auto object-contain rounded">
-                  </a>
+                  </button>
                   <div v-else :class="['max-w-[80%] px-4 py-3 rounded text-sm leading-relaxed',
                     msg.fromUserId === authStore.user?.id ? 'bg-[#02282C] text-white' : 'bg-gray-100 text-[#2D4D3A]']">
                     {{ msg.text }}
@@ -163,6 +163,11 @@
         </template>
       </div>
     </div>
+
+    <ImageLightbox
+      v-model:open="lightboxOpen"
+      :images="chatImages"
+      :initial-index="lightboxIndex" />
   </div>
 </template>
 
@@ -193,6 +198,15 @@ const msgEndDesktop = ref<HTMLElement | null>(null)
 const msgEndMobile = ref<HTMLElement | null>(null)
 const fileInputDesktop = ref<HTMLInputElement | null>(null)
 const fileInputMobile = ref<HTMLInputElement | null>(null)
+
+const lightboxOpen = ref(false)
+const lightboxIndex = ref(0)
+const chatImages = computed(() => msgList.value.filter(m => m.imageUrl).map(m => m.imageUrl as string))
+function openImage(url: string) {
+  const i = chatImages.value.indexOf(url)
+  lightboxIndex.value = i >= 0 ? i : 0
+  lightboxOpen.value = true
+}
 
 function scrollToBottom() {
   requestAnimationFrame(() => {
