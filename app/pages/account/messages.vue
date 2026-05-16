@@ -54,7 +54,7 @@
       </div>
 
       <!-- Mobile layout: страница не скроллится (body overflow hidden задан в script) -->
-      <div class="sm:hidden flex flex-col bg-white overflow-hidden" style="height: 100dvh;">
+      <div class="sm:hidden flex flex-col bg-white overflow-hidden fixed inset-x-0 z-40" :style="{ top: mobileTop, height: mobileHeight }">
 
         <!-- Chat list -->
         <template v-if="!activeChat">
@@ -136,8 +136,38 @@ const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 
-onMounted(() => { window.scrollTo(0, 0); document.body.style.overflow = 'hidden' })
-onUnmounted(() => { document.body.style.overflow = '' })
+const mobileHeight = ref('100dvh')
+const mobileTop = ref('0px')
+
+function updateMobileHeight() {
+  const vv = window.visualViewport
+  if (vv) {
+    mobileHeight.value = `${vv.height}px`
+    mobileTop.value = `${vv.offsetTop}px`
+  } else {
+    mobileHeight.value = '100dvh'
+    mobileTop.value = '0px'
+  }
+  if (activeChat.value) requestAnimationFrame(() => scrollToBottom())
+}
+
+onMounted(() => {
+  window.scrollTo(0, 0)
+  document.body.style.overflow = 'hidden'
+  document.documentElement.style.overflow = 'hidden'
+  updateMobileHeight()
+  const vv = window.visualViewport
+  vv?.addEventListener('resize', updateMobileHeight)
+  vv?.addEventListener('scroll', updateMobileHeight)
+})
+
+onUnmounted(() => {
+  document.body.style.overflow = ''
+  document.documentElement.style.overflow = ''
+  const vv = window.visualViewport
+  vv?.removeEventListener('resize', updateMobileHeight)
+  vv?.removeEventListener('scroll', updateMobileHeight)
+})
 
 if (!authStore.isLoggedIn) {
   await navigateTo(`/login?redirect=${encodeURIComponent(route.fullPath)}`)
