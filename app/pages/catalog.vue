@@ -80,7 +80,7 @@
 
     <!-- Ads -->
     <div>
-        <div v-if="pending" class="flex flex-col gap-3">
+        <div v-if="initialPending" class="flex flex-col gap-3">
           <div v-for="i in 6" :key="i" class="bg-white rounded h-24 animate-pulse"></div>
         </div>
 
@@ -92,12 +92,12 @@
           </div>
 
           <div v-if="hasActiveFilters" class="flex items-center justify-between mb-4">
-            <span class="text-2xl font-black text-[#02282C]">{{ t('catalog.found') }} {{ data?.total || 0 }} {{ t('catalog.ads') }}</span>
+            <span class="text-2xl font-black text-[#02282C]">{{ t('catalog.found') }} {{ total }} {{ t('catalog.ads') }}</span>
           </div>
 
           <!-- List view always -->
-          <div v-if="data?.ads?.length" class="flex flex-col gap-3">
-            <AdListItem v-for="ad in data.ads" :key="ad.id" :ad="ad" />
+          <div v-if="ads.length" class="flex flex-col gap-3">
+            <AdListItem v-for="ad in ads" :key="ad.id" :ad="ad" />
           </div>
           <div v-else class="text-center py-20 text-[#5B5B5B]">
             <div class="text-5xl mb-4">🔍</div>
@@ -105,18 +105,10 @@
             <p class="text-sm mt-1">{{ t('catalog.emptyHint') }}</p>
           </div>
 
-          <!-- Pagination -->
-          <div v-if="(data?.pages ?? 0) > 1" class="flex justify-center gap-2 mt-8">
-            <button v-for="p in data!.pages" :key="p"
-              @click="goPage(p)"
-              :class="[
-                'w-10 h-10 rounded text-sm font-semibold transition-all',
-                p === currentPage
-                  ? 'bg-[#2D4D3A] text-white'
-                  : 'bg-white text-[#2D4D3A] hover:bg-[#8FD9A8]/20'
-              ]">
-              {{ p }}
-            </button>
+          <!-- Lazy load sentinel -->
+          <div v-if="hasMore" ref="sentinel" class="h-10 mt-6"></div>
+          <div v-if="loadingMore" class="flex flex-col gap-3 mt-3">
+            <div v-for="i in 3" :key="i" class="bg-white rounded h-24 animate-pulse"></div>
           </div>
         </template>
     </div>
@@ -128,19 +120,12 @@ const { t, locale } = useLocale()
 const route = useRoute()
 const router = useRouter()
 
+const PAGE_SIZE = 12
+
 const filters = reactive({
   search: (route.query.search as string) || '',
   city: (route.query.city as string) || '',
   category: (route.query.category as string) || ''
-})
-const currentPage = ref(Number(route.query.page) || 1)
-
-watch(() => route.query, (q) => {
-  filters.search = (q.search as string) || ''
-  filters.city = (q.city as string) || ''
-  filters.category = (q.category as string) || ''
-  currentPage.value = Number(q.page) || 1
-  refresh()
 })
 
 const { categories, getCategory } = await useCategories()
@@ -159,36 +144,102 @@ const hasActiveFilters = computed(() =>
   !!(filters.search || filters.city || filters.category)
 )
 
-const query = computed(() => ({
-  page: currentPage.value,
-  limit: 12,
-  search: filters.search || undefined,
-  city: filters.city || undefined,
-  category: filters.category || undefined
-}))
+type Ad = any
+type AdsResponse = { ads: Ad[]; total: number; page: number; pages: number }
 
-const { data, pending, refresh } = await useFetch('/api/ads', { query })
+const ads = ref<Ad[]>([])
+const total = ref(0)
+const pagesTotal = ref(0)
+const currentPage = ref(0)
+const loadingMore = ref(false)
+const hasMore = computed(() => currentPage.value < pagesTotal.value)
+
+function buildQuery(page: number) {
+  return {
+    page,
+    limit: PAGE_SIZE,
+    search: filters.search || undefined,
+    city: filters.city || undefined,
+    category: filters.category || undefined
+  }
+}
+
+const { data: initial, pending: initialPending, refresh: refreshInitial } = await useAsyncData<AdsResponse>(
+  'catalog-list',
+  () => $fetch('/api/ads', { query: buildQuery(1) })
+)
+
+function applyResponse(res: AdsResponse | null, append: boolean) {
+  if (!res) return
+  total.value = res.total
+  pagesTotal.value = res.pages
+  currentPage.value = res.page
+  if (append) {
+    const existing = new Set(ads.value.map(a => a.id))
+    ads.value.push(...res.ads.filter(a => !existing.has(a.id)))
+  } else {
+    ads.value = res.ads
+  }
+}
+
+applyResponse(initial.value, false)
+watch(initial, (v) => applyResponse(v, false))
+
+async function loadMore() {
+  if (loadingMore.value || !hasMore.value) return
+  loadingMore.value = true
+  try {
+    const res = await $fetch<AdsResponse>('/api/ads', { query: buildQuery(currentPage.value + 1) })
+    applyResponse(res, true)
+    await nextTick()
+    if (observer && sentinel.value && hasMore.value) {
+      observer.unobserve(sentinel.value)
+      observer.observe(sentinel.value)
+    }
+  } finally {
+    loadingMore.value = false
+  }
+}
 
 function applyFilters() {
-  currentPage.value = 1
-  refresh()
-  router.replace({ query: { ...filters, page: 1 } })
+  router.replace({ query: { ...filters } })
+  refreshInitial()
 }
 
 function resetFilters() {
   filters.search = ''
   filters.city = ''
   filters.category = ''
-  currentPage.value = 1
-  refresh()
   router.replace({ query: {} })
+  refreshInitial()
 }
 
-function goPage(p: number) {
-  currentPage.value = p
-  refresh()
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
+watch(() => route.query, (q) => {
+  filters.search = (q.search as string) || ''
+  filters.city = (q.city as string) || ''
+  filters.category = (q.category as string) || ''
+  refreshInitial()
+})
+
+const sentinel = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
+
+onMounted(() => {
+  if (typeof IntersectionObserver === 'undefined') return
+  observer = new IntersectionObserver((entries) => {
+    if (entries.some(e => e.isIntersecting)) loadMore()
+  }, { rootMargin: '400px 0px' })
+
+  watch(sentinel, (el, prev) => {
+    if (prev) observer?.unobserve(prev)
+    if (el) observer?.observe(el)
+  }, { immediate: true, flush: 'post' })
+})
+
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  observer = null
+})
 
 useSeoMeta({ title: 'Каталог услуг — BeautyMaster' })
 </script>
