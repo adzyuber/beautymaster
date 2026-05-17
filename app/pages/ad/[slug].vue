@@ -137,7 +137,7 @@
               </button>
             </div>
             <div v-else-if="!authStore.isLoggedIn" class="mt-4">
-              <NuxtLink to="/login"
+              <NuxtLink :to="{ path: '/login', query: { redirect: route.fullPath } }"
                 class="block w-full text-center bg-[#02282C] text-white border-2 border-[#02282C] py-3 rounded font-bold hover:bg-[#011a1d] hover:border-[#011a1d] transition-all">
                 {{ t('ad.loginToWrite') }}
               </NuxtLink>

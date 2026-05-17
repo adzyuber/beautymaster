@@ -70,7 +70,7 @@
 
     <p class="text-center text-sm text-[#5B5B5B] mt-8">
       {{ t('register.hasAccount') }}
-      <NuxtLink to="/login" class="text-[#2D4D3A] font-semibold hover:underline ml-1">{{ t('register.login') }}</NuxtLink>
+      <NuxtLink :to="{ path: '/login', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="text-[#2D4D3A] font-semibold hover:underline ml-1">{{ t('register.login') }}</NuxtLink>
     </p>
   </AuthShell>
 </template>
@@ -82,6 +82,7 @@ definePageMeta({ layout: false })
 const { t, tError } = useLocale()
 const authStore = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 const form = reactive({ name: '', email: '', password: '', passwordConfirm: '', consent: false })
 const loading = ref(false)
 const error = ref('')
@@ -101,7 +102,8 @@ async function submit() {
   error.value = ''
   try {
     await authStore.register({ name: form.name, email: form.email, password: form.password })
-    router.push('/account/profile')
+    const redirect = route.query.redirect as string | undefined
+    router.push(redirect || '/')
   } catch (e: any) {
     error.value = tError(e, 'register.error')
   } finally {

@@ -41,7 +41,7 @@
 
     <p class="text-center text-sm text-[#5B5B5B] mt-8">
       {{ t('login.noAccount') }}
-      <NuxtLink to="/register" class="text-[#2D4D3A] font-semibold hover:underline ml-1">{{ t('login.register') }}</NuxtLink>
+      <NuxtLink :to="{ path: '/register', query: route.query.redirect ? { redirect: route.query.redirect } : {} }" class="text-[#2D4D3A] font-semibold hover:underline ml-1">{{ t('login.register') }}</NuxtLink>
     </p>
   </AuthShell>
 </template>
@@ -65,7 +65,7 @@ async function submit() {
   try {
     await authStore.login(form.login, form.password)
     const redirect = route.query.redirect as string | undefined
-    router.push(redirect || '/account/profile')
+    router.push(redirect || '/')
   } catch (e: any) {
     error.value = tError(e, 'login.error')
   } finally {
