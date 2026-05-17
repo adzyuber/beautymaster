@@ -10,8 +10,8 @@ export default defineEventHandler(async (event) => {
   })
 
   const missingImageIds = notifications
-    .filter(n => !n.adImageUrl)
-    .map(n => n.adId)
+    .filter(n => n.adId != null && !n.adImageUrl)
+    .map(n => n.adId as number)
 
   if (missingImageIds.length) {
     const images = await prisma.adImage.findMany({
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     }
     return notifications.map(n => ({
       ...n,
-      adImageUrl: n.adImageUrl || imageMap.get(n.adId) || null
+      adImageUrl: n.adImageUrl || (n.adId != null ? imageMap.get(n.adId) || null : null)
     }))
   }
 

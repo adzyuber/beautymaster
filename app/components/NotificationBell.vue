@@ -75,12 +75,18 @@
             :key="n.id"
             class="flex gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer group"
             :class="{ 'bg-[#f0fffe]': !n.isRead }"
-            @click="openAd(n)"
+            @click="openNotification(n)"
           >
-            <!-- Ad image -->
+            <!-- Icon / image -->
             <div class="shrink-0">
+              <div v-if="n.type === 'profile_incomplete'"
+                class="w-12 h-12 rounded-full bg-[#8FD9A8]/30 flex items-center justify-center">
+                <svg class="w-6 h-6 text-[#2D4D3A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+              </div>
               <img
-                v-if="n.adImageUrl"
+                v-else-if="n.adImageUrl"
                 :src="n.adImageUrl"
                 class="w-12 h-12 rounded object-cover"
               >
@@ -93,7 +99,7 @@
                 <p class="text-base font-semibold text-gray-800 truncate">{{ label(n.type) }}</p>
                 <span v-if="!n.isRead" class="mt-1 w-2 h-2 rounded-full bg-[#1EC3BD] shrink-0"></span>
               </div>
-              <p class="text-base text-gray-500 truncate mt-0.5">{{ n.adTitle }}</p>
+              <p v-if="n.adTitle" class="text-base text-gray-500 truncate mt-0.5">{{ n.adTitle }}</p>
               <p class="text-base text-gray-400 mt-0.5 leading-relaxed">{{ labelDesc(n.type) }}</p>
               <div v-if="n.reason" class="mt-1.5 px-2 py-1 bg-red-50 border border-red-100 rounded text-base text-red-500 leading-snug">
                 <span class="font-medium">{{ t('notif.reasonLabel') }}</span> {{ n.reason }}
@@ -151,15 +157,18 @@ async function markAllRead() {
 }
 
 const router = useRouter()
-async function openAd(n: any) {
-  if (!n.adSlug) return
+async function openNotification(n: any) {
+  const target = n.type === 'profile_incomplete'
+    ? '/account/profile'
+    : (n.adSlug ? `/ad/${n.adSlug}` : null)
+  if (!target) return
   if (!n.isRead) {
     n.isRead = true
     $fetch(`/api/notifications/${n.id}`, { method: 'PATCH' }).catch(() => {})
     await fetchUnread()
   }
   open.value = false
-  router.push(`/ad/${n.adSlug}`)
+  router.push(target)
 }
 
 async function deleteNotif(n: any) {
@@ -172,6 +181,7 @@ function label(type: string) {
   if (type === 'ad_approved') return t('notif.approved')
   if (type === 'ad_rejected') return t('notif.rejected')
   if (type === 'ad_inactive') return t('notif.inactive')
+  if (type === 'profile_incomplete') return t('notif.profileIncomplete')
   return t('notif.updated')
 }
 
@@ -179,6 +189,7 @@ function labelDesc(type: string) {
   if (type === 'ad_approved') return t('notif.approvedDesc')
   if (type === 'ad_rejected') return t('notif.rejectedDesc')
   if (type === 'ad_inactive') return t('notif.inactiveDesc')
+  if (type === 'profile_incomplete') return t('notif.profileIncompleteDesc')
   return t('notif.updatedDesc')
 }
 

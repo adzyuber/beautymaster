@@ -24,6 +24,10 @@ export default defineEventHandler(async (event) => {
     data: { name, email, passwordHash, organization: organization || null }
   })
 
+  await prisma.notification.create({
+    data: { userId: user.id, type: 'profile_incomplete' }
+  })
+
   const config = useRuntimeConfig()
   const token = signToken({ userId: user.id, role: user.role }, config.jwtSecret)
 

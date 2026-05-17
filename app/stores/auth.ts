@@ -9,6 +9,7 @@ interface User {
   organization?: string | null
   website?: string | null
   avatarUrl?: string | null
+  languages?: string | null
   role: string
 }
 

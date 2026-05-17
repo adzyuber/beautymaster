@@ -57,14 +57,16 @@
       </div>
 
       <!-- Mobile nav -->
-      <div class="sm:hidden border-t border-white/10">
-        <div class="flex py-1.5 px-2 gap-1">
+      <div class="sm:hidden border-t border-white/10 relative">
+        <div ref="mobileNavScroller"
+          class="flex py-1.5 px-3 gap-1 overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           <NuxtLink
             v-for="item in navItems" :key="item.to"
             :to="item.to"
+            :ref="(el) => setMobileNavRef(item.to, el)"
             :class="[
-              'relative flex-1 flex items-center justify-center gap-1 py-2 rounded text-sm font-medium transition-colors',
-              isActive(item.to) ? 'text-white bg-white/10' : 'text-white/60 hover:text-white'
+              'relative shrink-0 flex items-center justify-center gap-1.5 px-3.5 py-2 rounded text-sm font-medium transition-colors whitespace-nowrap',
+              isActive(item.to) ? 'text-white bg-white/10' : 'text-white/60 active:text-white'
             ]"
           >
             {{ item.label }}
@@ -74,6 +76,9 @@
             >{{ pendingAds }}</span>
           </NuxtLink>
         </div>
+        <!-- Edge fades to hint at scroll affordance -->
+        <div class="pointer-events-none absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-[#02282C] to-transparent"></div>
+        <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-[#02282C] to-transparent"></div>
       </div>
     </header>
 
@@ -96,12 +101,33 @@ const navItems = [
   { to: '/admin/users', label: 'Users' },
   { to: '/admin/ads', label: 'Listings', badge: true },
   { to: '/admin/categories', label: 'Categories' },
+  { to: '/admin/languages', label: 'Languages' },
   { to: '/admin/messages', label: 'Messages' },
 ]
 
 function isActive(path: string) {
   if (path === '/admin') return route.path === '/admin'
   return route.path.startsWith(path)
+}
+
+const mobileNavScroller = ref<HTMLElement | null>(null)
+const mobileNavRefs = new Map<string, HTMLElement>()
+
+function setMobileNavRef(path: string, el: any) {
+  const node = (el?.$el ?? el) as HTMLElement | null
+  if (node) mobileNavRefs.set(path, node)
+  else mobileNavRefs.delete(path)
+}
+
+function scrollActiveIntoView(behavior: ScrollBehavior = 'smooth') {
+  const scroller = mobileNavScroller.value
+  if (!scroller) return
+  const activeItem = navItems.find(i => isActive(i.to))
+  if (!activeItem) return
+  const el = mobileNavRefs.get(activeItem.to)
+  if (!el) return
+  const target = el.offsetLeft - (scroller.clientWidth - el.offsetWidth) / 2
+  scroller.scrollTo({ left: Math.max(0, target), behavior })
 }
 
 async function fetchPending() {
@@ -117,6 +143,12 @@ async function logout() {
   router.push('/')
 }
 
-onMounted(() => fetchPending())
-watch(() => route.path, () => fetchPending())
+onMounted(() => {
+  fetchPending()
+  nextTick(() => scrollActiveIntoView('auto'))
+})
+watch(() => route.path, () => {
+  fetchPending()
+  nextTick(() => scrollActiveIntoView('smooth'))
+})
 </script>

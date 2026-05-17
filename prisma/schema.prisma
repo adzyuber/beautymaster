@@ -17,6 +17,7 @@ model User {
   email             String    @unique
   passwordHash      String
   role              String    @default("user")
+  languages         String?
   createdAt         DateTime  @default(now())
   passwordChangedAt DateTime  @default(now())
 
@@ -74,6 +75,18 @@ model Setting {
   value String
 }
 
+model Language {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  nameRu    String
+  nameEn    String
+  sortOrder Int      @default(0)
+  isDefault Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Category {
   id         Int      @id @default(autoincrement())
   slug       String   @unique
@@ -125,10 +138,10 @@ model Message {
 model Notification {
   id        Int      @id @default(autoincrement())
   userId    Int
-  type      String   // 'ad_approved' | 'ad_rejected' | 'ad_inactive' | 'ad_active'
-  adId      Int
-  adTitle    String
-  adSlug     String
+  type      String   // 'ad_approved' | 'ad_rejected' | 'ad_inactive' | 'ad_active' | 'profile_incomplete'
+  adId      Int?
+  adTitle    String?
+  adSlug     String?
   adImageUrl String?
   reason     String?
   isRead    Boolean  @default(false)

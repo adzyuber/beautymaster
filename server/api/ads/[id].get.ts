@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     where: { OR: [{ id: isNaN(Number(id)) ? -1 : Number(id) }, { slug: id! }] },
     include: {
       images: { orderBy: { sortOrder: 'asc' } },
-      user: { select: { id: true, name: true, email: true, phone: true, organization: true, website: true, avatarUrl: true } }
+      user: { select: { id: true, name: true, email: true, phone: true, organization: true, website: true, avatarUrl: true, languages: true } }
     }
   })
 

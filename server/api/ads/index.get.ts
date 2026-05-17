@@ -1,4 +1,5 @@
 import prisma from '../../utils/prisma'
+import { filterLangCodes, getDefaultLanguageCode } from '../../utils/languages'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
@@ -18,6 +19,18 @@ export default defineEventHandler(async (event) => {
     ])
   }
 
+  const requestedLangs = await filterLangCodes(query.languages)
+  if (requestedLangs.length) {
+    const defaultCode = await getDefaultLanguageCode()
+    const wantsDefault = defaultCode ? requestedLangs.includes(defaultCode) : false
+    const langClauses: any[] = requestedLangs.map(code => ({ languages: { contains: `"${code}"` } }))
+    if (wantsDefault) {
+      langClauses.push({ languages: null })
+      langClauses.push({ languages: '' })
+    }
+    where.user = { OR: langClauses }
+  }
+
   const [ads, total] = await Promise.all([
     prisma.ad.findMany({
       where,
@@ -26,7 +39,7 @@ export default defineEventHandler(async (event) => {
       orderBy: { createdAt: 'desc' },
       include: {
         images: { orderBy: { sortOrder: 'asc' }, take: 1 },
-        user: { select: { name: true, organization: true } }
+        user: { select: { name: true, organization: true, languages: true } }
       }
     }),
     prisma.ad.count({ where })

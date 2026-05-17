@@ -127,6 +127,15 @@
                 <span class="text-xl">🌐</span>
                 <span class="font-medium text-[#5B5B5B] text-sm group-hover:text-[#2D4D3A] truncate">{{ ad.user.website.replace(/^https?:\/\//, '') }}</span>
               </a>
+              <div v-if="displayLanguages.length" class="pt-4 mt-1 border-t border-gray-100">
+                <div class="text-sm font-semibold text-[#2D4D3A] mb-2.5">{{ t('ad.speaks') }}:</div>
+                <div class="flex flex-wrap gap-2">
+                  <span v-for="code in displayLanguages" :key="code"
+                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border bg-white text-[#5B5B5B] border-gray-200">
+                    {{ labelFor(code, locale === 'en' ? 'en' : 'ru') }}
+                  </span>
+                </div>
+              </div>
             </div>
 
             <!-- Message button -->
@@ -243,11 +252,19 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
 import { userColor } from '~/utils/userColor'
+import { parseLanguages } from '~/utils/languages'
 const { t, locale } = useLocale()
 const { getCategory } = await useCategories()
+const { defaultCode, labelFor } = await useLanguages()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+
+const authorLanguages = computed(() => parseLanguages((ad.value as any)?.user?.languages))
+const displayLanguages = computed<string[]>(() => {
+  if (authorLanguages.value.length) return authorLanguages.value
+  return defaultCode.value ? [defaultCode.value] : []
+})
 
 const cat = computed(() => getCategory((ad.value as any)?.category))
 const catName = computed(() => locale.value === 'en' ? cat.value.nameEn : cat.value.nameRu)

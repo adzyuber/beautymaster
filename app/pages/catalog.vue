@@ -59,6 +59,22 @@
         </button>
       </div>
 
+      <!-- Language chips row -->
+      <div class="flex items-center gap-2 mt-3 flex-wrap">
+        <span class="text-sm font-semibold text-[#5B5B5B] mr-1">{{ t('catalog.languageFilter') }}</span>
+        <button v-for="lang in languages" :key="lang.code"
+          type="button"
+          @click="toggleLanguage(lang.code)"
+          :class="[
+            'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border transition-all',
+            filters.languages.includes(lang.code)
+              ? 'bg-[#02282C] text-white border-[#02282C]'
+              : 'bg-white text-[#5B5B5B] border-gray-200 hover:border-[#1EC3BD]'
+          ]">
+          {{ labelFor(lang.code, locale === 'en' ? 'en' : 'ru') }}
+        </button>
+      </div>
+
       <!-- Active filter / reset row -->
       <div v-if="hasActiveFilters" class="flex items-center gap-3 mt-3 flex-wrap">
         <span class="text-sm font-semibold text-[#02282C]">{{ t('catalog.activeFilters') }}</span>
@@ -117,16 +133,29 @@
 
 <script setup lang="ts">
 const { t, locale } = useLocale()
+const { languages, codes, labelFor } = await useLanguages()
 const route = useRoute()
 const router = useRouter()
 
 const PAGE_SIZE = 12
 
+function parseLangQuery(raw: unknown): string[] {
+  if (!raw) return []
+  const allowed = new Set<string>(codes.value)
+  return String(raw).split(',').map(v => v.trim().toLowerCase()).filter(v => allowed.has(v))
+}
+
 const filters = reactive({
   search: (route.query.search as string) || '',
   city: (route.query.city as string) || '',
-  category: (route.query.category as string) || ''
+  category: (route.query.category as string) || '',
+  languages: parseLangQuery(route.query.languages)
 })
+
+function toggleLanguage(code: string) {
+  filters.languages = filters.languages.includes(code) ? [] : [code]
+  applyFilters()
+}
 
 const { categories, getCategory } = await useCategories()
 
@@ -141,7 +170,7 @@ const categoryOptions = computed(() => [
 ])
 
 const hasActiveFilters = computed(() =>
-  !!(filters.search || filters.city || filters.category)
+  !!(filters.search || filters.city || filters.category || filters.languages.length)
 )
 
 type Ad = any
@@ -160,7 +189,8 @@ function buildQuery(page: number) {
     limit: PAGE_SIZE,
     search: filters.search || undefined,
     city: filters.city || undefined,
-    category: filters.category || undefined
+    category: filters.category || undefined,
+    languages: filters.languages.length ? filters.languages.join(',') : undefined
   }
 }
 
@@ -202,7 +232,14 @@ async function loadMore() {
 }
 
 function applyFilters() {
-  router.replace({ query: { ...filters } })
+  router.replace({
+    query: {
+      ...(filters.search ? { search: filters.search } : {}),
+      ...(filters.city ? { city: filters.city } : {}),
+      ...(filters.category ? { category: filters.category } : {}),
+      ...(filters.languages.length ? { languages: filters.languages.join(',') } : {})
+    }
+  })
   refreshInitial()
 }
 
@@ -210,6 +247,7 @@ function resetFilters() {
   filters.search = ''
   filters.city = ''
   filters.category = ''
+  filters.languages = []
   router.replace({ query: {} })
   refreshInitial()
 }
@@ -218,6 +256,7 @@ watch(() => route.query, (q) => {
   filters.search = (q.search as string) || ''
   filters.city = (q.city as string) || ''
   filters.category = (q.category as string) || ''
+  filters.languages = parseLangQuery(q.languages)
   refreshInitial()
 })
 

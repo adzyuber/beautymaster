@@ -45,7 +45,7 @@
             <div class="text-[#5B5B5B] text-sm">{{ authStore.user?.email }}</div>
             <button v-if="authStore.user?.avatarUrl" @click="removeAvatar"
               class="text-xs text-red-400 hover:text-red-600 mt-1 transition-colors">
-              Удалить фото
+              {{ t('account.avatarRemove') }}
             </button>
           </div>
         </div>
@@ -71,8 +71,22 @@
             <input v-model="form.phone" type="tel" placeholder="+421 9XX XXX XXX"
               class="w-full border border-gray-200 rounded px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
           </div>
-          <div class="text-sm text-[#5B5B5B]">
-            <span class="font-medium">Email:</span> {{ authStore.user?.email }}
+
+          <div>
+            <label class="block text-xs font-semibold text-[#5B5B5B] mb-1.5 uppercase tracking-wide">{{ t('account.languages') }}</label>
+            <p class="text-xs text-[#5B5B5B] mb-2">{{ t('account.languagesHint') }}</p>
+            <div class="flex flex-wrap gap-2">
+              <button v-for="lang in languages" :key="lang.code" type="button"
+                @click="toggleLanguage(lang.code)"
+                :class="[
+                  'inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium border transition-all',
+                  form.languages.includes(lang.code)
+                    ? 'bg-[#02282C] text-white border-[#02282C]'
+                    : 'bg-white text-[#5B5B5B] border-gray-200 hover:border-[#1EC3BD]'
+                ]">
+                {{ labelFor(lang.code, locale === 'en' ? 'en' : 'ru') }}
+              </button>
+            </div>
           </div>
 
           <div v-if="saved" class="bg-green-50 text-green-700 text-sm px-4 py-2 rounded">{{ t('account.saved') }}</div>
@@ -84,8 +98,8 @@
         </form>
       </div>
 
-      <!-- Quick links -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <!-- Quick links — desktop grid -->
+      <div class="hidden sm:grid sm:grid-cols-3 gap-4">
         <NuxtLink to="/account/ads"
           class="bg-white rounded p-5 shadow-[0_2px_16px_rgba(45,77,58,0.07)] hover:shadow-[0_8px_32px_rgba(45,77,58,0.14)] transition-all group">
           <div class="text-2xl mb-2">📋</div>
@@ -108,25 +122,49 @@
         </NuxtLink>
       </div>
 
-      <!-- Logout (mobile only) -->
-      <button @click="logout" class="sm:hidden w-full flex items-center justify-center gap-2 bg-white border border-red-200 text-red-500 rounded px-6 py-3 font-semibold hover:bg-red-50 transition-colors shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-        </svg>
-        {{ t('nav.logout') }}
-      </button>
-    </div>
+      <!-- Quick links — mobile list -->
+      <div class="sm:hidden bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] overflow-hidden">
+        <NuxtLink to="/account/ads" class="flex items-center gap-4 px-5 py-4 active:bg-gray-50 transition-colors border-b border-gray-100">
+          <span class="text-xl w-7 text-center">📋</span>
+          <span class="flex-1 font-semibold text-[#2D4D3A]">{{ t('account.myAds') }}</span>
+          <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </NuxtLink>
+        <NuxtLink to="/account/create" class="flex items-center gap-4 px-5 py-4 active:bg-gray-50 transition-colors border-b border-gray-100">
+          <span class="text-xl w-7 text-center">➕</span>
+          <span class="flex-1 font-semibold text-[#2D4D3A]">{{ t('account.createAd') }}</span>
+          <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </NuxtLink>
+        <NuxtLink to="/account/messages" class="flex items-center gap-4 px-5 py-4 active:bg-gray-50 transition-colors" :class="{ 'border-b border-gray-100': authStore.isAdmin }">
+          <span class="text-xl w-7 text-center">💬</span>
+          <span class="flex-1 font-semibold text-[#2D4D3A]">{{ t('account.messages') }}</span>
+          <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </NuxtLink>
+        <NuxtLink v-if="authStore.isAdmin" to="/admin" class="flex items-center gap-4 px-5 py-4 active:bg-gray-50 transition-colors bg-[#02282C]">
+          <span class="text-xl w-7 text-center">⚙️</span>
+          <span class="flex-1 font-semibold text-white">Admin panel</span>
+          <svg class="w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </NuxtLink>
+      </div>
 
-    <!-- Locale switcher (mobile only, always visible) -->
-    <div class="sm:hidden mt-6 bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] px-6 py-4 flex items-center justify-between">
-      <span class="text-sm font-semibold text-[#5B5B5B] uppercase tracking-wide">{{ t('account.language') }}</span>
-      <div class="flex items-center gap-1 bg-gray-100 rounded-full p-1">
-        <button @click="setLocale('ru')"
-          :class="locale === 'ru' ? 'bg-white text-[#2D4D3A] shadow-sm' : 'text-gray-400'"
-          class="px-4 py-1.5 rounded-full text-sm font-bold transition-all">RU</button>
-        <button @click="setLocale('en')"
-          :class="locale === 'en' ? 'bg-white text-[#2D4D3A] shadow-sm' : 'text-gray-400'"
-          class="px-4 py-1.5 rounded-full text-sm font-bold transition-all">EN</button>
+      <!-- Settings group (mobile only) -->
+      <div class="sm:hidden bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <span class="text-sm font-semibold text-[#5B5B5B] uppercase tracking-wide">{{ t('account.language') }}</span>
+          <div class="flex items-center gap-1 bg-gray-100 rounded-full p-1">
+            <button @click="setLocale('ru')"
+              :class="locale === 'ru' ? 'bg-white text-[#2D4D3A] shadow-sm' : 'text-gray-400'"
+              class="px-4 py-1.5 rounded-full text-sm font-bold transition-all">RU</button>
+            <button @click="setLocale('en')"
+              :class="locale === 'en' ? 'bg-white text-[#2D4D3A] shadow-sm' : 'text-gray-400'"
+              class="px-4 py-1.5 rounded-full text-sm font-bold transition-all">EN</button>
+          </div>
+        </div>
+        <button @click="logout" class="w-full flex items-center gap-3 px-5 py-4 text-red-500 active:bg-red-50 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          <span class="font-semibold">{{ t('nav.logout') }}</span>
+        </button>
       </div>
     </div>
   </div>
@@ -136,7 +174,9 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
 import { userColor } from '~/utils/userColor'
+import { parseLanguages } from '~/utils/languages'
 const { t, locale, setLocale } = useLocale()
+const { languages, labelFor } = await useLanguages()
 const authStore = useAuthStore()
 const router = useRouter()
 
@@ -149,8 +189,15 @@ const form = reactive({
   name: authStore.user?.name || '',
   organization: authStore.user?.organization || '',
   website: authStore.user?.website || '',
-  phone: authStore.user?.phone || ''
+  phone: authStore.user?.phone || '',
+  languages: parseLanguages(authStore.user?.languages)
 })
+
+function toggleLanguage(code: string) {
+  const idx = form.languages.indexOf(code)
+  if (idx >= 0) form.languages.splice(idx, 1)
+  else form.languages.push(code)
+}
 
 const saving = ref(false)
 const saved = ref(false)
@@ -191,7 +238,13 @@ async function save() {
 }
 
 watch(() => authStore.user, (u) => {
-  if (u) { form.name = u.name; form.organization = u.organization || ''; form.website = u.website || ''; form.phone = u.phone || '' }
+  if (u) {
+    form.name = u.name
+    form.organization = u.organization || ''
+    form.website = u.website || ''
+    form.phone = u.phone || ''
+    form.languages = parseLanguages(u.languages)
+  }
 }, { immediate: true })
 
 useSeoMeta({ title: 'Мой профиль — BeautyMaster' })
