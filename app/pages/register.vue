@@ -31,10 +31,22 @@
         <p class="text-xs text-[#5B5B5B] mt-1.5">{{ t('register.passwordPlaceholder') }}</p>
       </div>
       <div>
-        <label class="block text-sm font-medium text-[#2D4D3A] mb-1.5">{{ t('register.org') }}</label>
-        <input v-model="form.organization" type="text" enterkeyhint="done"
-          :placeholder="t('register.orgPlaceholder')"
-          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-base text-[#2D2D2D] placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
+        <label class="block text-sm font-medium text-[#2D4D3A] mb-1.5">{{ t('register.passwordConfirm') }} <span class="text-[#1EC3BD]">*</span></label>
+        <div class="relative">
+          <input v-model="form.passwordConfirm" :type="showPasswordConfirm ? 'text' : 'password'" required minlength="8" autocomplete="new-password" enterkeyhint="done"
+            class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 pr-12 text-base text-[#2D2D2D] placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
+          <button type="button" @click="showPasswordConfirm = !showPasswordConfirm"
+            :aria-label="showPasswordConfirm ? t('auth.hidePassword') : t('auth.showPassword')"
+            class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-[#2D4D3A] transition-colors">
+            <svg v-if="!showPasswordConfirm" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <svg v-else class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029M9.88 9.88a3 3 0 104.243 4.243M9.88 9.88l4.243 4.243M9.88 9.88L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411M3 3l18 18"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <label class="flex items-start gap-3 pt-1 cursor-pointer">
@@ -70,20 +82,25 @@ definePageMeta({ layout: false })
 const { t, tError } = useLocale()
 const authStore = useAuthStore()
 const router = useRouter()
-const form = reactive({ name: '', email: '', password: '', organization: '', consent: false })
+const form = reactive({ name: '', email: '', password: '', passwordConfirm: '', consent: false })
 const loading = ref(false)
 const error = ref('')
 const showPassword = ref(false)
+const showPasswordConfirm = ref(false)
 
 async function submit() {
   if (!form.consent) {
     error.value = t('register.consentRequired')
     return
   }
+  if (form.password !== form.passwordConfirm) {
+    error.value = t('register.passwordMismatch')
+    return
+  }
   loading.value = true
   error.value = ''
   try {
-    await authStore.register(form)
+    await authStore.register({ name: form.name, email: form.email, password: form.password })
     router.push('/account/profile')
   } catch (e: any) {
     error.value = tError(e, 'register.error')
