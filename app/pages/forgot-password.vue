@@ -7,8 +7,8 @@
     <form v-else @submit.prevent="submit" class="space-y-4">
       <div>
         <label class="block text-sm font-medium text-[#2D4D3A] mb-1.5">{{ t('forgot.email') }}</label>
-        <input v-model="email" type="email" required autocomplete="email"
-          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-[15px] text-[#2D2D2D] placeholder:text-gray-300 transition-colors focus:border-[#1EC3BD] focus:outline-none focus:ring-4 focus:ring-[#1EC3BD]/25">
+        <input v-model="email" type="email" required autocomplete="email" inputmode="email" enterkeyhint="go"
+          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-base text-[#2D2D2D] placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
       </div>
 
       <div v-if="error" class="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded">

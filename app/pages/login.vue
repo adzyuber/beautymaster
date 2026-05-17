@@ -3,18 +3,18 @@
     <form @submit.prevent="submit" class="space-y-4">
       <div>
         <label class="block text-sm font-medium text-[#2D4D3A] mb-1.5">{{ t('login.label') }}</label>
-        <input v-model="form.login" type="text" required autocomplete="username"
-          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-[15px] text-[#2D2D2D] placeholder:text-gray-300 transition-colors focus:border-[#1EC3BD] focus:outline-none focus:ring-4 focus:ring-[#1EC3BD]/25">
+        <input v-model="form.login" type="text" required autocomplete="username" enterkeyhint="next"
+          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-base text-[#2D2D2D] placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
       </div>
 
       <div>
         <div class="flex items-center justify-between mb-1.5">
           <label class="block text-sm font-medium text-[#2D4D3A]">{{ t('login.password') }}</label>
-          <NuxtLink to="/forgot-password" class="text-xs font-semibold text-[#1EC3BD] hover:text-[#02282C] transition-colors">{{ t('login.forgot') }}</NuxtLink>
+          <NuxtLink to="/forgot-password" class="text-sm font-semibold text-[#1EC3BD] hover:text-[#02282C] transition-colors -my-1 py-1">{{ t('login.forgot') }}</NuxtLink>
         </div>
         <div class="relative">
-          <input v-model="form.password" :type="showPassword ? 'text' : 'password'" required autocomplete="current-password"
-            class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 pr-12 text-[15px] text-[#2D2D2D] transition-colors focus:border-[#1EC3BD] focus:outline-none focus:ring-4 focus:ring-[#1EC3BD]/25">
+          <input v-model="form.password" :type="showPassword ? 'text' : 'password'" required autocomplete="current-password" enterkeyhint="go"
+            class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 pr-12 text-base text-[#2D2D2D] focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
           <button type="button" @click="showPassword = !showPassword"
             :aria-label="showPassword ? t('auth.hidePassword') : t('auth.showPassword')"
             class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-[#2D4D3A] transition-colors">

@@ -3,19 +3,19 @@
     <form @submit.prevent="submit" class="space-y-4">
       <div>
         <label class="block text-sm font-medium text-[#2D4D3A] mb-1.5">{{ t('register.name') }} <span class="text-[#1EC3BD]">*</span></label>
-        <input v-model="form.name" type="text" required autocomplete="name"
-          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-[15px] text-[#2D2D2D] placeholder:text-gray-300 transition-colors focus:border-[#1EC3BD] focus:outline-none focus:ring-4 focus:ring-[#1EC3BD]/25">
+        <input v-model="form.name" type="text" required autocomplete="name" enterkeyhint="next"
+          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-base text-[#2D2D2D] placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
       </div>
       <div>
         <label class="block text-sm font-medium text-[#2D4D3A] mb-1.5">{{ t('register.email') }} <span class="text-[#1EC3BD]">*</span></label>
-        <input v-model="form.email" type="email" required autocomplete="email"
-          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-[15px] text-[#2D2D2D] placeholder:text-gray-300 transition-colors focus:border-[#1EC3BD] focus:outline-none focus:ring-4 focus:ring-[#1EC3BD]/25">
+        <input v-model="form.email" type="email" required autocomplete="email" inputmode="email" enterkeyhint="next"
+          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-base text-[#2D2D2D] placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
       </div>
       <div>
         <label class="block text-sm font-medium text-[#2D4D3A] mb-1.5">{{ t('register.password') }} <span class="text-[#1EC3BD]">*</span></label>
         <div class="relative">
-          <input v-model="form.password" :type="showPassword ? 'text' : 'password'" required minlength="8" autocomplete="new-password"
-            class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 pr-12 text-[15px] text-[#2D2D2D] placeholder:text-gray-300 transition-colors focus:border-[#1EC3BD] focus:outline-none focus:ring-4 focus:ring-[#1EC3BD]/25">
+          <input v-model="form.password" :type="showPassword ? 'text' : 'password'" required minlength="8" autocomplete="new-password" enterkeyhint="next"
+            class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 pr-12 text-base text-[#2D2D2D] placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
           <button type="button" @click="showPassword = !showPassword"
             :aria-label="showPassword ? t('auth.hidePassword') : t('auth.showPassword')"
             class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-[#2D4D3A] transition-colors">
@@ -32,9 +32,9 @@
       </div>
       <div>
         <label class="block text-sm font-medium text-[#2D4D3A] mb-1.5">{{ t('register.org') }}</label>
-        <input v-model="form.organization" type="text"
+        <input v-model="form.organization" type="text" enterkeyhint="done"
           :placeholder="t('register.orgPlaceholder')"
-          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-[15px] text-[#2D2D2D] placeholder:text-gray-300 transition-colors focus:border-[#1EC3BD] focus:outline-none focus:ring-4 focus:ring-[#1EC3BD]/25">
+          class="w-full rounded border border-gray-200 bg-white px-4 py-3.5 text-base text-[#2D2D2D] placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1EC3BD]">
       </div>
 
       <label class="flex items-start gap-3 pt-1 cursor-pointer">

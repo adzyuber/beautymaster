@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-dvh flex bg-white">
     <!-- Left: form column -->
-    <div class="flex-1 flex flex-col px-6 py-6 sm:px-10 lg:px-12 xl:px-20 lg:w-1/2">
+    <div class="flex-1 flex flex-col px-6 py-6 sm:px-10 lg:px-12 xl:px-20 lg:w-1/2 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
       <div class="flex items-center justify-between">
         <NuxtLink to="/" class="inline-flex items-center gap-2 lg:hidden">
           <img src="/logo.png" alt="BeautyMaster" class="h-8 w-auto">
@@ -22,10 +22,10 @@
       </div>
 
       <div class="flex-1 flex items-center">
-        <div class="w-full max-w-md mx-auto py-10">
-          <h1 class="text-3xl font-bold text-[#2D4D3A] leading-tight">{{ title }}</h1>
+        <div class="w-full max-w-md mx-auto py-6 sm:py-10">
+          <h1 class="text-2xl sm:text-3xl font-bold text-[#2D4D3A] leading-tight">{{ title }}</h1>
           <p v-if="subtitle" class="text-[#5B5B5B] mt-2 text-[15px]">{{ subtitle }}</p>
-          <div class="mt-8">
+          <div class="mt-6 sm:mt-8">
             <slot />
           </div>
         </div>
