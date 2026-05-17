@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-dvh flex bg-gradient-to-br from-[#F2FAF9] via-[#E6F4F3] to-[#D7EEEB] lg:bg-none lg:bg-white">
+  <div class="min-h-dvh flex bg-white">
     <!-- Left: form column -->
-    <div class="flex-1 flex flex-col px-6 py-6 sm:px-10 lg:px-12 xl:px-20 lg:w-1/2 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+    <div class="flex-1 flex flex-col px-6 py-6 sm:px-10 lg:px-12 xl:px-20 lg:w-1/2 pb-[max(1.5rem,env(safe-area-inset-bottom))] bg-gradient-to-br from-[#F2FAF9] via-[#E6F4F3] to-[#D7EEEB]">
       <div class="flex items-center justify-between">
         <NuxtLink to="/" class="inline-flex items-center gap-2 lg:hidden">
           <img src="/logo.png" alt="BeautyMaster" class="h-8 w-auto">
