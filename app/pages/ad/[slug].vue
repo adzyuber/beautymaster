@@ -24,8 +24,8 @@
               <img
                 :src="ad.images?.[activeImg]?.imageUrl || adFallbackImage"
                 :alt="ad.title"
-                @click="ad.images?.length && openLightbox(activeImg)"
-                :class="['w-full h-full object-cover', ad.images?.length && 'cursor-zoom-in']">
+                @click="openLightbox(activeImg)"
+                class="w-full h-full object-cover cursor-zoom-in">
               <button @click="router.back()"
                 class="sm:hidden absolute top-3 left-3 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,7 +185,7 @@
     <!-- Image lightbox -->
     <ImageLightbox
       v-model:open="lightboxOpen"
-      :images="ad?.images?.map(i => i.imageUrl) || []"
+      :images="ad?.images?.length ? ad.images.map(i => i.imageUrl) : [adFallbackImage]"
       :initial-index="activeImg"
       :alt="ad?.title" />
 
