@@ -263,9 +263,10 @@
     <!-- Category edit modal -->
     <Teleport to="body">
       <div v-if="modal.open"
-        class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4 overflow-y-auto"
-        @click.self="modal.open = false">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 my-8">
+        class="fixed inset-0 bg-black/40 z-50 overflow-y-auto">
+        <div class="min-h-full flex items-center justify-center p-4"
+          @click.self="modal.open = false">
+          <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 my-8">
           <h2 class="text-lg font-bold text-[#2D4D3A] mb-4">
             {{ modal.id ? 'Edit category' : 'New category' }}
           </h2>
@@ -351,6 +352,7 @@
               {{ modal.saving ? 'Saving...' : 'Save' }}
             </button>
           </div>
+          </div>
         </div>
       </div>
     </Teleport>
@@ -358,9 +360,10 @@
     <!-- Subcategory edit modal -->
     <Teleport to="body">
       <div v-if="subModal.open"
-        class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
-        @click.self="subModal.open = false">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+        class="fixed inset-0 bg-black/40 z-50 overflow-y-auto">
+        <div class="min-h-full flex items-center justify-center p-4"
+          @click.self="subModal.open = false">
+          <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 my-8">
           <h2 class="text-lg font-bold text-[#2D4D3A] mb-1">
             {{ subModal.id ? 'Edit subcategory' : 'New subcategory' }}
           </h2>
@@ -399,6 +402,7 @@
               class="px-4 py-2 text-sm bg-[#1EC3BD] text-white rounded hover:bg-[#19a8a3] font-medium transition-all disabled:opacity-50">
               {{ subModal.saving ? 'Saving...' : 'Save' }}
             </button>
+          </div>
           </div>
         </div>
       </div>
