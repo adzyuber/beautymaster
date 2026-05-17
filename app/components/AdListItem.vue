@@ -1,8 +1,8 @@
 <template>
   <NuxtLink :to="`/ad/${ad.slug}`"
-    class="group flex gap-5 bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] hover:shadow-[0_6px_24px_rgba(45,77,58,0.13)] transition-all duration-200 overflow-hidden p-4">
+    class="group flex gap-5 h-40 sm:h-48 bg-white rounded shadow-[0_2px_16px_rgba(45,77,58,0.07)] hover:shadow-[0_6px_24px_rgba(45,77,58,0.13)] transition-all duration-200 overflow-hidden pr-4">
     <!-- Image -->
-    <div class="relative w-40 h-32 shrink-0 rounded overflow-hidden bg-gray-100">
+    <div class="relative w-40 sm:w-72 self-stretch shrink-0 overflow-hidden bg-gray-100">
       <img v-if="ad.images?.[0]"
         :src="ad.images[0].imageUrl"
         :alt="ad.title"
@@ -14,25 +14,31 @@
     </div>
 
     <!-- Content -->
-    <div class="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+    <div class="flex-1 min-w-0 flex flex-col justify-between py-4">
       <div>
-        <div class="flex items-center gap-2 mb-1">
+        <div class="flex items-center justify-between gap-3 mb-1">
           <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-full min-w-0 max-w-full overflow-hidden"
             :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
             <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
               v-html="cat.iconSvg" />
             <span class="truncate">{{ catName }}</span>
           </span>
+          <div class="hidden sm:block text-[#2D4D3A] font-bold text-base shrink-0">
+            {{ ad.price ? formatPrice(ad.price) : t('ad.price.negotiable') }}
+          </div>
         </div>
-        <h3 class="font-semibold text-[#2D4D3A] text-base leading-snug line-clamp-1 group-hover:text-[#3d6650] transition-colors">
+        <h3 class="font-semibold text-[#2D4D3A] text-sm sm:text-base leading-snug line-clamp-1 group-hover:text-[#3d6650] transition-colors">
           {{ ad.title }}
         </h3>
-        <p class="text-[#5B5B5B] text-sm mt-1 line-clamp-2">{{ ad.description }}</p>
+        <p class="text-[#5B5B5B] text-sm mt-1 line-clamp-2 sm:line-clamp-4">{{ ad.description }}</p>
       </div>
 
-      <div class="flex items-center justify-between mt-2">
-        <div class="text-[#2D4D3A] font-bold text-base">
-          {{ ad.price ? formatPrice(ad.price) : t('ad.price.negotiable') }}
+      <div class="flex items-center justify-between sm:justify-start mt-2 gap-3">
+        <div class="sm:hidden">
+          <div class="text-[#2D4D3A] font-bold text-base">
+            {{ ad.price ? formatPrice(ad.price) : t('ad.price.negotiable') }}
+          </div>
+          <div class="text-xs text-gray-400 mt-0.5">{{ formatDate(ad.createdAt) }}</div>
         </div>
         <span class="flex items-center gap-1 text-xs text-gray-400 min-w-0">
           <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,6 +47,8 @@
           </svg>
           <span class="truncate">{{ ad.city }}</span>
         </span>
+        <span class="hidden sm:inline text-xs text-gray-400 shrink-0">·</span>
+        <span class="hidden sm:inline text-xs text-gray-400 shrink-0">{{ formatDate(ad.createdAt) }}</span>
       </div>
     </div>
   </NuxtLink>
@@ -60,5 +68,9 @@ const fallbackImage = computed(() => {
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price)
+}
+
+function formatDate(d: string) {
+  return new Date(d).toLocaleDateString(locale.value === 'en' ? 'en-GB' : 'ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 </script>
