@@ -138,6 +138,16 @@ const messages = {
     'err.token_expired': 'Ссылка недействительна или истекла',
     'login.forgot': 'Забыли пароль?',
 
+    // Auth shell (split-screen)
+    'auth.hero.title': 'Beauty и медицина\nв одном месте',
+    'auth.hero.subtitle': 'Тысячи специалистов и клиентов уже на платформе',
+    'auth.hero.feature1': 'Бесплатное размещение объявлений',
+    'auth.hero.feature2': 'Прямой чат с клиентами без посредников',
+    'auth.hero.feature3': 'Целевая аудитория для вашей услуги',
+    'auth.showPassword': 'Показать пароль',
+    'auth.hidePassword': 'Скрыть пароль',
+    'auth.backHome': '← На главную',
+
     // Forgot password
     'forgot.title': 'Восстановление пароля',
     'forgot.subtitle': 'Введите email — пришлём ссылку для сброса',
@@ -396,6 +406,16 @@ const messages = {
     'err.invalid_token': 'Invalid link',
     'err.token_expired': 'Link is invalid or expired',
     'login.forgot': 'Forgot password?',
+
+    // Auth shell (split-screen)
+    'auth.hero.title': 'Beauty and medicine\nin one place',
+    'auth.hero.subtitle': 'Thousands of specialists and clients already on the platform',
+    'auth.hero.feature1': 'Free listing posting',
+    'auth.hero.feature2': 'Direct chat with clients, no middlemen',
+    'auth.hero.feature3': 'Targeted audience for your service',
+    'auth.showPassword': 'Show password',
+    'auth.hidePassword': 'Hide password',
+    'auth.backHome': '← Back to home',
 
     // Forgot password
     'forgot.title': 'Reset your password',
