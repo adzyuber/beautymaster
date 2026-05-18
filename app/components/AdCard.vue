@@ -10,7 +10,7 @@
         :src="fallbackImage"
         :alt="catName"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-      <span class="absolute top-3 left-3 flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
+      <span class="absolute top-3 left-3 flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded"
         :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
         <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
           v-html="cat.iconSvg" />

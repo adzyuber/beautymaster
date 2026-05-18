@@ -17,7 +17,7 @@
     <div class="flex-1 min-w-0 flex flex-col justify-between py-2.5 sm:py-4">
       <div>
         <div class="flex items-center justify-between gap-3 mb-1">
-          <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-full min-w-0 max-w-full overflow-hidden"
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded min-w-0 max-w-full overflow-hidden"
             :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
             <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
               v-html="cat.iconSvg" />

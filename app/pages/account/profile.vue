@@ -79,7 +79,7 @@
               <button v-for="lang in languages" :key="lang.code" type="button"
                 @click="toggleLanguage(lang.code)"
                 :class="[
-                  'inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium border transition-all',
+                  'inline-flex items-center px-3 py-1.5 rounded text-sm font-medium border transition-all',
                   form.languages.includes(lang.code)
                     ? 'bg-[#02282C] text-white border-[#02282C]'
                     : 'bg-white text-[#5B5B5B] border-gray-200 hover:border-[#1EC3BD]'

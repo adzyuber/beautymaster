@@ -47,7 +47,7 @@
           <!-- Mobile + tablet title + price -->
           <div class="lg:hidden bg-white sm:rounded px-5 py-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <div class="flex items-center justify-between gap-3 mb-2">
-              <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
+              <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded"
                 :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
                 <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                   v-html="cat.iconSvg" />
@@ -93,7 +93,7 @@
           <!-- Price + title (desktop sidebar) -->
           <div class="hidden lg:block bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
             <div class="flex items-center justify-between gap-3 mb-3">
-              <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full"
+              <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded"
                 :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
                 <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                   v-html="cat.iconSvg" />
@@ -142,7 +142,7 @@
                 <div class="flex flex-wrap items-center gap-x-2 gap-y-2">
                   <span class="text-sm font-semibold text-[#2D4D3A]">{{ t('ad.speaks') }}:</span>
                   <span v-for="code in displayLanguages" :key="code"
-                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border bg-white text-[#5B5B5B] border-gray-200">
+                    class="inline-flex items-center px-3 py-1 rounded text-sm font-medium border bg-white text-[#5B5B5B] border-gray-200">
                     {{ labelFor(code, locale === 'en' ? 'en' : 'ru') }}
                   </span>
                 </div>
