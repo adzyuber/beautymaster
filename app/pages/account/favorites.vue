@@ -46,7 +46,7 @@
                     :style="{ color: cat.iconColor }"
                     v-html="cat.iconSvg"></svg>
                 </div>
-                <span class="text-center text-xs font-semibold text-[#2D4D3A] leading-tight line-clamp-2">{{ locale === 'en' ? cat.nameEn : cat.nameRu }}</span>
+                <span class="text-center text-xs font-semibold text-[#2D4D3A] group-active:text-[#1EC3BD] leading-tight line-clamp-2 transition-colors">{{ locale === 'en' ? cat.nameEn : cat.nameRu }}</span>
               </NuxtLink>
             </div>
           </div>
@@ -68,7 +68,7 @@
                     :style="{ color: cat.iconColor }"
                     v-html="cat.iconSvg"></svg>
                 </div>
-                <span class="text-center text-xs font-semibold text-[#2D4D3A] leading-tight line-clamp-2">{{ locale === 'en' ? cat.nameEn : cat.nameRu }}</span>
+                <span class="text-center text-xs font-semibold text-[#2D4D3A] group-hover:text-[#1EC3BD] leading-tight line-clamp-2 transition-colors">{{ locale === 'en' ? cat.nameEn : cat.nameRu }}</span>
               </NuxtLink>
             </div>
           </div>
