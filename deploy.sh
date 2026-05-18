@@ -32,6 +32,9 @@ p.setting.upsert({ where: { key: 'emailNotificationsEnabled' }, create: { key: '
 echo "→ Seeding default categories (insert-only, safe on re-deploy)..."
 node $APP_DIR/prisma/seed-categories.mjs
 
+echo "→ Seeding default languages (insert-only, safe on re-deploy)..."
+node $APP_DIR/prisma/seed-languages.mjs
+
 echo "→ Building..."
 npm run build
 
