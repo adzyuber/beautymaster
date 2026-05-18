@@ -26,6 +26,7 @@ model User {
   receivedMessages Message[] @relation("ReceivedMessages")
   resetTokens      PasswordResetToken[]
   notifications    Notification[]
+  favorites        Favorite[]
 }
 
 model PasswordResetToken {
@@ -59,6 +60,21 @@ model Ad {
 
   user        User      @relation(fields: [userId], references: [id])
   images      AdImage[]
+  favorites   Favorite[]
+}
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  adId      Int
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ad        Ad       @relation(fields: [adId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, adId])
+  @@index([userId])
+  @@index([adId])
 }
 
 model AdImage {

@@ -46,12 +46,15 @@
 
           <!-- Mobile + tablet title + price -->
           <div class="lg:hidden bg-white sm:rounded px-5 py-4 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
-            <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full mb-2"
-              :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
-              <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                v-html="cat.iconSvg" />
-              <span>{{ catName }}</span>
-            </span>
+            <div class="flex items-center justify-between gap-3 mb-2">
+              <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
+                :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
+                <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  v-html="cat.iconSvg" />
+                <span>{{ catName }}</span>
+              </span>
+              <FavoriteButton v-if="ad.id && authStore.user?.id !== ad.userId" :ad-id="ad.id" variant="inline" size="md" />
+            </div>
             <div class="text-[13px] text-[#5B5B5B] mb-1">{{ t('ad.publishedOn') }} {{ formatDate(ad.createdAt) }}</div>
             <h1 class="text-lg font-normal text-[#2D4D3A] leading-snug mb-2">{{ ad.title }}</h1>
             <div class="text-2xl font-bold text-[#2D4D3A]">
@@ -89,12 +92,15 @@
         <div class="space-y-px sm:space-y-4">
           <!-- Price + title (desktop sidebar) -->
           <div class="hidden lg:block bg-white rounded p-6 shadow-[0_2px_16px_rgba(45,77,58,0.07)]">
-            <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full mb-3"
-              :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
-              <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                v-html="cat.iconSvg" />
-              <span>{{ catName }}</span>
-            </span>
+            <div class="flex items-center justify-between gap-3 mb-3">
+              <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full"
+                :style="{ backgroundColor: cat.iconBg, color: cat.iconColor }">
+                <svg v-if="cat.iconSvg" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  v-html="cat.iconSvg" />
+                <span>{{ catName }}</span>
+              </span>
+              <FavoriteButton v-if="ad.id && authStore.user?.id !== ad.userId" :ad-id="ad.id" variant="inline" size="md" />
+            </div>
             <div class="text-[13px] text-[#5B5B5B] mb-1">{{ t('ad.publishedOn') }} {{ formatDate(ad.createdAt) }}</div>
             <h1 class="text-xl font-bold text-[#2D4D3A] mb-3">{{ ad.title }}</h1>
             <div class="text-2xl font-bold text-[#2D4D3A]">

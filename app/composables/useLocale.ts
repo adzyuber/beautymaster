@@ -13,6 +13,15 @@ const messages = {
     'nav.create': 'Создать',
     'nav.chat': 'Чат',
     'nav.profile': 'Профиль',
+    'nav.favorites': 'Избранное',
+
+    // Favorites
+    'favorites.title': 'Избранные объявления',
+    'favorites.empty': 'Пока нет избранных объявлений',
+    'favorites.emptyHint': 'Нажмите на сердечко на объявлении, чтобы сохранить его сюда',
+    'favorites.add': 'В избранное',
+    'favorites.remove': 'Убрать из избранного',
+    'favorites.loginToSave': 'Войдите, чтобы добавлять в избранное',
 
     // Home
     'home.hero.title': 'Найдите специалиста по',
@@ -292,6 +301,15 @@ const messages = {
     'nav.create': 'Create',
     'nav.chat': 'Chat',
     'nav.profile': 'Profile',
+    'nav.favorites': 'Favorites',
+
+    // Favorites
+    'favorites.title': 'Favorite listings',
+    'favorites.empty': 'No favorite listings yet',
+    'favorites.emptyHint': 'Tap the heart on a listing to save it here',
+    'favorites.add': 'Add to favorites',
+    'favorites.remove': 'Remove from favorites',
+    'favorites.loginToSave': 'Sign in to save favorites',
 
     // Home
     'home.hero.title': 'Find a specialist in',
