@@ -101,12 +101,12 @@
     <!-- CTA -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="bg-[#02282C] rounded p-12 text-center text-white">
-        <h2 class="text-3xl font-bold mb-4">{{ t('home.cta.title') }}</h2>
-        <p class="text-white/60 mb-8 text-lg">{{ t('home.cta.subtitle') }}</p>
+        <h2 class="text-3xl font-bold mb-4">{{ auth.isLoggedIn ? t('home.cta.authTitle') : t('home.cta.title') }}</h2>
+        <p class="text-white/60 mb-8 text-lg">{{ auth.isLoggedIn ? t('home.cta.authSubtitle') : t('home.cta.subtitle') }}</p>
         <div class="flex gap-4 justify-center flex-col sm:flex-row">
-          <NuxtLink to="/register"
+          <NuxtLink :to="auth.isLoggedIn ? '/account/create' : '/register'"
             class="bg-white text-[#02282C] border-2 border-white px-8 py-3.5 rounded font-bold hover:bg-gray-400 hover:border-gray-400 transition-all">
-            {{ t('home.cta.register') }}
+            {{ auth.isLoggedIn ? t('home.cta.createAd') : t('home.cta.register') }}
           </NuxtLink>
           <NuxtLink to="/catalog"
             class="border-2 border-[#1EC3BD] text-[#1EC3BD] px-8 py-3.5 rounded font-bold hover:bg-[#1EC3BD] hover:text-white transition-all">
@@ -120,6 +120,7 @@
 
 <script setup lang="ts">
 const { t, locale } = useLocale()
+const auth = useAuthStore()
 const search = ref('')
 const city = ref('')
 const router = useRouter()

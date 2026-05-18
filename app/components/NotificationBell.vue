@@ -36,22 +36,6 @@
           </button>
         </div>
 
-        <!-- Unread messages banner -->
-        <NuxtLink
-          v-if="unreadCount > 0"
-          to="/account/messages"
-          @click="open = false"
-          class="flex items-center gap-3 px-4 py-2.5 bg-[#f0fffe] border-b border-[#c8f5f3] hover:bg-[#e0faf8] transition-colors"
-        >
-          <span class="text-[#1EC3BD] text-base">✉</span>
-          <span class="text-sm text-[#02282C] font-medium">
-            {{ t('notif.newMessages', { n: unreadCount }) }}
-          </span>
-          <svg class="ml-auto w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-          </svg>
-        </NuxtLink>
-
         <div v-if="loading" class="py-8 flex justify-center">
           <svg class="animate-spin h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
@@ -80,17 +64,17 @@
             <!-- Icon / image -->
             <div class="shrink-0">
               <div v-if="n.type === 'profile_incomplete'"
-                class="w-12 h-12 rounded-full bg-[#8FD9A8]/30 flex items-center justify-center">
-                <svg class="w-6 h-6 text-[#2D4D3A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="w-24 h-24 rounded-full bg-[#8FD9A8]/30 flex items-center justify-center">
+                <svg class="w-12 h-12 text-[#2D4D3A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                 </svg>
               </div>
               <img
                 v-else-if="n.adImageUrl"
                 :src="n.adImageUrl"
-                class="w-12 h-12 rounded object-cover"
+                class="w-24 h-24 rounded object-cover"
               >
-              <div v-else class="w-12 h-12 rounded bg-gray-100"></div>
+              <div v-else class="w-24 h-24 rounded bg-gray-100"></div>
             </div>
 
             <!-- Content -->
@@ -122,10 +106,10 @@
 
 <script setup lang="ts">
 const props = withDefaults(defineProps<{ dark?: boolean; iconSize?: string }>(), { dark: true, iconSize: 'w-5 h-5' })
-const { notifCount, unreadCount, fetchUnread } = useUnreadCount()
+const { notifCount, fetchUnread } = useUnreadCount()
 const { t } = useLocale()
 
-const totalBadge = computed(() => notifCount.value + unreadCount.value)
+const totalBadge = computed(() => notifCount.value)
 
 const bellRef = ref<HTMLElement | null>(null)
 const open = ref(false)

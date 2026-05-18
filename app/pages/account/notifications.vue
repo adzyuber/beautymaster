@@ -19,21 +19,6 @@
       </button>
     </div>
 
-    <!-- Unread messages banner -->
-    <NuxtLink
-      v-if="unreadCount > 0"
-      to="/account/messages"
-      class="flex items-center gap-3 px-4 py-3 bg-[#f0fffe] border-b border-[#c8f5f3] hover:bg-[#e0faf8] transition-colors"
-    >
-      <span class="text-[#1EC3BD] text-lg">✉</span>
-      <span class="text-base text-[#02282C] font-medium flex-1">
-        {{ t('notif.newMessages', { n: unreadCount }) }}
-      </span>
-      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-      </svg>
-    </NuxtLink>
-
     <!-- Loading -->
     <div v-if="loading" class="flex justify-center py-16">
       <svg class="animate-spin h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24">
@@ -67,9 +52,9 @@
           <img
             v-if="n.adImageUrl"
             :src="n.adImageUrl"
-            class="w-14 h-14 rounded-lg object-cover"
+            class="w-24 h-24 rounded-lg object-cover"
           >
-          <div v-else class="w-14 h-14 rounded-lg bg-gray-100"></div>
+          <div v-else class="w-24 h-24 rounded-lg bg-gray-100"></div>
         </div>
 
         <!-- Content -->
@@ -98,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-const { notifCount, unreadCount, fetchUnread } = useUnreadCount()
+const { fetchUnread } = useUnreadCount()
 const { t } = useLocale()
 const router = useRouter()
 

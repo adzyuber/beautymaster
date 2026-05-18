@@ -29,6 +29,9 @@ const messages = {
     'home.cta.subtitle': 'Присоединяйтесь к тысячам специалистов на нашей платформе',
     'home.cta.register': 'Зарегистрироваться',
     'home.cta.find': 'Найти специалиста',
+    'home.cta.authTitle': 'Готовы разместить объявление?',
+    'home.cta.authSubtitle': 'Расскажите о своих услугах — клиенты уже ищут специалистов',
+    'home.cta.createAd': 'Создать объявление',
 
     // Catalog
     'mobile.searchPlaceholder': 'Поиск специалистов...',
@@ -305,6 +308,9 @@ const messages = {
     'home.cta.subtitle': 'Join thousands of specialists on our platform',
     'home.cta.register': 'Sign up',
     'home.cta.find': 'Find a specialist',
+    'home.cta.authTitle': 'Ready to post an ad?',
+    'home.cta.authSubtitle': 'Tell clients about your services — they\'re already looking',
+    'home.cta.createAd': 'Create listing',
 
     // Catalog
     'mobile.searchPlaceholder': 'Search specialists...',
