@@ -17,8 +17,12 @@ const messages = {
 
     // Favorites
     'favorites.title': 'Избранные объявления',
-    'favorites.empty': 'Пока нет избранных объявлений',
-    'favorites.emptyHint': 'Нажмите на сердечко на объявлении, чтобы сохранить его сюда',
+    'favorites.empty': 'Здесь будут ваши избранные',
+    'favorites.emptyHint': 'Сохраняйте интересные объявления — вернётесь к ним позже',
+    'favorites.emptyExplore': 'Популярные категории',
+    'favorites.openCatalog': 'Открыть каталог',
+    'favorites.scrollPrev': 'Предыдущие категории',
+    'favorites.scrollNext': 'Следующие категории',
     'favorites.add': 'В избранное',
     'favorites.remove': 'Убрать из избранного',
     'favorites.loginToSave': 'Войдите, чтобы добавлять в избранное',
@@ -305,8 +309,12 @@ const messages = {
 
     // Favorites
     'favorites.title': 'Favorite listings',
-    'favorites.empty': 'No favorite listings yet',
-    'favorites.emptyHint': 'Tap the heart on a listing to save it here',
+    'favorites.empty': 'Your favorites will live here',
+    'favorites.emptyHint': 'Save interesting listings — they’ll be waiting when you come back',
+    'favorites.emptyExplore': 'Popular categories',
+    'favorites.openCatalog': 'Open catalog',
+    'favorites.scrollPrev': 'Previous categories',
+    'favorites.scrollNext': 'Next categories',
     'favorites.add': 'Add to favorites',
     'favorites.remove': 'Remove from favorites',
     'favorites.loginToSave': 'Sign in to save favorites',
