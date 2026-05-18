@@ -43,10 +43,10 @@
         </span>
         <span class="text-xs text-gray-400 shrink-0">·</span>
         <span class="text-xs text-gray-400 shrink-0">{{ formatDate(ad.createdAt) }}</span>
-        <template v-if="authorLanguages.length">
+        <template v-if="displayLanguages.length">
           <span class="text-xs text-gray-400 shrink-0">·</span>
           <div class="flex items-center gap-1 flex-wrap" :title="t('ad.speaks')">
-            <span v-for="code in authorLanguages" :key="code"
+            <span v-for="code in displayLanguages" :key="code"
               class="text-[10px] sm:text-[11px] font-semibold text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
               {{ code.toUpperCase() }}
             </span>
@@ -62,10 +62,15 @@ import { parseLanguages } from '~/utils/languages'
 const props = defineProps<{ ad: any }>()
 const { t, locale } = useLocale()
 const { getCategory } = await useCategories()
+const { defaultCode } = await useLanguages()
 
 const cat = computed(() => getCategory(props.ad.category))
 const catName = computed(() => locale.value === 'en' ? cat.value.nameEn : cat.value.nameRu)
 const authorLanguages = computed(() => parseLanguages(props.ad.user?.languages))
+const displayLanguages = computed<string[]>(() => {
+  if (authorLanguages.value.length) return authorLanguages.value
+  return defaultCode.value ? [defaultCode.value] : []
+})
 
 const fallbackImage = computed(() => {
   return cat.value.imageUrl || `https://loremflickr.com/400/300/beauty,health?lock=${(props.ad.id % 50) || 1}`

@@ -176,7 +176,7 @@ import { useAuthStore } from '~/stores/auth'
 import { userColor } from '~/utils/userColor'
 import { parseLanguages } from '~/utils/languages'
 const { t, locale, setLocale } = useLocale()
-const { languages, labelFor } = await useLanguages()
+const { languages, labelFor, defaultCode } = await useLanguages()
 const authStore = useAuthStore()
 const router = useRouter()
 
@@ -243,7 +243,8 @@ watch(() => authStore.user, (u) => {
     form.organization = u.organization || ''
     form.website = u.website || ''
     form.phone = u.phone || ''
-    form.languages = parseLanguages(u.languages)
+    const parsed = parseLanguages(u.languages)
+    form.languages = parsed.length ? parsed : (defaultCode.value ? [defaultCode.value] : [])
   }
 }, { immediate: true })
 

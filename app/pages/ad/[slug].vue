@@ -128,8 +128,8 @@
                 <span class="font-medium text-[#5B5B5B] text-sm group-hover:text-[#2D4D3A] truncate">{{ ad.user.website.replace(/^https?:\/\//, '') }}</span>
               </a>
               <div v-if="displayLanguages.length" class="pt-4 mt-1 border-t border-gray-100">
-                <div class="text-sm font-semibold text-[#2D4D3A] mb-2.5">{{ t('ad.speaks') }}:</div>
-                <div class="flex flex-wrap gap-2">
+                <div class="flex flex-wrap items-center gap-x-2 gap-y-2">
+                  <span class="text-sm font-semibold text-[#2D4D3A]">{{ t('ad.speaks') }}:</span>
                   <span v-for="code in displayLanguages" :key="code"
                     class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border bg-white text-[#5B5B5B] border-gray-200">
                     {{ labelFor(code, locale === 'en' ? 'en' : 'ru') }}
