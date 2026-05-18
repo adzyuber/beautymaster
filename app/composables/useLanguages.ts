@@ -33,5 +33,14 @@ export async function useLanguages() {
     return languages.value[0] ?? null
   }
 
-  return { languages, codes, defaultCode, labelFor, defaultLanguage, labelMap }
+  function sortByAdminOrder(input: string[]): string[] {
+    const order = codes.value
+    const rank = (c: string) => {
+      const i = order.indexOf(c)
+      return i === -1 ? Number.MAX_SAFE_INTEGER : i
+    }
+    return [...input].sort((a, b) => rank(a) - rank(b))
+  }
+
+  return { languages, codes, defaultCode, labelFor, defaultLanguage, labelMap, sortByAdminOrder }
 }
