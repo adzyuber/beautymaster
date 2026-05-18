@@ -44,7 +44,7 @@
       <h2 class="text-2xl font-bold text-[#2D4D3A] mb-2">{{ t('home.categories.title') }} <span class="sm:hidden">Beauty<span class="text-[#1EC3BD]">Master</span></span></h2>
       <p class="text-[#5B5B5B] mb-8">{{ t('home.categories.subtitle') }}</p>
       <!-- Mobile: 3 rows, horizontal scroll -->
-      <div v-if="categories.length" class="sm:hidden overflow-x-auto -mx-4 px-4 pb-2">
+      <div v-if="categories.length" class="sm:hidden overflow-x-auto -mx-4 px-4 pt-1 pb-2">
         <div class="grid grid-rows-3 grid-flow-col gap-x-5 gap-y-4 w-max">
           <NuxtLink v-for="cat in categories" :key="cat.slug"
             :to="`/catalog?category=${encodeURIComponent(cat.slug)}`"
