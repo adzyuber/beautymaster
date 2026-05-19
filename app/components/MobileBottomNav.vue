@@ -41,7 +41,7 @@
 
     <NuxtLink :to="authStore.isLoggedIn ? '/account/profile' : '/login'"
       class="flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-[#02282C] transition-colors"
-      :class="{ '!text-[#02282C]': route.path.startsWith('/account/profile') || route.path === '/login' }">
+      :class="{ '!text-[#02282C]': route.path.startsWith('/account/profile') || route.path === '/account/settings' || route.path === '/login' }">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
       </svg>
