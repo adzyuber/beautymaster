@@ -115,10 +115,24 @@
           <div v-if="ads.length" class="flex flex-col gap-3">
             <AdListItem v-for="ad in ads" :key="ad.id" :ad="ad" />
           </div>
-          <div v-else class="text-center py-20 text-[#5B5B5B]">
-            <div class="text-5xl mb-4">🔍</div>
-            <p class="text-lg font-medium">{{ t('catalog.empty') }}</p>
-            <p class="text-sm mt-1">{{ t('catalog.emptyHint') }}</p>
+          <div v-else class="flex flex-col items-center text-center px-4 py-10 sm:py-16">
+            <div class="relative mb-6">
+              <div class="absolute inset-0 -m-6 rounded-full bg-gradient-to-br from-[#E0F7F6] via-[#F0FFFE] to-transparent blur-xl" aria-hidden="true"></div>
+              <div class="relative w-24 h-24 rounded-full bg-gradient-to-br from-[#E0F7F6] to-white flex items-center justify-center ring-1 ring-[#1EC3BD]/10">
+                <svg class="w-12 h-12 text-[#1EC3BD]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"/>
+                  <path d="M20 20l-3.5-3.5"/>
+                </svg>
+              </div>
+            </div>
+
+            <h2 class="text-xl sm:text-2xl font-bold text-[#2D4D3A]">{{ t('catalog.empty') }}</h2>
+            <p class="text-sm sm:text-base text-[#5B5B5B] mt-2 max-w-md leading-relaxed">{{ t('catalog.emptyHint') }}</p>
+
+            <button v-if="hasActiveFilters" type="button" @click="resetFilters"
+              class="mt-10 inline-block bg-[#02282C] text-white border-2 border-[#02282C] px-8 py-3.5 rounded font-bold hover:bg-[#011a1d] hover:border-[#011a1d] transition-all">
+              {{ t('catalog.reset') }}
+            </button>
           </div>
 
           <!-- Lazy load sentinel -->
