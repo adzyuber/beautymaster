@@ -23,80 +23,94 @@
     <Transition name="dropdown">
       <div
         v-if="open"
-        class="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-[440px] bg-white rounded shadow-lg border border-gray-100 z-50 overflow-hidden"
+        class="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-[440px] bg-white rounded shadow-[0_8px_24px_rgba(2,40,44,0.12),0_2px_8px_rgba(2,40,44,0.06)] ring-1 ring-black/5 z-50 overflow-hidden"
       >
-        <div class="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
-          <span class="font-semibold text-lg text-gray-800">{{ t('notif.title') }}</span>
+        <div class="flex items-center justify-between px-4 py-3 border-b border-black/5">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-lg text-[#2D4D3A]">{{ t('notif.title') }}</span>
+            <span v-if="notifications.length" class="text-sm text-[#5B5B5B]">· {{ notifications.length }}</span>
+          </div>
           <button
-            v-if="notifications.some(n => !n.isRead)"
+            v-if="hasUnread"
             @click="markAllRead"
-            class="text-sm text-[#1EC3BD] hover:underline"
+            class="text-sm text-[#1EC3BD] hover:text-[#02282C] font-semibold transition-colors"
           >
             {{ t('notif.markAllRead') }}
           </button>
         </div>
 
-        <div v-if="loading" class="py-8 flex justify-center">
-          <svg class="animate-spin h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24">
+        <div v-if="loading" class="py-10 flex justify-center">
+          <svg class="animate-spin h-5 w-5 text-[#1EC3BD]" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
           </svg>
         </div>
 
-        <div v-else-if="notifications.length === 0" class="py-8 px-6 text-center">
-          <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-            </svg>
+        <div v-else-if="notifications.length === 0" class="flex flex-col items-center text-center px-6 py-10">
+          <div class="relative mb-5">
+            <div class="absolute inset-0 -m-5 rounded-full bg-gradient-to-br from-[#E0F7F6] via-[#F0FFFE] to-transparent blur-xl" aria-hidden="true"></div>
+            <div class="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#E0F7F6] to-white flex items-center justify-center ring-1 ring-[#1EC3BD]/10">
+              <svg class="w-10 h-10 text-[#1EC3BD]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3a6 6 0 016 6v3.586l1.707 1.707A1 1 0 0119 16H5a1 1 0 01-.707-1.707L6 12.586V9a6 6 0 016-6z"/>
+                <path d="M10 19a2 2 0 004 0"/>
+              </svg>
+            </div>
           </div>
-          <p class="text-lg font-semibold text-gray-700">{{ t('notif.empty') }}</p>
-          <p class="text-base text-gray-400 mt-2 leading-relaxed">{{ t('notif.emptyDesc') }}</p>
+          <p class="text-lg font-bold text-[#2D4D3A]">{{ t('notif.empty') }}</p>
+          <p class="text-sm text-[#5B5B5B] mt-1.5 leading-relaxed max-w-xs">{{ t('notif.emptyDesc') }}</p>
         </div>
 
-        <ul v-else class="max-h-[480px] overflow-y-auto divide-y divide-gray-50">
+        <ul v-else class="max-h-[480px] overflow-y-auto p-2 space-y-2">
           <li
             v-for="n in notifications"
             :key="n.id"
-            class="flex gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer group"
-            :class="{ 'bg-[#f0fffe]': !n.isRead }"
+            class="group relative flex gap-3 p-2.5 rounded ring-1 transition-all cursor-pointer hover:shadow-[0_2px_8px_rgba(2,40,44,0.06),0_8px_20px_rgba(2,40,44,0.06)]"
+            :class="!n.isRead ? 'ring-[#1EC3BD]/30 bg-gradient-to-br from-[#F0FFFE] to-white' : 'ring-transparent hover:ring-[#1EC3BD]/20 hover:bg-[#f8faf9]'"
             @click="openNotification(n)"
           >
-            <!-- Icon / image -->
             <div class="shrink-0">
               <div v-if="n.type === 'profile_incomplete'"
-                class="w-24 h-24 rounded-full bg-[#8FD9A8]/30 flex items-center justify-center">
-                <svg class="w-12 h-12 text-[#2D4D3A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                class="w-20 h-20 rounded-full bg-gradient-to-br from-[#E0F7F6] to-white ring-1 ring-[#1EC3BD]/10 flex items-center justify-center">
+                <svg class="w-10 h-10 text-[#1EC3BD]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                  <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                 </svg>
               </div>
               <img
                 v-else-if="n.adImageUrl"
                 :src="n.adImageUrl"
-                class="w-24 h-24 rounded object-cover"
+                class="w-20 h-20 rounded object-cover"
               >
-              <div v-else class="w-24 h-24 rounded bg-gray-100"></div>
+              <div v-else class="w-20 h-20 rounded bg-[#E0F7F6] flex items-center justify-center">
+                <svg class="w-7 h-7 text-[#1EC3BD]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 7h16v12H4z"/>
+                  <circle cx="9" cy="11" r="1.5"/>
+                  <path d="M20 16l-5-5-9 9"/>
+                </svg>
+              </div>
             </div>
 
-            <!-- Content -->
             <div class="flex-1 min-w-0">
-              <div class="flex items-start justify-between gap-1">
-                <p class="text-base font-semibold text-gray-800 truncate">{{ label(n.type) }}</p>
-                <span v-if="!n.isRead" class="mt-1 w-2 h-2 rounded-full bg-[#1EC3BD] shrink-0"></span>
+              <div class="flex items-start justify-between gap-2">
+                <p class="text-sm font-bold text-[#2D4D3A] truncate">{{ label(n.type) }}</p>
+                <span v-if="!n.isRead" class="mt-1.5 w-2 h-2 rounded-full bg-[#1EC3BD] shrink-0" aria-hidden="true"></span>
               </div>
-              <p v-if="n.adTitle" class="text-base text-gray-500 truncate mt-0.5">{{ n.adTitle }}</p>
-              <p class="text-base text-gray-400 mt-0.5 leading-relaxed">{{ labelDesc(n.type) }}</p>
-              <div v-if="n.reason" class="mt-1.5 px-2 py-1 bg-red-50 border border-red-100 rounded text-base text-red-500 leading-snug">
-                <span class="font-medium">{{ t('notif.reasonLabel') }}</span> {{ n.reason }}
+              <p v-if="n.adTitle" class="text-sm text-[#02282C] truncate mt-0.5">{{ n.adTitle }}</p>
+              <p class="text-xs text-[#5B5B5B] mt-1 leading-relaxed line-clamp-2">{{ labelDesc(n.type) }}</p>
+              <div v-if="n.reason" class="mt-1.5 px-2 py-1 bg-red-50 border border-red-100 rounded text-xs text-red-600 leading-snug">
+                <span class="font-semibold">{{ t('notif.reasonLabel') }}</span> {{ n.reason }}
               </div>
-              <p class="text-sm text-gray-400 mt-1.5">{{ timeAgo(n.createdAt) }}</p>
+              <p class="text-xs text-[#5B5B5B]/80 mt-1.5">{{ timeAgo(n.createdAt) }}</p>
             </div>
 
-            <!-- Delete -->
             <button
               @click.stop="deleteNotif(n)"
-              class="opacity-0 group-hover:opacity-100 self-start mt-0.5 text-gray-300 hover:text-red-400 transition-all text-lg leading-none shrink-0"
+              class="opacity-0 group-hover:opacity-100 self-start w-7 h-7 rounded-full text-[#5B5B5B]/60 hover:text-red-500 hover:bg-red-50 transition-all flex items-center justify-center shrink-0"
               :aria-label="t('notif.delete')"
-            >×</button>
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 6l12 12M6 18L18 6"/>
+              </svg>
+            </button>
           </li>
         </ul>
       </div>
@@ -115,6 +129,7 @@ const bellRef = ref<HTMLElement | null>(null)
 const open = ref(false)
 const loading = ref(false)
 const notifications = ref<any[]>([])
+const hasUnread = computed(() => notifications.value.some(n => !n.isRead))
 
 onClickOutside(bellRef, () => { open.value = false })
 

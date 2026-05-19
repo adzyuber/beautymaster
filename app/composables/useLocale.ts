@@ -289,6 +289,8 @@ const messages = {
     'notif.daysAgo': '{n} дн. назад',
     'notif.newMessages': 'Новых сообщений: {n}',
     'notif.delete': 'Удалить уведомление',
+    'notif.loginToView': 'Войдите, чтобы видеть уведомления',
+    'notif.openMyAds': 'Перейти к моим объявлениям',
   },
 
   en: {
@@ -585,6 +587,8 @@ const messages = {
     'notif.daysAgo': '{n} d ago',
     'notif.newMessages': '{n} new messages',
     'notif.delete': 'Delete notification',
+    'notif.loginToView': 'Sign in to see your notifications',
+    'notif.openMyAds': 'Go to my listings',
   }
 }
 

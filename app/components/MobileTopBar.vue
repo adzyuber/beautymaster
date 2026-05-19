@@ -45,7 +45,7 @@ const { t } = useLocale()
 const authStore = useAuthStore()
 const { notifCount } = useUnreadCount()
 const totalBadge = computed(() => notifCount.value)
-const hideOnRoutes = ['/account/messages', '/account/profile', '/account/create', '/account/notifications', '/privacy']
+const hideOnRoutes = ['/account/messages', '/account/profile', '/account/create', '/privacy']
 const isHidden = computed(() => hideOnRoutes.includes(route.path) || route.path.startsWith('/ad/'))
 
 function goSearch() {
