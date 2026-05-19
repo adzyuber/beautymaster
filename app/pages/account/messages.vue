@@ -75,7 +75,7 @@
                   </button>
                   <div v-else :class="['max-w-[70%] px-4 py-2.5 rounded text-sm leading-relaxed',
                     msg.fromUserId === authStore.user?.id
-                      ? 'bg-[#02282C] text-white'
+                      ? 'bg-[#FFF1EC] text-[#2D4D3A] ring-1 ring-[#F4B59F]/25'
                       : 'bg-[#F0FFFE] text-[#2D4D3A] ring-1 ring-[#1EC3BD]/15']">
                     {{ msg.text }}
                   </div>
@@ -172,7 +172,7 @@
                   </button>
                   <div v-else :class="['max-w-[80%] px-4 py-2.5 rounded text-sm leading-relaxed',
                     msg.fromUserId === authStore.user?.id
-                      ? 'bg-[#02282C] text-white'
+                      ? 'bg-[#FFF1EC] text-[#2D4D3A] ring-1 ring-[#F4B59F]/25'
                       : 'bg-[#F0FFFE] text-[#2D4D3A] ring-1 ring-[#1EC3BD]/15']">
                     {{ msg.text }}
                   </div>
