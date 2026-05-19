@@ -20,8 +20,8 @@
       </NuxtLink>
     </div>
 
-    <div v-else-if="pending" class="space-y-3 max-w-3xl mx-auto">
-      <div v-for="i in 3" :key="i" class="bg-white rounded h-28 animate-pulse"></div>
+    <div v-else-if="pending" class="space-y-3 lg:space-y-4 max-w-3xl lg:max-w-5xl mx-auto">
+      <div v-for="i in 3" :key="i" class="bg-white rounded h-28 lg:h-36 animate-pulse"></div>
     </div>
 
     <div v-else-if="!data?.ads?.length" class="flex flex-col items-center text-center px-4 py-10 sm:py-16">
@@ -47,14 +47,14 @@
       </NuxtLink>
     </div>
 
-    <ul v-else class="max-w-3xl mx-auto space-y-3">
+    <ul v-else class="max-w-3xl lg:max-w-5xl mx-auto space-y-3 lg:space-y-4">
       <li v-for="ad in data.ads" :key="ad.id"
-        class="group relative flex gap-3 sm:gap-4 p-3 sm:p-4 bg-white rounded ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:ring-[#1EC3BD]/20 hover:shadow-[0_4px_12px_rgba(2,40,44,0.06),0_12px_32px_rgba(2,40,44,0.08)]">
+        class="group relative flex gap-3 sm:gap-4 lg:gap-5 p-3 sm:p-4 lg:p-5 bg-white rounded ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:ring-[#1EC3BD]/20 hover:shadow-[0_4px_12px_rgba(2,40,44,0.06),0_12px_32px_rgba(2,40,44,0.08)]">
         <NuxtLink :to="ad.status === 'active' ? `/ad/${ad.slug}` : `/account/edit/${ad.id}`" class="shrink-0">
           <img v-if="ad.images?.[0]" :src="ad.images[0].imageUrl"
-            class="w-20 h-20 sm:w-24 sm:h-24 rounded object-cover">
-          <div v-else class="w-20 h-20 sm:w-24 sm:h-24 rounded bg-[#E0F7F6] flex items-center justify-center">
-            <svg class="w-8 h-8 text-[#1EC3BD]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            class="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded object-cover">
+          <div v-else class="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded bg-[#E0F7F6] flex items-center justify-center">
+            <svg class="w-8 h-8 lg:w-10 lg:h-10 text-[#1EC3BD]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 7h16v12H4z"/>
               <circle cx="9" cy="11" r="1.5"/>
               <path d="M20 16l-5-5-9 9"/>
@@ -64,12 +64,12 @@
 
         <div class="flex-1 min-w-0">
           <NuxtLink :to="ad.status === 'active' ? `/ad/${ad.slug}` : `/account/edit/${ad.id}`"
-            class="block font-bold text-[#2D4D3A] text-base sm:text-lg leading-tight truncate hover:text-[#02282C] transition-colors">
+            class="block font-bold text-[#2D4D3A] text-base sm:text-lg lg:text-xl leading-tight truncate hover:text-[#02282C] transition-colors">
             {{ ad.title }}
           </NuxtLink>
-          <p class="text-xs sm:text-sm text-[#5B5B5B] mt-0.5 truncate">{{ catName(ad.category) }} · {{ ad.city }}</p>
+          <p class="text-xs sm:text-sm text-[#5B5B5B] mt-0.5 lg:mt-1 truncate">{{ catName(ad.category) }} · {{ ad.city }}</p>
 
-          <div class="flex items-center gap-2 mt-2 flex-wrap">
+          <div class="flex items-center gap-2 mt-2 lg:mt-3 flex-wrap">
             <span :class="['inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold px-2 py-0.5 rounded ring-1', statusClass(ad.status)]">
               <span class="w-1.5 h-1.5 rounded-full" :class="statusDotClass(ad.status)" aria-hidden="true"></span>
               {{ statusLabel(ad.status) }}
@@ -78,32 +78,34 @@
           </div>
 
           <div v-if="ad.status === 'rejected' && ad.rejectionReason"
-            class="mt-2 px-2.5 py-1.5 bg-red-50 border border-red-100 rounded text-xs sm:text-sm text-red-600 leading-snug">
+            class="mt-2 lg:mt-3 px-2.5 py-1.5 bg-red-50 border border-red-100 rounded text-xs sm:text-sm text-red-600 leading-snug">
             <span class="font-semibold">{{ t('account.rejectionReason') }}:</span> {{ ad.rejectionReason }}
           </div>
         </div>
 
-        <div class="self-start flex flex-col sm:flex-row gap-1 shrink-0">
+        <!-- Stacked icon actions on all sizes -->
+        <div class="self-start flex flex-col gap-1 lg:gap-1.5 shrink-0">
           <NuxtLink v-if="ad.status === 'active'" :to="`/ad/${ad.slug}`"
-            class="w-8 h-8 rounded-full text-[#5B5B5B]/70 hover:text-[#1EC3BD] hover:bg-[#F0FFFE] transition-colors flex items-center justify-center"
+            class="w-8 h-8 lg:w-9 lg:h-9 rounded-full text-[#5B5B5B]/70 hover:text-[#1EC3BD] hover:bg-[#F0FFFE] transition-colors flex items-center justify-center"
             :title="t('account.view')" :aria-label="t('account.view')">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <svg class="w-4 h-4 lg:w-[18px] lg:h-[18px]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M1.5 12s4-7 10.5-7 10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/>
               <circle cx="12" cy="12" r="3"/>
             </svg>
           </NuxtLink>
           <NuxtLink :to="`/account/edit/${ad.id}`"
-            class="w-8 h-8 rounded-full text-[#5B5B5B]/70 hover:text-[#02282C] hover:bg-[#F0FFFE] transition-colors flex items-center justify-center"
-            :title="t('account.editAd')" :aria-label="t('account.editAd')">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            class="w-8 h-8 lg:w-9 lg:h-9 rounded-full text-[#5B5B5B]/70 hover:text-[#02282C] hover:bg-[#F0FFFE] transition-colors flex items-center justify-center"
+            :title="ad.status === 'rejected' ? t('account.fixAndResubmit') : t('account.editAd')"
+            :aria-label="ad.status === 'rejected' ? t('account.fixAndResubmit') : t('account.editAd')">
+            <svg class="w-4 h-4 lg:w-[18px] lg:h-[18px]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/>
               <path d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"/>
             </svg>
           </NuxtLink>
-          <button @click="askDelete(ad)"
-            class="w-8 h-8 rounded-full text-[#5B5B5B]/50 hover:text-red-500 hover:bg-red-50 transition-colors flex items-center justify-center"
+          <button type="button" @click="askDelete(ad)"
+            class="w-8 h-8 lg:w-9 lg:h-9 rounded-full text-[#5B5B5B]/50 hover:text-red-500 hover:bg-red-50 transition-colors flex items-center justify-center"
             :title="t('account.deleteAd')" :aria-label="t('account.deleteAd')">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <svg class="w-4 h-4 lg:w-[18px] lg:h-[18px]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 7h16M10 11v6M14 11v6M5 7l1 13a2 2 0 002 2h8a2 2 0 002-2l1-13M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"/>
             </svg>
           </button>
