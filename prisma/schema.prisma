@@ -27,6 +27,19 @@ model User {
   resetTokens      PasswordResetToken[]
   notifications    Notification[]
   favorites        Favorite[]
+  chatHides        ChatHide[]
+}
+
+model ChatHide {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  otherUserId Int
+  hiddenAt    DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, otherUserId])
+  @@index([userId])
 }
 
 model PasswordResetToken {

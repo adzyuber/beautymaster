@@ -22,26 +22,35 @@
                 </div>
                 <p class="text-sm font-bold text-[#2D4D3A]">{{ t('account.noDialogs') }}</p>
               </div>
-              <button v-for="chat in chatsData?.chats" :key="chat.userId" @click="selectChat(chat)"
-                :class="['w-full text-left p-2.5 rounded ring-1 transition-all',
-                  activeChat?.userId === chat.userId
-                    ? 'ring-[#1EC3BD]/30 bg-gradient-to-br from-[#F0FFFE] to-white'
-                    : 'ring-transparent hover:ring-[#1EC3BD]/20 hover:bg-[#f8faf9]']">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden"
-                    :style="userColor(chat.userName)">
-                    <img v-if="chat.userAvatarUrl" :src="chat.userAvatarUrl" class="w-full h-full object-cover">
-                    <span v-else>{{ chat.userName?.charAt(0) }}</span>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex justify-between items-center gap-2">
-                      <span class="font-bold text-[#2D4D3A] text-sm truncate">{{ chat.userName }}</span>
-                      <span v-if="chat.unread > 0" class="bg-[#1EC3BD] text-white text-[11px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center shrink-0">{{ chat.unread }}</span>
+              <div v-for="chat in chatsData?.chats" :key="chat.userId" class="group relative">
+                <button @click="selectChat(chat)"
+                  :class="['w-full text-left p-2.5 pr-9 rounded ring-1 transition-all',
+                    activeChat?.userId === chat.userId
+                      ? 'ring-[#1EC3BD]/30 bg-gradient-to-br from-[#F0FFFE] to-white'
+                      : 'ring-transparent hover:ring-[#1EC3BD]/20 hover:bg-[#f8faf9]']">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden"
+                      :style="userColor(chat.userName)">
+                      <img v-if="chat.userAvatarUrl" :src="chat.userAvatarUrl" class="w-full h-full object-cover">
+                      <span v-else>{{ chat.userName?.charAt(0) }}</span>
                     </div>
-                    <p class="text-xs text-[#5B5B5B] truncate mt-0.5">{{ chat.lastMessage || (chat.lastImageUrl ? t('account.imagePreview') : '') }}</p>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex justify-between items-center gap-2">
+                        <span class="font-bold text-[#2D4D3A] text-sm truncate">{{ chat.userName }}</span>
+                        <span v-if="chat.unread > 0" class="bg-[#1EC3BD] text-white text-[11px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center shrink-0">{{ chat.unread }}</span>
+                      </div>
+                      <p class="text-xs text-[#5B5B5B] truncate mt-0.5">{{ chat.lastMessage || (chat.lastImageUrl ? t('account.imagePreview') : '') }}</p>
+                    </div>
                   </div>
-                </div>
-              </button>
+                </button>
+                <button type="button" @click.stop="askDeleteChat(chat)"
+                  class="absolute top-1/2 -translate-y-1/2 right-1.5 w-7 h-7 rounded-full text-[#5B5B5B]/60 hover:text-red-500 hover:bg-red-50 transition-all flex items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto focus:opacity-100 focus:pointer-events-auto"
+                  :aria-label="t('account.deleteChat')">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 6l12 12M6 18L18 6"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
           <div class="flex-1 bg-white rounded ring-1 ring-black/5 shadow-[0_2px_16px_rgba(45,77,58,0.06)] overflow-hidden flex flex-col">
@@ -123,25 +132,41 @@
                   </svg>
                 </div>
               </div>
-              <p class="text-lg font-bold text-[#2D4D3A]">{{ t('account.noDialogs') }}</p>
+              <h2 class="text-xl font-bold text-[#2D4D3A]">{{ t('account.noDialogs') }}</h2>
+              <p class="text-sm text-[#5B5B5B] mt-2 max-w-[260px] leading-relaxed">{{ t('account.noDialogsDesc') }}</p>
             </div>
-            <button v-for="chat in chatsData?.chats" :key="chat.userId" @click="selectChat(chat)"
-              class="w-full text-left px-4 py-4 border-b border-black/5 active:bg-[#F0FFFE] transition-colors">
-              <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shrink-0 overflow-hidden"
-                  :style="userColor(chat.userName)">
-                  <img v-if="chat.userAvatarUrl" :src="chat.userAvatarUrl" class="w-full h-full object-cover">
-                  <span v-else>{{ chat.userName?.charAt(0) }}</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex justify-between items-center gap-2 mb-0.5">
-                    <span class="font-bold text-[#2D4D3A] text-base truncate">{{ chat.userName }}</span>
-                    <span v-if="chat.unread > 0" class="bg-[#1EC3BD] text-white text-xs font-bold min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center shrink-0">{{ chat.unread }}</span>
+            <div v-for="chat in chatsData?.chats" :key="chat.userId"
+              class="relative border-b border-black/5 overflow-hidden bg-white">
+              <button type="button"
+                @click="askDeleteChat(chat)"
+                class="absolute inset-y-0 right-0 w-20 bg-red-500 text-white flex items-center justify-center"
+                :aria-label="t('account.deleteChat')">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6 6l12 12M6 18L18 6"/>
+                </svg>
+              </button>
+              <button type="button" @click="onChatRowClick(chat)"
+                @touchstart.passive="onSwipeStart($event, chat.userId)"
+                @touchmove.passive="onSwipeMove($event, chat.userId)"
+                @touchend="onSwipeEnd(chat.userId)"
+                class="relative w-full text-left px-4 py-4 active:bg-[#F0FFFE] bg-white transition-transform duration-200 ease-out"
+                :style="{ transform: `translateX(${swipeOffsetFor(chat.userId)}px)` }">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shrink-0 overflow-hidden"
+                    :style="userColor(chat.userName)">
+                    <img v-if="chat.userAvatarUrl" :src="chat.userAvatarUrl" class="w-full h-full object-cover">
+                    <span v-else>{{ chat.userName?.charAt(0) }}</span>
                   </div>
-                  <p class="text-sm text-[#5B5B5B] truncate">{{ chat.lastMessage || (chat.lastImageUrl ? t('account.imagePreview') : '') }}</p>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-center gap-2 mb-0.5">
+                      <span class="font-bold text-[#2D4D3A] text-base truncate">{{ chat.userName }}</span>
+                      <span v-if="chat.unread > 0" class="bg-[#1EC3BD] text-white text-xs font-bold min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center shrink-0">{{ chat.unread }}</span>
+                    </div>
+                    <p class="text-sm text-[#5B5B5B] truncate">{{ chat.lastMessage || (chat.lastImageUrl ? t('account.imagePreview') : '') }}</p>
+                  </div>
                 </div>
-              </div>
-            </button>
+              </button>
+            </div>
           </div>
           <div class="h-16 shrink-0"></div>
       </div>
@@ -206,6 +231,62 @@
       v-model:open="lightboxOpen"
       :images="chatImages"
       :initial-index="lightboxIndex" />
+
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-150 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0">
+        <div v-if="chatToDelete" class="fixed inset-0 z-[60] bg-[#02282C]/40 backdrop-blur-[2px] flex items-center justify-center px-4"
+          @click.self="chatToDelete = null">
+          <Transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="opacity-0 translate-y-2 scale-[0.98]"
+            enter-to-class="opacity-100 translate-y-0 scale-100"
+            leave-active-class="transition duration-150 ease-in"
+            leave-from-class="opacity-100 translate-y-0 scale-100"
+            leave-to-class="opacity-0 translate-y-2 scale-[0.98]">
+            <div v-if="chatToDelete"
+              class="relative bg-white rounded ring-1 ring-black/5 shadow-[0_8px_24px_rgba(2,40,44,0.12),0_2px_8px_rgba(2,40,44,0.06)] w-full max-w-md overflow-hidden">
+              <button type="button" @click="chatToDelete = null"
+                class="absolute top-3 right-3 w-8 h-8 rounded-full text-[#5B5B5B]/60 hover:text-[#02282C] hover:bg-[#F0FFFE] transition-colors flex items-center justify-center"
+                :aria-label="t('common.cancel')">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6 6l12 12M6 18L18 6"/>
+                </svg>
+              </button>
+              <div class="px-6 pt-9 pb-2 flex flex-col items-center text-center">
+                <div class="relative mb-5">
+                  <div class="absolute inset-0 -m-5 rounded-full bg-gradient-to-br from-[#FFE6E0] via-[#FFF1EC] to-transparent blur-xl" aria-hidden="true"></div>
+                  <div class="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#FFF1EC] to-white flex items-center justify-center ring-1 ring-[#F4B59F]/30">
+                    <svg class="w-10 h-10 text-[#E5734B]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M4 7h16M10 11v6M14 11v6M5 7l1 13a2 2 0 002 2h8a2 2 0 002-2l1-13M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"/>
+                    </svg>
+                  </div>
+                </div>
+                <h3 class="text-xl font-bold text-[#2D4D3A]">{{ t('account.deleteChatTitle') }}</h3>
+                <p class="text-sm text-[#5B5B5B] mt-2 leading-relaxed max-w-sm">
+                  {{ t('account.deleteChatDesc', { name: chatToDelete.userName }) }}
+                </p>
+              </div>
+              <div class="px-6 pt-5 pb-6 flex flex-col sm:flex-row-reverse gap-2.5">
+                <button type="button" @click="confirmDeleteChat" :disabled="deleting"
+                  class="flex-1 px-5 py-3 rounded font-bold text-white bg-[#02282C] hover:bg-[#011a1d] transition-colors disabled:opacity-50">
+                  {{ deleting ? '...' : t('account.delete') }}
+                </button>
+                <button type="button" @click="chatToDelete = null" :disabled="deleting"
+                  class="flex-1 px-5 py-3 rounded font-bold text-[#02282C] ring-1 ring-black/10 hover:bg-[#F0FFFE] hover:ring-[#1EC3BD]/30 transition-all disabled:opacity-50">
+                  {{ t('common.cancel') }}
+                </button>
+              </div>
+            </div>
+          </Transition>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -239,6 +320,86 @@ const fileInputMobile = ref<HTMLInputElement | null>(null)
 
 const lightboxOpen = ref(false)
 const lightboxIndex = ref(0)
+
+const chatToDelete = ref<any>(null)
+const deleting = ref(false)
+const swipedChatId = ref<number | null>(null)
+const swipeStartX = ref(0)
+const swipeBaseDx = ref(0)
+const swipeDx = ref(0)
+const SWIPE_REVEAL = 80
+const SWIPE_THRESHOLD = 40
+
+function askDeleteChat(chat: any) {
+  swipedChatId.value = null
+  swipeDx.value = 0
+  chatToDelete.value = chat
+}
+
+async function confirmDeleteChat() {
+  if (!chatToDelete.value || deleting.value) return
+  const userId = chatToDelete.value.userId
+  deleting.value = true
+  try {
+    await $fetch(`/api/messages/${userId}`, { method: 'DELETE' })
+    if (chatsData.value?.chats) {
+      chatsData.value = {
+        ...chatsData.value,
+        chats: chatsData.value.chats.filter((c: any) => c.userId !== userId)
+      }
+    }
+    if (activeChat.value?.userId === userId) {
+      activeChat.value = null
+      msgList.value = []
+    }
+    chatToDelete.value = null
+    fetchUnread()
+  } finally {
+    deleting.value = false
+  }
+}
+
+function swipeOffsetFor(userId: number) {
+  if (swipedChatId.value !== userId) return 0
+  return swipeDx.value
+}
+
+function onSwipeStart(e: TouchEvent, userId: number) {
+  if (swipedChatId.value && swipedChatId.value !== userId) {
+    swipedChatId.value = null
+    swipeDx.value = 0
+  }
+  swipeStartX.value = e.touches[0].clientX
+  swipeBaseDx.value = swipedChatId.value === userId ? -SWIPE_REVEAL : 0
+}
+
+function onSwipeMove(e: TouchEvent, userId: number) {
+  const dx = e.touches[0].clientX - swipeStartX.value
+  let next = swipeBaseDx.value + dx
+  if (next > 0) next = 0
+  if (next < -SWIPE_REVEAL - 20) next = -SWIPE_REVEAL - 20
+  swipeDx.value = next
+  swipedChatId.value = userId
+}
+
+function onSwipeEnd(userId: number) {
+  if (swipeDx.value <= -SWIPE_THRESHOLD) {
+    swipedChatId.value = userId
+    swipeDx.value = -SWIPE_REVEAL
+  } else {
+    swipedChatId.value = null
+    swipeDx.value = 0
+  }
+}
+
+function onChatRowClick(chat: any) {
+  if (swipedChatId.value === chat.userId) {
+    swipedChatId.value = null
+    swipeDx.value = 0
+    return
+  }
+  selectChat(chat)
+}
 const chatImages = computed(() => msgList.value.filter(m => m.imageUrl).map(m => m.imageUrl as string))
 function openImage(url: string) {
   const i = chatImages.value.indexOf(url)
